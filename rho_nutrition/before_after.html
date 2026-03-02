@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rho Nutrition — Before/After Automation</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .transition-all { transition: all 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const PROCESSES = [
+      {
+        id: 1,
+        name: "Post-purchase LTV Extension",
+        category: "Retention / Revenue",
+        phase: "Q2",
+        before: { label: "Missing entirely", hrs: "N/A", cost: "$0 captured", detail: "No post-purchase education sequence. LTV stuck at ~3 months. No systematic mechanism to push subscribers toward the 4–5 product escape velocity threshold." },
+        after: { label: "Klaviyo sequence live", hrs: "Automated", cost: "+$3.9M–7.8M/yr", detail: "Post-purchase email sequence: product education at days 7, 14, 21 + cross-sell trigger at day 21 toward escape velocity products. Every 15 days of avg LTV extension = $3.9M in zero-CAC revenue." },
+        savings: "$3.9M–7.8M/yr",
+        implCost: "$16,000",
+        roi: "1,950"
+      },
+      {
+        id: 2,
+        name: "Trustpilot Review Repair",
+        category: "Reputation / Conversion",
+        phase: "Q1",
+        before: { label: "1.7/5 — 88% one-star", hrs: "Unmanaged", cost: "$700K+ conversion loss", detail: "Trustpilot score 1.7/5 visible in Google search results. 88% one-star reviews — all about operational failures (CS, shipping, renewals), not product. Suppressing conversion on $140M D2C channel." },
+        after: { label: "Score climbing to 3.5+", hrs: "Automated", cost: "+$420K–1.4M/yr", detail: "Post-delivery Klaviyo fork: satisfied customers → Trustpilot link; dissatisfied → CS ticket auto-created. Score moves to 3.5+ in 60–90 days. Conversion rate recovery begins immediately." },
+        savings: "$420K–1.4M/yr",
+        implCost: "$4,500",
+        roi: "1,890"
+      },
+      {
+        id: 3,
+        name: "Postscript SMS Activation",
+        category: "Revenue Recovery",
+        phase: "Q1",
+        before: { label: "Signed, never activated", hrs: "N/A", cost: "$0 revenue generated", detail: "Postscript contract is signed and the platform is paid for. It has never been activated. $0 revenue from an asset already on the books. Cart abandonment and churn-moment SMS opportunities are untouched." },
+        after: { label: "Cart + churn SMS live", hrs: "Automated", cost: "+$1.4M–2.5M/yr", detail: "3-touch abandoned cart sequence + pre-churn SMS at 28-day renewal moment + win-back trigger. Conservative 1% incremental cart recovery on $140M D2C = $1.4M. Platform cost: already paid." },
+        savings: "$1.4M–2.5M/yr",
+        implCost: "$6,500",
+        roi: "1,587"
+      },
+      {
+        id: 4,
+        name: "Win-Back Sequence (Churned Subs)",
+        category: "Retention / Revenue",
+        phase: "Q2",
+        before: { label: "No win-back exists", hrs: "N/A", cost: "$0 recovered", detail: "~33% monthly churn = ~21,500 subscribers lost every month. No systematic outreach. Churned subscribers receive nothing — they simply leave and are never contacted again." },
+        after: { label: "3-touch sequence live", hrs: "Automated", cost: "+$620K–1.86M/yr", detail: "Day 0, 7, 30 post-churn: email + SMS 3-touch win-back with escalating incentive. 2–3% reactivation = 430–650 recoveries/month × $120 = $51K–78K/month in recovered revenue." },
+        savings: "$620K–1.86M/yr",
+        implCost: "$10,000",
+        roi: "1,116"
+      },
+      {
+        id: 5,
+        name: "Multi-Product Escape Velocity",
+        category: "LTV / Cross-Sell",
+        phase: "Q3",
+        before: { label: "No trigger system", hrs: "N/A", cost: "$0 systematic cross-sell", detail: "George's escape velocity concept (5+ products = near-zero churn) has no automation engine behind it. Product recommendation is not triggered by purchase behavior. Subscribers stay at 1–2 products." },
+        after: { label: "Behavioral triggers live", hrs: "Automated", cost: "+$1M–2M/yr", detail: "At months 2, 3, 4 post-first-purchase: behavioral triggers recommend complementary products based on purchase history + health goal data. Pushes subscribers toward the 4–5 product threshold systematically." },
+        savings: "$1M–2M/yr",
+        implCost: "$11,500",
+        roi: "879"
+      },
+      {
+        id: 6,
+        name: "Creative AI Dashboard",
+        category: "Growth / Efficiency",
+        phase: "Q3",
+        before: { label: "20–30 hrs/wk manual analysis", hrs: "25 hrs/wk", cost: "$46,800/yr team time", detail: "Manual creative production loop: source UGC → test → pull Meta/YouTube data manually → analyze → write brief → repeat. No structured performance pipeline. Growth team spends 20–30 hrs/week on analysis." },
+        after: { label: "Auto-pull → AI brief generator", hrs: "~8 hrs/wk", cost: "+$1M–1.5M/yr impact", detail: "Meta + YouTube data auto-pulled into AI brief generator. Performance data → structured brief template → faster iteration cycle. Reduces CAC over time through compounding creative flywheel." },
+        savings: "$1M–1.5M/yr",
+        implCost: "$20,000",
+        roi: "420"
+      },
+      {
+        id: 7,
+        name: "Pre-Renewal Klaviyo Fix",
+        category: "CS Ticket Reduction",
+        phase: "Q1",
+        before: { label: "Broken / unreliable", hrs: "Generates 15% of tickets", cost: "$97K/yr in CS cost", detail: "\"I didn't receive my renewal email\" is the #2 CS ticket driver. Pre-renewal notifications are either broken or not reliably delivered. Creates unnecessary CS load AND chargeback risk." },
+        after: { label: "7d + 3d + 24hr sequence", hrs: "Automated", cost: "+$97K–200K/yr saved", detail: "Rebuilt Klaviyo pre-renewal flow: emails at 7 days, 3 days, and 24 hours before billing. Eliminates ~15% of Zendesk ticket volume. Reduces chargebacks. Strengthens FTC compliance." },
+        savings: "$97K–200K/yr",
+        implCost: "$3,000",
+        roi: "325"
+      },
+      {
+        id: 8,
+        name: "Shipping/Tracking Automation",
+        category: "CS Ticket Reduction",
+        phase: "Q1",
+        before: { label: "~25 agent-hrs/wk manual", hrs: "25 hrs/wk", cost: "$51,000/yr", detail: "\"Where's my package\" is ~25% of CS ticket volume. Agents manually look up tracking for each inquiry — pure data lookup that should never require human involvement." },
+        after: { label: "Wonderment → auto-reply", hrs: "~5 hrs/wk oversight", cost: "$77K/yr saved (80%)", detail: "Wonderment integration → proactive shipping event emails + Zendesk auto-reply with tracking link. Eliminates 60–80% of shipping tickets. Agents freed for complex escalations." },
+        savings: "$77K/yr",
+        implCost: "$4,500",
+        roi: "171"
+      },
+      {
+        id: 9,
+        name: "Zendesk ↔ Shopify + Retextion",
+        category: "Operations Efficiency",
+        phase: "Q2",
+        before: { label: "Standalone — manual lookup", hrs: "2–3 min overhead/ticket", cost: "$108K/yr handle time", detail: "Zendesk operates in complete isolation. Every ticket requires agents to manually tab-switch to Shopify and Retextion to look up order status and subscription details. 5,000+ tickets/week × 2–3 min overhead." },
+        after: { label: "Integrated sidebar context", hrs: "~1 min/ticket", cost: "$108K/yr saved", detail: "Zendesk app install + Retextion API sidebar. Agents see full order history and subscription status inside every ticket — no tab-switching. 40% handle time reduction across 5K+ tickets/week." },
+        savings: "$108K/yr",
+        implCost: "$7,500",
+        roi: "130"
+      },
+      {
+        id: 10,
+        name: "Zendesk AI Deflection",
+        category: "CS Automation",
+        phase: "Q2",
+        before: { label: "35–40% volume is manual FAQ", hrs: "Manual for all tickets", cost: "$208K/yr (deflectable)", detail: "Top 3 ticket types (cancel sub, renewal confusion, tracking) make up 75–80% of volume and are highly repetitive. Each requires a human agent to respond with the same answer." },
+        after: { label: "30–40% auto-deflected", hrs: "Agents handle complex only", cost: "$130K–208K/yr saved", detail: "Zendesk macros + AI auto-routing for top 3 ticket types. Cancel requests → portal link + instructions. Renewal → explanation + portal. Tracking → auto-lookup. 30–40% ticket deflection." },
+        savings: "$130K–208K/yr",
+        implCost: "$20,000",
+        roi: "68"
+      }
+    ];
+
+    const SUMMARY = {
+      before: {
+        totalHrsWeek: 920,
+        annualCost: "$618K CS payroll + $700K+ conversion loss",
+        trustpilot: "1.7/5",
+        postscriptRevenue: "$0",
+        ltvMonths: "~3.0 months",
+        missingRevenue: "$14.7M/yr gap"
+      },
+      after: {
+        totalHrsWeek: 600,
+        annualImpact: "$13.5M midpoint",
+        trustpilot: "3.5+",
+        postscriptRevenue: "$1.4M–2.5M/yr",
+        ltvMonths: "3.5–4.5 months",
+        hrsFreed: "~320 hrs/wk"
+      }
+    };
+
+    const FINANCIALS = {
+      implCost: "$94,000",
+      payback: "< 3 days (Q1 alone)",
+      year1Net: "$6.7M",
+      year3Cumulative: "$31.8M",
+      roi3yr: "33,700%"
+    };
+
+    const PHASES = [
+      { label: "Q1 — Foundation Repair", color: "bg-blue-600", months: "Month 1–3", cost: "$13K–24K", impact: "$2M–4.1M/yr", items: ["Trustpilot review repair flow", "Postscript SMS activation", "Pre-renewal Klaviyo fix", "Shipping/tracking automation"] },
+      { label: "Q2 — Retention Engine", color: "bg-teal-600", months: "Month 3–6", cost: "$40K–67K", impact: "$4.76M–9.97M/yr", items: ["Post-purchase LTV extension sequence", "Win-back sequence for churned subs", "Zendesk ↔ Shopify + Retextion", "Zendesk AI deflection"] },
+      { label: "Q3 — Scale Optimization", color: "bg-purple-600", months: "Month 6–9", cost: "$41K–73K", impact: "$2.05M–3.6M/yr", items: ["Multi-product escape velocity triggers", "Creative AI performance dashboard", "Wholesale workflow automation", "Science AI research tool"] }
+    ];
+
+    function App() {
+      const [view, setView] = useState("before");
+      const [expandedCard, setExpandedCard] = useState(null);
+
+      const isAfter = view === "after";
+      const theme = isAfter
+        ? { bg: "from-teal-900 to-teal-700", badge: "bg-teal-100 text-teal-800", btn: "bg-teal-600 hover:bg-teal-700", card: "border-teal-200 bg-white", accent: "text-teal-700" }
+        : { bg: "from-red-900 to-red-700", badge: "bg-red-100 text-red-800", btn: "bg-red-600 hover:bg-red-700", card: "border-red-100 bg-white", accent: "text-red-700" };
+
+      return (
+        <div className="min-h-screen bg-gray-50">
+          {/* Header */}
+          <div className={`bg-gradient-to-r ${theme.bg} text-white py-10 px-6`}>
+            <div className="max-w-6xl mx-auto">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                  <p className="text-sm font-medium uppercase tracking-widest opacity-70 mb-1">Run Crewless — Business Automation Audit</p>
+                  <h1 className="text-3xl font-bold">Rho Nutrition</h1>
+                  <p className="opacity-80 mt-1 text-sm">$18–20M/month · 65K active subscribers · Miami, FL</p>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setView("before")}
+                    className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${!isAfter ? "bg-white text-red-800 shadow-lg" : "bg-white/20 text-white hover:bg-white/30"}`}
+                  >
+                    Current State
+                  </button>
+                  <button
+                    onClick={() => setView("after")}
+                    className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${isAfter ? "bg-white text-teal-800 shadow-lg" : "bg-white/20 text-white hover:bg-white/30"}`}
+                  >
+                    After Automation
+                  </button>
+                </div>
+              </div>
+
+              {/* Summary Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                {isAfter ? (
+                  <>
+                    <StatBox label="Hours Freed / Week" value="~320 hrs" sub="CS + Creative + Admin" />
+                    <StatBox label="Annual Impact (Mid)" value="$13.5M" sub="Revenue + savings" />
+                    <StatBox label="Trustpilot Score" value="3.5+" sub="Up from 1.7/5" />
+                    <StatBox label="Postscript Revenue" value="$1.4M–2.5M" sub="Currently $0 generated" />
+                  </>
+                ) : (
+                  <>
+                    <StatBox label="CS Team Hours/Week" value="~920 hrs" sub="20 agents + 3 leads" />
+                    <StatBox label="Revenue Gap" value="$14.7M/yr" sub="Missing processes" />
+                    <StatBox label="Trustpilot Score" value="1.7 / 5.0" sub="88% one-star reviews" />
+                    <StatBox label="Postscript Revenue" value="$0" sub="Contract paid, never live" />
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-6xl mx-auto px-6 py-10">
+            {/* Process Cards */}
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {isAfter ? "10 Processes — After Automation" : "10 Processes — Current State"}
+              </h2>
+              <p className="text-sm text-gray-500 mb-6">Click any card to expand details</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {PROCESSES.map(p => (
+                  <ProcessCard
+                    key={p.id}
+                    process={p}
+                    isAfter={isAfter}
+                    expanded={expandedCard === p.id}
+                    onToggle={() => setExpandedCard(expandedCard === p.id ? null : p.id)}
+                    theme={theme}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Financial Impact */}
+            <div className="mb-10">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Financial Impact</h2>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <FinancialBox label="Total Investment" value={FINANCIALS.implCost} color="bg-blue-50 border-blue-200 text-blue-800" />
+                <FinancialBox label="Payback Period" value={FINANCIALS.payback} color="bg-green-50 border-green-200 text-green-800" />
+                <FinancialBox label="Year 1 Net Benefit" value={FINANCIALS.year1Net} color="bg-teal-50 border-teal-200 text-teal-800" />
+                <FinancialBox label="3-Year Cumulative" value={FINANCIALS.year3Cumulative} color="bg-purple-50 border-purple-200 text-purple-800" />
+                <FinancialBox label="3-Year ROI" value={FINANCIALS.roi3yr} color="bg-yellow-50 border-yellow-200 text-yellow-800" />
+              </div>
+            </div>
+
+            {/* LTV Math */}
+            <div className="mb-10 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">The LTV Math</h2>
+              <p className="text-sm text-gray-500 mb-6">65,000 subscribers × $120 blended AOV — how much is each extra day worth?</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <LTVBox days="+15 days" scenario="3.0 → 3.5 months" value="$3.9M/yr" cume="$11.7M over 3 yrs" highlight={false} />
+                <LTVBox days="+30 days" scenario="3.0 → 4.0 months" value="$7.8M/yr" cume="$23.4M over 3 yrs" highlight={true} />
+                <LTVBox days="+60 days" scenario="3.0 → 5.0 months" value="$15.6M/yr" cume="$46.8M over 3 yrs" highlight={false} />
+              </div>
+              <p className="text-xs text-gray-400 mt-4">Every 15 days of average LTV extension = $3.9M/year in revenue that requires zero additional customer acquisition spend.</p>
+            </div>
+
+            {/* Implementation Roadmap (after view only) */}
+            {isAfter && (
+              <div className="mb-10 fade-in">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">3-Phase Quarterly Roadmap</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {PHASES.map((phase, i) => (
+                    <div key={i} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                      <div className={`${phase.color} text-white px-5 py-4`}>
+                        <div className="font-bold text-sm">{phase.label}</div>
+                        <div className="text-xs opacity-80 mt-0.5">{phase.months}</div>
+                      </div>
+                      <div className="p-5">
+                        <div className="flex justify-between text-sm mb-4">
+                          <span className="text-gray-500">Investment</span>
+                          <span className="font-semibold text-gray-900">{phase.cost}</span>
+                        </div>
+                        <div className="flex justify-between text-sm mb-4">
+                          <span className="text-gray-500">Annual Impact</span>
+                          <span className="font-semibold text-green-700">{phase.impact}</span>
+                        </div>
+                        <ul className="space-y-1.5">
+                          {phase.items.map((item, j) => (
+                            <li key={j} className="text-xs text-gray-600 flex items-start gap-2">
+                              <span className="text-green-500 mt-0.5">✓</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="text-center text-xs text-gray-400 border-t border-gray-200 pt-6">
+              <p>Prepared by Run Crewless · March 2, 2026 · Confidential</p>
+              <p className="mt-1">All figures are conservative estimates based on industry benchmarks and Rho Nutrition's stated metrics.</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function StatBox({ label, value, sub }) {
+      return (
+        <div className="bg-white/15 backdrop-blur rounded-lg px-4 py-3 text-white">
+          <div className="text-lg font-bold">{value}</div>
+          <div className="text-xs font-medium opacity-90 mt-0.5">{label}</div>
+          <div className="text-xs opacity-60 mt-0.5">{sub}</div>
+        </div>
+      );
+    }
+
+    function ProcessCard({ process, isAfter, expanded, onToggle, theme }) {
+      const state = isAfter ? process.after : process.before;
+      const badgeColor = isAfter
+        ? "bg-teal-100 text-teal-700"
+        : "bg-red-100 text-red-700";
+      const phaseColors = { Q1: "bg-blue-100 text-blue-700", Q2: "bg-teal-100 text-teal-700", Q3: "bg-purple-100 text-purple-700" };
+
+      return (
+        <div
+          className={`bg-white rounded-xl border ${theme.card} shadow-sm cursor-pointer hover:shadow-md transition-all`}
+          onClick={onToggle}
+        >
+          <div className="p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${phaseColors[process.phase]}`}>{process.phase}</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${badgeColor}`}>{state.label}</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">{process.name}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">{process.category}</p>
+              </div>
+              <div className="text-right shrink-0">
+                <div className={`font-bold text-sm ${isAfter ? "text-teal-700" : "text-red-700"}`}>{isAfter ? process.savings : process.before.cost}</div>
+                {isAfter && <div className="text-xs text-gray-400">ROI: {process.roi}x</div>}
+              </div>
+            </div>
+
+            {expanded && (
+              <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-600 leading-relaxed fade-in">
+                {state.detail}
+                {isAfter && (
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <div className="bg-gray-50 rounded-lg p-2">
+                      <div className="text-gray-400 text-xs">Impl. Cost</div>
+                      <div className="font-semibold text-gray-800">{process.implCost}</div>
+                    </div>
+                    <div className="bg-teal-50 rounded-lg p-2">
+                      <div className="text-gray-400 text-xs">ROI Score</div>
+                      <div className="font-semibold text-teal-800">{process.roi}x</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    function FinancialBox({ label, value, color }) {
+      return (
+        <div className={`border rounded-xl p-4 ${color}`}>
+          <div className="text-xs font-medium opacity-70 mb-1">{label}</div>
+          <div className="text-sm font-bold leading-tight">{value}</div>
+        </div>
+      );
+    }
+
+    function LTVBox({ days, scenario, value, cume, highlight }) {
+      return (
+        <div className={`rounded-xl p-5 border ${highlight ? "bg-teal-600 border-teal-500 text-white" : "bg-gray-50 border-gray-200 text-gray-800"}`}>
+          <div className={`text-2xl font-black mb-1 ${highlight ? "text-white" : "text-teal-700"}`}>{days}</div>
+          <div className={`text-xs mb-3 ${highlight ? "text-teal-100" : "text-gray-500"}`}>{scenario}</div>
+          <div className={`text-lg font-bold ${highlight ? "text-white" : "text-gray-900"}`}>{value}</div>
+          <div className={`text-xs mt-1 ${highlight ? "text-teal-200" : "text-gray-400"}`}>{cume}</div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
