@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProAccess — Before/After Automation</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .transition-all { transition: all 0.3s ease; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const CLIENT = {
+      name: "ProAccess",
+      industry: "ACA Health Insurance Book-of-Business Management",
+      auditDate: "March 2026",
+    };
+
+    const SUMMARY = {
+      hoursFreedPerWeek: 73,
+      annualSavings: "$45,533",
+      processesAutomated: 8,
+      paybackMonths: 4.7,
+    };
+
+    const PROCESSES = [
+      {
+        name: "Client Acquisition",
+        icon: "🏢",
+        category: "Growth",
+        current: { label: "Zero system — 1 client only", value: "0 clients", unit: "in pipeline", cost: "$0 invested" },
+        after:   { label: "LinkedIn + email outreach system", value: "5+ clients", unit: "targeted/mo", cost: "$2,500 build" },
+        savings: "$50K–$218K/yr new revenue",
+        hoursWeek: 5,
+      },
+      {
+        name: "Supervisor Functions",
+        icon: "📊",
+        category: "Operations",
+        current: { label: "Unmanned — founders absorbing", value: "20 hrs/wk", unit: "founder time lost", cost: "$18,200/yr hire planned" },
+        after:   { label: "AI dashboard + automated alerts", value: "2 hrs/wk", unit: "founder review", cost: "$3,500 build" },
+        savings: "$18,200/yr",
+        hoursWeek: 18,
+      },
+      {
+        name: "Policy Risk Outreach",
+        icon: "📱",
+        category: "Retention",
+        current: { label: "Manual per-channel follow-up", value: "30 hrs/wk", unit: "manual effort", cost: "$3,900/yr" },
+        after:   { label: "Auto WhatsApp + SMS + email sequences", value: "8 hrs/wk", unit: "oversight only", cost: "$975/yr" },
+        savings: "$2,925/yr + retention value",
+        hoursWeek: 22,
+      },
+      {
+        name: "19K DB Prioritization",
+        icon: "🗂️",
+        category: "Enrollment",
+        current: { label: "Row-by-row manual review, no scoring", value: "30 hrs/wk", unit: "spreadsheet work", cost: "$3,900/yr" },
+        after:   { label: "AI scoring — highest value rows first", value: "16 hrs/wk", unit: "focused review", cost: "$2,145/yr" },
+        savings: "$1,755/yr + 20–40% conversion lift",
+        hoursWeek: 14,
+      },
+      {
+        name: "QA & Call Monitoring",
+        icon: "🎧",
+        category: "Quality",
+        current: { label: "No QA — unmanned supervisor function", value: "0 calls", unit: "reviewed/wk", cost: "$4,550/yr avoided" },
+        after:   { label: "AI transcription + automated scoring", value: "100%", unit: "calls scored", cost: "$1,365/yr" },
+        savings: "$3,185/yr",
+        hoursWeek: 7,
+      },
+      {
+        name: "CS Benefits Questions",
+        icon: "💬",
+        category: "Customer Service",
+        current: { label: "Manual carrier portal lookup each time", value: "15 hrs/wk", unit: "on repetitive CS", cost: "$1,950/yr" },
+        after:   { label: "AI knowledge base — instant lookup", value: "5 hrs/wk", unit: "complex only", cost: "$683/yr" },
+        savings: "$1,268/yr + churn reduction",
+        hoursWeek: 10,
+      },
+      {
+        name: "Compliance Forms",
+        icon: "📋",
+        category: "Compliance",
+        current: { label: "Manual detection + manual sending", value: "5 hrs/wk", unit: "manual tracking", cost: "$650/yr" },
+        after:   { label: "Auto-detect missing + DocuSign trigger", value: "1 hr/wk", unit: "exception review", cost: "$163/yr" },
+        savings: "$487/yr + regulatory risk reduction",
+        hoursWeek: 4,
+      },
+      {
+        name: "Enrollment Verification",
+        icon: "✅",
+        category: "Operations",
+        current: { label: "Freeform manual check — errors missed", value: "10 hrs/wk", unit: "per Health Sherpa batch", cost: "$1,300/yr" },
+        after:   { label: "Guided checklist + audit trail", value: "5 hrs/wk", unit: "structured review", cost: "$650/yr" },
+        savings: "$650/yr",
+        hoursWeek: 5,
+      },
+    ];
+
+    const FINANCIALS = {
+      implementationCost: "$18,000",
+      paybackPeriod: "4.7 months",
+      year1ROI: "356%",
+      year3NetBenefit: "$439,000",
+    };
+
+    const PHASES = [
+      {
+        phase: "Phase 1",
+        name: "Quick Wins",
+        timeline: "Month 1–2",
+        cost: "$10,500",
+        savings: "$72,155+/yr",
+        items: ["Client acquisition system", "AI supervisor dashboard", "Policy risk outreach automation", "19K DB prioritization"],
+      },
+      {
+        phase: "Phase 2",
+        name: "Foundation",
+        timeline: "Month 2–4",
+        cost: "$4,500",
+        savings: "$4,453/yr",
+        items: ["QA & call monitoring AI", "Benefits explainer knowledge base"],
+      },
+      {
+        phase: "Phase 3",
+        name: "Advanced",
+        timeline: "Month 4–6",
+        cost: "$3,000",
+        savings: "$1,137/yr",
+        items: ["Compliance form automation", "Enrollment verification workflow"],
+      },
+    ];
+
+    const { useState } = React;
+
+    function StatBadge({ label, value, accent }) {
+      return (
+        <div className={`rounded-xl p-4 text-center border-2 ${accent}`}>
+          <div className="text-2xl font-bold">{value}</div>
+          <div className="text-xs mt-1 opacity-75">{label}</div>
+        </div>
+      );
+    }
+
+    function ProcessCard({ proc, isAfter }) {
+      const state = isAfter ? proc.after : proc.current;
+      const theme = isAfter
+        ? { card: "bg-green-950 border-green-700", badge: "bg-green-800 text-green-200", value: "text-green-400", savings: "text-green-300" }
+        : { card: "bg-red-950 border-red-800",   badge: "bg-red-900 text-red-200",   value: "text-red-400",   savings: "text-gray-400" };
+
+      return (
+        <div className={`rounded-xl border p-4 ${theme.card} flex flex-col gap-2`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">{proc.icon}</span>
+              <span className="font-semibold text-white text-sm">{proc.name}</span>
+            </div>
+            <span className={`text-xs px-2 py-0.5 rounded-full ${theme.badge}`}>{proc.category}</span>
+          </div>
+          <div className="text-xs text-gray-400">{state.label}</div>
+          <div className={`text-2xl font-bold ${theme.value}`}>{state.value}</div>
+          <div className="text-xs text-gray-500">{state.unit}</div>
+          <div className="flex items-center justify-between mt-1 pt-2 border-t border-gray-700">
+            <span className="text-xs text-gray-400">Annual cost</span>
+            <span className={`text-sm font-semibold ${isAfter ? "text-green-400" : "text-red-400"}`}>{state.cost}</span>
+          </div>
+          {isAfter && (
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-400">Savings</span>
+              <span className={`text-sm font-bold ${theme.savings}`}>{proc.savings}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function PhaseCard({ phase }) {
+      const colors = { "Phase 1": "border-teal-500", "Phase 2": "border-blue-500", "Phase 3": "border-purple-500" };
+      const bg    = { "Phase 1": "bg-teal-900",      "Phase 2": "bg-blue-900",     "Phase 3": "bg-purple-900" };
+      return (
+        <div className={`rounded-xl border-2 p-4 bg-gray-900 ${colors[phase.phase]}`}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className={`text-xs font-bold px-2 py-0.5 rounded-full text-white ${bg[phase.phase]}`}>{phase.phase}</span>
+            <span className="text-sm font-semibold text-white">{phase.name}</span>
+            <span className="text-xs text-gray-400 ml-auto">{phase.timeline}</span>
+          </div>
+          <div className="flex gap-4 text-xs mb-3">
+            <div><span className="text-gray-400">Investment: </span><span className="text-white font-semibold">{phase.cost}</span></div>
+            <div><span className="text-gray-400">Savings: </span><span className="text-green-400 font-semibold">{phase.savings}</span></div>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {phase.items.map(item => (
+              <span key={item} className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded">{item}</span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [isAfter, setIsAfter] = useState(false);
+
+      return (
+        <div className="min-h-screen bg-gray-950 text-white">
+          <div className={`py-5 px-6 ${isAfter ? "bg-green-900" : "bg-red-900"} transition-all`}>
+            <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <div className="text-xs text-gray-300 mb-0.5">Run Crewless — Automation Audit</div>
+                <h1 className="text-2xl font-bold">{CLIENT.name}</h1>
+                <div className="text-sm text-gray-300">{CLIENT.industry} | {CLIENT.auditDate}</div>
+              </div>
+              <button
+                onClick={() => setIsAfter(!isAfter)}
+                className={`px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg
+                  ${isAfter
+                    ? "bg-green-500 hover:bg-green-400 text-white"
+                    : "bg-red-500 hover:bg-red-400 text-white"}`}
+              >
+                {isAfter ? "✅ Showing: After Automation" : "🔴 Showing: Current State"}
+                <span className="ml-2 text-xs opacity-75">(click to toggle)</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <StatBadge
+                label="Hours Freed / Week"
+                value={`${SUMMARY.hoursFreedPerWeek} hrs`}
+                accent={isAfter ? "border-green-600 text-green-300 bg-green-950" : "border-gray-600 text-gray-400 bg-gray-900"}
+              />
+              <StatBadge
+                label="Annual Direct Savings"
+                value={SUMMARY.annualSavings}
+                accent={isAfter ? "border-green-600 text-green-300 bg-green-950" : "border-gray-600 text-gray-400 bg-gray-900"}
+              />
+              <StatBadge
+                label="Processes Automated"
+                value={`${SUMMARY.processesAutomated} of 8`}
+                accent={isAfter ? "border-green-600 text-green-300 bg-green-950" : "border-gray-600 text-gray-400 bg-gray-900"}
+              />
+              <StatBadge
+                label="Payback Period"
+                value={`${SUMMARY.paybackMonths} mo`}
+                accent={isAfter ? "border-green-600 text-green-300 bg-green-950" : "border-gray-600 text-gray-400 bg-gray-900"}
+              />
+            </div>
+
+            {!isAfter && (
+              <div className="mb-6 p-4 rounded-xl bg-red-950 border border-red-700">
+                <div className="text-red-300 font-bold text-sm mb-1">⚠ Critical Risk: Single-Client Concentration</div>
+                <div className="text-red-200 text-xs">100% of ProAccess revenue ($218,400/yr) comes from one client — Dee Daniel. Zero business continuity. The client acquisition system (Phase 1) is existential, not optional.</div>
+              </div>
+            )}
+
+            {isAfter && (
+              <div className="mb-6 p-4 rounded-xl bg-green-950 border border-green-700">
+                <div className="text-green-300 font-bold text-sm mb-1">✅ After Phase 1: Business Continuity Achieved</div>
+                <div className="text-green-200 text-xs">Automated LinkedIn + email outreach system targeting health insurance agencies. Conservative: 1 new client = $54,600/year additional revenue. 3-year cumulative benefit: $439,000.</div>
+              </div>
+            )}
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`w-3 h-3 rounded-full ${isAfter ? "bg-green-500" : "bg-red-500"}`}></div>
+              <h2 className="text-lg font-bold">
+                {isAfter ? "After Automation — Projected State" : "Current State — Manual Operations"}
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {PROCESSES.map((proc) => (
+                <ProcessCard key={proc.name} proc={proc} isAfter={isAfter} />
+              ))}
+            </div>
+
+            <div className="rounded-2xl border border-gray-700 bg-gray-900 p-6 mb-6">
+              <h3 className="text-base font-bold mb-4 text-gray-200">Financial Impact</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: "Implementation Cost", value: FINANCIALS.implementationCost, color: "text-yellow-400" },
+                  { label: "Payback Period",       value: FINANCIALS.paybackPeriod,      color: "text-blue-400" },
+                  { label: "Year 1 ROI",           value: FINANCIALS.year1ROI,           color: "text-green-400" },
+                  { label: "3-Year Net Benefit",   value: FINANCIALS.year3NetBenefit,    color: "text-green-300" },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="text-center">
+                    <div className={`text-xl font-bold ${color}`}>{value}</div>
+                    <div className="text-xs text-gray-400 mt-1">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {isAfter && (
+              <div>
+                <h3 className="text-base font-bold mb-4 text-gray-200">Implementation Timeline</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {PHASES.map((phase) => (
+                    <PhaseCard key={phase.phase} phase={phase} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-8 pt-4 border-t border-gray-800 flex items-center justify-between text-xs text-gray-500">
+              <span>Prepared by Run Crewless | runcrewless.com</span>
+              <span>CONFIDENTIAL</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

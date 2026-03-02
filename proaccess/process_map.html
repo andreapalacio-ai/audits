@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProAccess — Process Map</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .node-btn { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+    .node-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .node-btn.selected { outline: 3px solid #fff; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const CLIENT = {
+      name: "ProAccess",
+      industry: "ACA Health Insurance Book-of-Business Management",
+    };
+
+    const LIFECYCLE_COLUMNS = [
+      {
+        id: "acquisition",
+        label: "Acquisition",
+        icon: "🎯",
+        nodes: [
+          {
+            id: "proaccess-client-acq",
+            name: "ProAccess Client Acquisition",
+            status: "critical",
+            time: "0 hrs/wk invested",
+            savings: "$50K–$218K/yr",
+            description: "No system exists to attract new clients. 100% revenue from Dee Daniel — existential single-point-of-failure. Zero outbound activity.",
+            action: "PHASE 1 PRIORITY: Build automated LinkedIn + cold email outreach targeting health insurance agencies with 1,000+ active ACA policies.",
+          },
+          {
+            id: "db-prioritization",
+            name: "19K DB Lead Prioritization",
+            status: "critical",
+            time: "30 hrs/wk manual",
+            savings: "$1,755/yr + conversion lift",
+            description: "19,000-row spreadsheet worked row-by-row with no scoring, no prioritization, no automation. Operators waste time on low-probability contacts.",
+            action: "Build AI scoring model — enrollment probability, data completeness, last contact, policy history. Agents work highest-value rows first.",
+          },
+          {
+            id: "initial-outreach",
+            name: "Multi-Channel Client Outreach",
+            status: "automate",
+            time: "30 hrs/wk manual",
+            savings: "$2,925/yr + retention",
+            description: "Clients must be reached via WhatsApp + SMS + email because most don't know they have an active policy. No single reliable channel. All channels required.",
+            action: "Automated 3-step sequences per channel. Triggered when policy flagged at-risk or client uncontacted for X days. No Health Sherpa API needed.",
+          },
+          {
+            id: "crm",
+            name: "CRM System",
+            status: "missing",
+            time: "N/A",
+            savings: "$12,000+/yr",
+            description: "No CRM. All 19,000 contacts managed in a spreadsheet. No contact history, no automation triggers, no pipeline tracking, no reporting.",
+            action: "CRITICAL: Implement GoHighLevel or lightweight CRM in Phase 1. Import 19K database. This is the foundation for all other automation.",
+          },
+        ],
+      },
+      {
+        id: "enrollment",
+        label: "Enrollment",
+        icon: "📝",
+        nodes: [
+          {
+            id: "phone-enrollment",
+            name: "Phone Enrollment",
+            status: "manual",
+            time: "5 agents × 45 hrs/wk",
+            savings: "Capacity liberation",
+            description: "Agents call clients from DB and verbally enroll them. 667 phone enrollments completed in February. Process is working but relies entirely on human execution.",
+            action: "Maintain human enrollment calls. Improve with better scripts + AI call coaching. Free agent time by automating pre-call research and post-call logging.",
+          },
+          {
+            id: "health-sherpa-entry",
+            name: "Health Sherpa Data Entry",
+            status: "manual",
+            time: "~40 enrollments/wk",
+            savings: "$650/yr + rework reduction",
+            description: "Computer operators manually enter enrollment data into Health Sherpa. No API access. ~40 manual enrollments per week. Not every enrollment completes.",
+            action: "Build guided verification checklist. Operators follow structured steps for each enrollment. Errors flagged before submission. Reduces rework.",
+          },
+          {
+            id: "enrollment-verification",
+            name: "Enrollment Verification",
+            status: "warning",
+            time: "10 hrs/wk",
+            savings: "$650/yr",
+            description: "After Health Sherpa entry, operators must verify the enrollment processed correctly. Currently ad-hoc — some errors go undetected until policies fail.",
+            action: "Phase 3: Guided browser checklist with required confirmations at each step. Audit trail created automatically.",
+          },
+          {
+            id: "post-enroll-welcome",
+            name: "Post-Enrollment Welcome",
+            status: "missing",
+            time: "N/A",
+            savings: "$10,000+/yr (churn reduction)",
+            description: "No post-enrollment communication. Clients don't know they're enrolled, don't know what they have, and don't know how to use their benefits.",
+            action: "Build automated welcome sequence: Day 1 (confirmation), Day 3 (benefits overview), Day 7 (how to use insurance), Day 30 (check-in). Reduces CS volume and churn.",
+          },
+        ],
+      },
+      {
+        id: "servicing",
+        label: "Servicing",
+        icon: "⚙️",
+        nodes: [
+          {
+            id: "policy-monitoring",
+            name: "Policy Status Monitoring",
+            status: "critical",
+            time: "No automated detection",
+            savings: "Retention value",
+            description: "No automated system to detect when policies are at risk (missed payment, govt document request). Someone logs in manually and notices — or doesn't.",
+            action: "Build a daily structured check protocol. When status changes are detected, automated outreach sequences fire immediately across all channels.",
+          },
+          {
+            id: "document-requests",
+            name: "Govt Document Request Handling",
+            status: "warning",
+            time: "Variable — unknown volume",
+            savings: "Risk mitigation",
+            description: "When healthcare.gov flags a policy requiring supporting documents (income, immigration status), team must detect it, contact client, collect docs, and upload before deadline.",
+            action: "Structured daily portal check SOP + automated client alert when flag detected. Deadline tracker in CRM. Reduces policy terminations from missed deadlines.",
+          },
+          {
+            id: "cs-benefits",
+            name: "CS: Benefits Questions",
+            status: "automate",
+            time: "15 hrs/wk",
+            savings: "$1,268/yr + loyalty",
+            description: "Clients call asking: what does my plan cover? How do I find a doctor? Why haven't I received my card? Agents answer from memory or slow portal lookups.",
+            action: "Phase 2: AI knowledge base with all carrier/plan data. Agent types carrier + plan → gets instant answer. Also: self-serve client FAQ via WhatsApp bot.",
+          },
+          {
+            id: "cs-1095",
+            name: "CS: 1095-A Requests",
+            status: "automate",
+            time: "~3 hrs/wk",
+            savings: "Included in CS KB",
+            description: "Frequent client question during tax season: 'I need my 1095-A form.' Agents manually explain how to download from healthcare.gov each time.",
+            action: "Add 1095-A retrieval instructions to CS knowledge base. Create templated WhatsApp/SMS message with step-by-step instructions. Eliminate manual handling.",
+          },
+        ],
+      },
+      {
+        id: "retention",
+        label: "Retention",
+        icon: "🔄",
+        nodes: [
+          {
+            id: "payment-followup",
+            name: "Payment Lapse Follow-Up",
+            status: "automate",
+            time: "Included in outreach hrs",
+            savings: "Included in outreach ROI",
+            description: "When a client misses a premium payment, the policy is at risk. Team must reach them before grace period expires. Currently manual — many fall through.",
+            action: "Automated payment lapse sequence: Day 1 all channels, Day 5 urgency, Day 10 final warning. Triggered from CRM flag (no Health Sherpa API needed).",
+          },
+          {
+            id: "loyalty-program",
+            name: "Client Loyalty Program",
+            status: "missing",
+            time: "N/A",
+            savings: "$15,000+/yr (churn reduction)",
+            description: "Zero client loyalty infrastructure. Clients don't know they have insurance, don't value the relationship, and are easily lost to competitors or simply don't renew.",
+            action: "Build touchpoint sequence: anniversary messages, benefits reminders, open enrollment alerts. Make clients feel the agency is looking out for them.",
+          },
+          {
+            id: "compliance-forms",
+            name: "Consent Form Compliance",
+            status: "warning",
+            time: "5 hrs/wk",
+            savings: "$487/yr + risk reduction",
+            description: "Clients must sign authorization forms confirming the agency as their agent of record. Missing forms are a regulatory risk. Currently tracked manually.",
+            action: "Phase 3: Database scan for missing forms → automated DocuSign/Hellosign delivery → auto-reminders until signed. Compliance status visible in CRM.",
+          },
+          {
+            id: "qa-monitoring",
+            name: "QA & Call Quality",
+            status: "automate",
+            time: "0 hrs (unmanned)",
+            savings: "$3,185/yr",
+            description: "No call quality monitoring. Supervisor was supposed to audit calls daily but role is unfilled. Agent quality is unknown and uncheckable.",
+            action: "Phase 2: Deploy Fireflies.ai or Otter.ai for automatic call transcription + AI scoring. Flag poor calls for review. Replace 10 hrs/wk manual QA.",
+          },
+        ],
+      },
+      {
+        id: "operations",
+        label: "Operations & Growth",
+        icon: "🚀",
+        nodes: [
+          {
+            id: "supervisor-dashboard",
+            name: "AI Supervisor Dashboard",
+            status: "missing",
+            time: "0 (role unmanned)",
+            savings: "$18,200/yr",
+            description: "Supervisor role is unfilled. Production tracking, goal monitoring, agent accountability, and daily reporting all fall on founders or go undone.",
+            action: "PHASE 1: Build automated Hubstaff API dashboard. Daily production digests, agent performance scores, goal tracking alerts delivered to founders via WhatsApp/email.",
+          },
+          {
+            id: "agent-licenses",
+            name: "Agent License Tracking",
+            status: "warning",
+            time: "Ad hoc",
+            savings: "Compliance risk mitigation",
+            description: "Agent licenses and certifications must be maintained for legal compliance. Currently tracked ad-hoc. No automated renewal reminders or deadline tracking.",
+            action: "Build license tracker in CRM/spreadsheet with automated reminders 60/30/14 days before expiration. Stephanie owns execution.",
+          },
+          {
+            id: "hubstaff-reporting",
+            name: "Hubstaff Productivity Reports",
+            status: "automate",
+            time: "5 hrs/wk (manual)",
+            savings: "$650/yr + founder time",
+            description: "Hubstaff tracks all agent time but reports require manual compilation. Founders check Hubstaff manually instead of getting automated alerts.",
+            action: "Hubstaff API → automated daily digest. Flag any agent below 60% productivity. Weekly team summary auto-sent to founders. Zero manual compilation.",
+          },
+          {
+            id: "billing-staffing",
+            name: "Billing vs. Staffing Alignment",
+            status: "critical",
+            time: "Immediate action needed",
+            savings: "Trust + contract risk",
+            description: "ProAccess is billing Dee Daniel for 12 agents at $350/week but only 6 are working. This gap is a significant trust and contract risk with their only client.",
+            action: "IMMEDIATE: Either fill the 6 vacant positions OR renegotiate the contract to reflect actual headcount. Resolve within 30 days.",
+          },
+        ],
+      },
+    ];
+
+    const TOOLS = [
+      { name: "Health Sherpa", status: "manual", note: "Enrollment platform — manual browser only, no API" },
+      { name: "Healthcare.gov (CMS)", status: "manual", note: "Policy status checks — manual login daily" },
+      { name: "Carrier Portals (multiple)", status: "manual", note: "Benefits, cards, status — all manual" },
+      { name: "Hubstaff", status: "standalone", note: "Time tracking — not connected to reporting" },
+      { name: "WhatsApp (3 lines)", status: "standalone", note: "Primary comms — no CRM capture" },
+      { name: "Google Sheets / Excel", status: "manual", note: "Acting as CRM — 19K rows, no automation" },
+      { name: "CRM (missing)", status: "missing", note: "CRITICAL GAP — Phase 1 priority" },
+      { name: "Automation Platform (missing)", status: "missing", note: "Make.com or Zapier — Phase 1" },
+    ];
+
+    const { useState } = React;
+
+    const STATUS_CONFIG = {
+      critical: { bg: "bg-red-500",   text: "text-white",     label: "Critical",  dot: "bg-red-500" },
+      automate: { bg: "bg-green-500", text: "text-white",     label: "Automate",  dot: "bg-green-500" },
+      warning:  { bg: "bg-yellow-500",text: "text-gray-900",  label: "Warning",   dot: "bg-yellow-500" },
+      missing:  { bg: "bg-transparent border-2 border-red-500 border-dashed", text: "text-red-400", label: "Missing", dot: "bg-red-200" },
+      manual:   { bg: "bg-blue-500",  text: "text-white",     label: "Manual",    dot: "bg-blue-500" },
+      normal:   { bg: "bg-gray-500",  text: "text-white",     label: "Normal",    dot: "bg-gray-500" },
+    };
+
+    const TOOL_STATUS = {
+      integrated: { color: "text-green-400", icon: "✓", label: "Integrated" },
+      standalone: { color: "text-yellow-400", icon: "⚠", label: "Standalone" },
+      manual:     { color: "text-orange-400", icon: "⚠", label: "Manual Only" },
+      missing:    { color: "text-red-400",    icon: "✗", label: "Not Present" },
+    };
+
+    function NodeButton({ node, isSelected, onClick }) {
+      const cfg = STATUS_CONFIG[node.status] || STATUS_CONFIG.normal;
+      return (
+        <button
+          onClick={onClick}
+          className={`node-btn w-full rounded-lg p-3 text-left ${cfg.bg} ${cfg.text} ${isSelected ? "selected" : ""}`}
+        >
+          <div className="font-semibold text-xs leading-tight">{node.name}</div>
+          <div className="text-xs mt-1 opacity-75">{node.time}</div>
+          {node.savings && (
+            <div className={`text-xs mt-1 font-bold ${node.status === "missing" ? "text-red-300" : "opacity-90"}`}>
+              {node.savings}
+            </div>
+          )}
+        </button>
+      );
+    }
+
+    function DetailPanel({ node, onClose }) {
+      if (!node) return null;
+      const cfg = STATUS_CONFIG[node.status] || STATUS_CONFIG.normal;
+      return (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 p-5 z-50 shadow-2xl">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className={`px-2 py-0.5 rounded text-xs font-bold ${cfg.bg} ${cfg.text}`}>{cfg.label}</span>
+                <h3 className="text-lg font-bold text-white">{node.name}</h3>
+              </div>
+              <button onClick={onClose} className="text-gray-400 hover:text-white text-xl font-bold ml-4">×</button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Current State</div>
+                <p className="text-sm text-gray-200">{node.description}</p>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Time Investment</div>
+                <p className="text-sm font-bold text-white">{node.time}</p>
+                {node.savings && (
+                  <div className="mt-2">
+                    <div className="text-xs text-gray-400 mb-1">Value / Savings</div>
+                    <p className="text-sm font-bold text-green-400">{node.savings}</p>
+                  </div>
+                )}
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Recommended Action</div>
+                <p className="text-sm text-green-300">{node.action}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [selectedNode, setSelectedNode] = useState(null);
+
+      const handleNodeClick = (node) => {
+        setSelectedNode(prev => prev?.id === node.id ? null : node);
+      };
+
+      return (
+        <div className="min-h-screen bg-gray-950 text-white pb-48">
+          <div className="bg-gray-900 border-b border-gray-700 px-6 py-4">
+            <div className="max-w-full mx-auto flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <div className="text-xs text-gray-400">Run Crewless — Automation Audit</div>
+                <h1 className="text-xl font-bold">{CLIENT.name} — Process Map</h1>
+                <div className="text-xs text-gray-400 mt-0.5">{CLIENT.industry} | Click any node for details</div>
+              </div>
+              <div className="flex flex-wrap gap-3 text-xs">
+                {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+                  <div key={key} className="flex items-center gap-1">
+                    <div className={`w-2.5 h-2.5 rounded-full ${cfg.dot}`}></div>
+                    <span className="text-gray-300">{cfg.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="px-4 py-6 overflow-x-auto">
+            <div className="flex gap-4 min-w-max pb-4" style={{ minWidth: "1000px" }}>
+              {LIFECYCLE_COLUMNS.map((col) => (
+                <div key={col.id} className="flex-1 min-w-44">
+                  <div className="text-center mb-4">
+                    <div className="text-2xl mb-1">{col.icon}</div>
+                    <div className="font-bold text-sm text-white">{col.label}</div>
+                    <div className="h-0.5 bg-gray-700 mt-2 mx-4 rounded"></div>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {col.nodes.map((node) => (
+                      <NodeButton
+                        key={node.id}
+                        node={node}
+                        isSelected={selectedNode?.id === node.id}
+                        onClick={() => handleNodeClick(node)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="px-4 pb-4">
+            <div className="border border-gray-700 rounded-xl p-4 bg-gray-900">
+              <h3 className="font-bold text-sm mb-3 text-gray-200">Data Systems & Integration Status</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                {TOOLS.map((tool) => {
+                  const ts = TOOL_STATUS[tool.status] || TOOL_STATUS.standalone;
+                  return (
+                    <div key={tool.name} className="bg-gray-800 rounded-lg p-3">
+                      <div className="font-semibold text-xs text-white leading-tight">{tool.name}</div>
+                      <div className={`text-xs mt-1 font-bold ${ts.color}`}>{ts.icon} {ts.label}</div>
+                      <div className="text-xs text-gray-500 mt-1 leading-tight">{tool.note}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="px-4 pt-2 pb-2 flex justify-between text-xs text-gray-600">
+            <span>Prepared by Run Crewless | runcrewless.com</span>
+            <span>CONFIDENTIAL</span>
+          </div>
+
+          {selectedNode && (
+            <DetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
