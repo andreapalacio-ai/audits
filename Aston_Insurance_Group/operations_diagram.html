@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aston Insurance Group - Operations & Automation Opportunity Map</title>
+  <title>Aston Insurance Group - Mapa de Oportunidades de Automatizacion</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -49,105 +49,104 @@
 
     const phases = [
       {
-        name: 'Acquisition',
+        name: 'Adquisicion',
         accent: '#3B82F6',
         accentLight: '#EFF6FF',
         processes: [
-          { id: 'acq-1', name: 'Referrals Only', status: 'warning', metric: '100% of leads', detail: 'No active marketing, no outbound. All clients come from word-of-mouth.', risk: 'Single channel dependency' },
-          { id: 'acq-2', name: 'Inbound Calls', status: 'normal', metric: '500+/mo', detail: 'RingCentral VoIP - 4 hrs/day team time. NOT integrated with ZOHO.' },
-          { id: 'acq-3', name: 'WhatsApp', status: 'unknown', metric: 'Volume unknown', detail: 'WhatsApp Business used but API integration status unknown.' },
-          { id: 'acq-4', name: 'Manual Lead Entry', status: 'automate', metric: '5-10 min each', detail: 'Manually entering 20-50 leads/month into ZOHO.', savings: '$2,080/yr' },
+          { id: 'acq-1', name: 'Solo Referidos', status: 'warning', metric: '100% de prospectos', detail: 'Sin marketing activo ni llamadas salientes. Todos los clientes llegan por recomendacion.', risk: 'Dependencia de un solo canal' },
+          { id: 'acq-2', name: 'Llamadas Entrantes', status: 'normal', metric: '500+/mes', detail: 'RingCentral VoIP - 4 hrs/dia del equipo. NO integrado con ZOHO.' },
+          { id: 'acq-3', name: 'WhatsApp', status: 'unknown', metric: 'Volumen desconocido', detail: 'Se usa WhatsApp Business pero se desconoce el estado de integracion API.' },
+          { id: 'acq-4', name: 'Ingreso Manual de Prospectos', status: 'automate', metric: '5-10 min c/u', detail: 'Ingreso manual de 20-50 prospectos/mes en ZOHO.', savings: '$2,080/ano' },
         ],
       },
       {
-        name: 'Onboarding',
+        name: 'Incorporacion',
         accent: '#8B5CF6',
         accentLight: '#F5F3FF',
         processes: [
-          { id: 'onb-1', name: 'Intake Call', status: 'normal', metric: '10-60+ min', detail: '20-50 new clients/month. Highly variable call length.' },
-          { id: 'onb-2', name: 'Health Sherpa Quoting', status: 'normal', metric: '20-45 min', detail: 'ACA plan comparison via certified platform.' },
-          { id: 'onb-3', name: 'Consent Collection', status: 'critical', metric: 'Via Cliq/Email', detail: 'NO SMS CONSENT CAPTURED. Cannot legally do bulk SMS marketing.', risk: 'TCPA Compliance Gap' },
-          { id: 'onb-4', name: 'Document Collection', status: 'automate', metric: '30-60 min/case', detail: 'Manual follow-up for missing documents.', savings: '$4,160/yr' },
-          { id: 'onb-5', name: 'Application Submit', status: 'normal', metric: '15-30 min', detail: 'Submission through Health Sherpa or carrier portal.' },
+          { id: 'onb-1', name: 'Llamada Inicial', status: 'normal', metric: '10-60+ min', detail: '20-50 clientes nuevos/mes. Duracion de llamada muy variable.' },
+          { id: 'onb-2', name: 'Cotizacion Health Sherpa', status: 'normal', metric: '20-45 min', detail: 'Comparacion de planes ACA mediante plataforma certificada.' },
+          { id: 'onb-3', name: 'Recopilacion de Consentimiento', status: 'critical', metric: 'Via Cliq/Email', detail: 'NO SE CAPTURA CONSENTIMIENTO SMS. No se puede hacer marketing masivo por SMS legalmente.', risk: 'Brecha de Cumplimiento TCPA' },
+          { id: 'onb-4', name: 'Recopilacion de Documentos', status: 'automate', metric: '30-60 min/caso', detail: 'Seguimiento manual de documentos faltantes.', savings: '$4,160/ano' },
+          { id: 'onb-5', name: 'Envio de Solicitud', status: 'normal', metric: '15-30 min', detail: 'Envio mediante Health Sherpa o portal de aseguradora.' },
         ],
       },
       {
-        name: 'Policy Servicing',
+        name: 'Servicio de Polizas',
         accent: '#EC4899',
         accentLight: '#FDF2F8',
         processes: [
-          { id: 'svc-1', name: 'Policy Verification', status: 'critical', metric: '8-15 min each', detail: 'Mery = 100% FTE on this alone. 3,000 policies at peak, 300 normal. Manual Healthcare.gov lookup.', savings: '$34,580/yr', risk: '1 FTE Bottleneck' },
-          { id: 'svc-2', name: 'Payment Check', status: 'normal', metric: 'Monthly', detail: 'Download carrier lists, cross-reference manually.' },
-          { id: 'svc-3', name: 'Payment Follow-up', status: 'automate', metric: '5-7 min each', detail: '45-80 clients/month. Manual SMS one-by-one via RingCentral.', savings: '$6,240/yr' },
-          { id: 'svc-4', name: 'Admin Tasks', status: 'automate', metric: '25 min each', detail: 'Yuliana 80% on admin. ~100 tasks/month.', savings: '$10,920/yr' },
-          { id: 'svc-5', name: 'ID Card Requests', status: 'normal', metric: '10 min each', detail: '~100 requests/month for ID cards and doctor lists.' },
+          { id: 'svc-1', name: 'Verificacion de Polizas', status: 'critical', metric: '8-15 min c/u', detail: 'Mery = 100% dedicada a esto. 3,000 polizas en temporada alta, 300 normal. Busqueda manual en Healthcare.gov.', savings: '$34,580/ano', risk: 'Cuello de Botella 1 FTE' },
+          { id: 'svc-2', name: 'Revision de Pagos', status: 'normal', metric: 'Mensual', detail: 'Descargar listas de aseguradoras, cruzar datos manualmente.' },
+          { id: 'svc-3', name: 'Seguimiento de Pagos', status: 'automate', metric: '5-7 min c/u', detail: '45-80 clientes/mes. SMS manual uno por uno via RingCentral.', savings: '$6,240/ano' },
+          { id: 'svc-4', name: 'Tareas Administrativas', status: 'automate', metric: '25 min c/u', detail: 'Yuliana 80% en admin. ~100 tareas/mes.', savings: '$10,920/ano' },
+          { id: 'svc-5', name: 'Solicitudes de Tarjeta de ID', status: 'normal', metric: '10 min c/u', detail: '~100 solicitudes/mes de tarjetas de ID y listas de doctores.' },
         ],
       },
       {
-        name: 'Retention',
+        name: 'Retencion',
         accent: '#F59E0B',
         accentLight: '#FFFBEB',
         processes: [
-          { id: 'ret-1', name: 'Renewal Outreach', status: 'warning', metric: 'Not systematic', detail: 'No automated renewal reminders. Ad-hoc contact during OE.', savings: '$8,320/yr', risk: 'Churn Risk' },
-          { id: 'ret-2', name: 'Open Enrollment', status: 'normal', metric: 'Oct-Dec', detail: 'Peak season. All hands on deck.' },
-          { id: 'ret-3', name: 'Win-back', status: 'missing', metric: 'Not defined', detail: 'No win-back process exists.', risk: 'Lost Revenue' },
+          { id: 'ret-1', name: 'Contacto de Renovacion', status: 'warning', metric: 'No sistematico', detail: 'Sin recordatorios automaticos de renovacion. Contacto ad-hoc durante inscripcion abierta.', savings: '$8,320/ano', risk: 'Riesgo de Perdida' },
+          { id: 'ret-2', name: 'Inscripcion Abierta', status: 'normal', metric: 'Oct-Dic', detail: 'Temporada alta. Todo el equipo ocupado.' },
+          { id: 'ret-3', name: 'Recuperacion', status: 'missing', metric: 'No definido', detail: 'No existe proceso de recuperacion de clientes.', risk: 'Ingresos Perdidos' },
         ],
       },
       {
-        name: 'Not Being Done',
+        name: 'No Se Esta Haciendo',
         accent: '#EF4444',
         accentLight: '#FEF2F2',
         processes: [
-          { id: 'gap-1', name: 'Birthday Outreach', status: 'missing', metric: 'Never', detail: 'Zero birthday messages sent. Quick win opportunity.', savings: '$2,600/yr revenue' },
-          { id: 'gap-2', name: 'Medicare Age Trigger', status: 'missing', metric: 'Never', detail: 'Not tracking clients turning 65. Missing Medicare cross-sell.', savings: '$15,000+/yr revenue' },
-          { id: 'gap-3', name: 'Email Marketing', status: 'missing', metric: '0 campaigns', detail: '3,000 client emails, ZERO campaigns ever sent.', savings: '$15,600/yr revenue' },
-          { id: 'gap-4', name: 'Outbound Sales', status: 'missing', metric: 'Never', detail: 'No time for outbound. Staff fully consumed by service.', savings: 'TBD after automation' },
+          { id: 'gap-1', name: 'Contacto de Cumpleanos', status: 'missing', metric: 'Nunca', detail: 'Cero mensajes de cumpleanos enviados. Oportunidad de victoria rapida.', savings: '$2,600/ano ingresos' },
+          { id: 'gap-2', name: 'Activador de Edad Medicare', status: 'missing', metric: 'Nunca', detail: 'No se rastrean clientes que cumplen 65. Se pierde la venta cruzada de Medicare.', savings: '$15,000+/ano ingresos' },
+          { id: 'gap-3', name: 'Marketing por Email', status: 'missing', metric: '0 campanas', detail: '3,000 emails de clientes, CERO campanas enviadas.', savings: '$15,600/ano ingresos' },
+          { id: 'gap-4', name: 'Ventas Salientes', status: 'missing', metric: 'Nunca', detail: 'Sin tiempo para llamadas salientes. El personal esta consumido por el servicio.', savings: 'Por determinar post-automatizacion' },
         ],
       },
     ];
 
     const statusConfig = {
-      critical:  { label: 'Critical',       color: '#EF4444', bg: '#FEF2F2', border: 'solid' },
-      automate:  { label: 'Automate',       color: '#10B981', bg: '#ECFDF5', border: 'solid' },
-      warning:   { label: 'Warning',        color: '#F59E0B', bg: '#FFFBEB', border: 'solid' },
-      missing:   { label: 'Missing',        color: '#F87171', bg: '#FEF2F2', border: 'dashed' },
+      critical:  { label: 'Critico',        color: '#EF4444', bg: '#FEF2F2', border: 'solid' },
+      automate:  { label: 'Automatizar',    color: '#10B981', bg: '#ECFDF5', border: 'solid' },
+      warning:   { label: 'Alerta',         color: '#F59E0B', bg: '#FFFBEB', border: 'solid' },
+      missing:   { label: 'Faltante',       color: '#F87171', bg: '#FEF2F2', border: 'dashed' },
       normal:    { label: 'Normal',         color: '#9CA3AF', bg: '#F9FAFB', border: 'solid' },
-      unknown:   { label: 'Unknown',        color: '#818CF8', bg: '#EEF2FF', border: 'solid' },
+      unknown:   { label: 'Desconocido',    color: '#818CF8', bg: '#EEF2FF', border: 'solid' },
     };
 
     const roiMetrics = [
-      { label: 'Annual Savings', value: '$78,936', sub: 'Identified opportunity' },
-      { label: 'Implementation Cost', value: '$21,500', sub: 'Full automation build' },
-      { label: 'Payback Period', value: '3.3 months', sub: 'Time to break even' },
-      { label: '3-Year ROI', value: '1,002%', sub: 'Return on investment' },
+      { label: 'Ahorro Anual', value: '$78,936', sub: 'Oportunidad identificada' },
+      { label: 'Periodo de Recuperacion', value: '3.3 meses', sub: 'Tiempo para recuperar la inversion' },
+      { label: 'ROI a 3 Anos', value: '1,002%', sub: 'Retorno sobre la inversion' },
     ];
 
     const keyFindings = [
       {
-        title: 'Critical Issues',
+        title: 'Problemas Criticos',
         color: '#EF4444',
         items: [
-          'Policy Verification consumes 1 FTE (Mery 100%)',
-          'No SMS consent captured',
-          'RingCentral not integrated with ZOHO',
+          'Verificacion de polizas consume 1 FTE (Mery 100%)',
+          'No se captura consentimiento SMS',
+          'RingCentral no integrado con ZOHO',
         ],
       },
       {
-        title: 'Top ROI Opportunities',
+        title: 'Principales Oportunidades de ROI',
         color: '#10B981',
         items: [
-          'Policy Verification RPA $34,580/yr',
-          'Email Marketing $15,600/yr',
-          'ZOHO Workflow Automation $10,920/yr',
+          'RPA de Verificacion de Polizas $34,580/ano',
+          'Marketing por Email $15,600/ano',
+          'Automatizacion de Flujos ZOHO $10,920/ano',
         ],
       },
       {
-        title: 'Quick Wins',
+        title: 'Victorias Rapidas',
         color: '#3B82F6',
         items: [
-          'Add SMS consent checkbox to intake',
-          'Birthday automation in ZOHO',
-          'Medicare age trigger (65)',
+          'Agregar checkbox de consentimiento SMS al formulario',
+          'Automatizacion de cumpleanos en ZOHO',
+          'Activador de edad Medicare (65)',
         ],
       },
     ];
@@ -219,7 +218,7 @@
               <h3 className="text-sm font-bold text-gray-800 tracking-tight">{phase.name}</h3>
             </div>
             <p className="text-[11px] text-gray-400 mt-0.5 pl-[18px]">
-              {phase.processes.length} process{phase.processes.length !== 1 ? 'es' : ''}
+              {phase.processes.length} proceso{phase.processes.length !== 1 ? 's' : ''}
             </p>
           </div>
           {/* Cards */}
@@ -273,24 +272,24 @@
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
             {/* Detail */}
             <div className="sm:col-span-2">
-              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Process Detail</p>
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Detalle del Proceso</p>
               <p className="text-sm text-gray-700 leading-relaxed">{process.detail}</p>
             </div>
             {/* Meta */}
             <div className="space-y-3">
               <div>
-                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Time / Volume</p>
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Tiempo / Volumen</p>
                 <p className="text-sm font-medium text-gray-800">{process.metric}</p>
               </div>
               {process.savings && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Estimated Savings</p>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Ahorro Estimado</p>
                   <p className="text-sm font-bold text-emerald-600">{process.savings}</p>
                 </div>
               )}
               {process.risk && (
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Risk</p>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Riesgo</p>
                   <p className="text-sm font-bold text-red-500">{process.risk}</p>
                 </div>
               )}
@@ -320,20 +319,20 @@
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Aston Insurance Group</h1>
-                  <p className="text-sm text-gray-500 mt-1 font-medium">Operations & Automation Opportunity Map</p>
+                  <p className="text-sm text-gray-500 mt-1 font-medium">Mapa de Oportunidades de Automatizacion</p>
                 </div>
                 <div className="flex items-center gap-5 text-[12px] text-gray-400 font-medium">
                   <span className="flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m0 0a4 4 0 118 0m-8 0a4 4 0 008 0m-4-8a4 4 0 100-8 4 4 0 000 8z"/></svg>
-                    ~3,000 Clients
+                    ~3,000 Clientes
                   </span>
                   <span className="flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    5 Team Members
+                    5 Miembros del Equipo
                   </span>
                   <span className="flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    90% ACA Focus
+                    90% Enfoque ACA
                   </span>
                 </div>
               </div>
@@ -344,7 +343,7 @@
 
             {/* ---- ROI SUMMARY ---- */}
             <section>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {roiMetrics.map((m, i) => (
                   <div
                     key={i}
@@ -362,7 +361,7 @@
             {/* ---- LEGEND ---- */}
             <section>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-gray-500">
-                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mr-1">Status:</span>
+                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mr-1">Estado:</span>
                 {Object.entries(statusConfig).map(([key, cfg]) => (
                   <span key={key} className="flex items-center gap-1.5">
                     <StatusDot status={key} />
@@ -399,7 +398,7 @@
 
             {/* ---- KEY FINDINGS ---- */}
             <section>
-              <h2 className="text-sm font-bold text-gray-800 mb-4 tracking-tight">Key Findings</h2>
+              <h2 className="text-sm font-bold text-gray-800 mb-4 tracking-tight">Hallazgos Clave</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {keyFindings.map((finding, i) => (
                   <div
@@ -431,8 +430,8 @@
           {/* ---- FOOTER ---- */}
           <footer className="border-t border-gray-100 mt-8">
             <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-400">
-              <span>Operations Analysis &middot; Aston Insurance Group &middot; March 2026</span>
-              <span className="mt-1 sm:mt-0">Prepared by <span className="font-semibold text-gray-500">Run Crewless</span></span>
+              <span>Analisis de Operaciones &middot; Aston Insurance Group &middot; Marzo 2026</span>
+              <span className="mt-1 sm:mt-0">Preparado por <span className="font-semibold text-gray-500">Run Crewless</span></span>
             </div>
           </footer>
         </div>
