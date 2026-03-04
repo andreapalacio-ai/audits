@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aston Insurance Group - Operations & Automation Opportunity Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #FFFFFF; }
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .detail-enter { animation: slideDown 0.25s ease-out; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .phase-col { min-width: 220px; }
+    ::-webkit-scrollbar { height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useCallback } = React;
+
+    /* ------------------------------------------------------------------ */
+    /*  DATA                                                               */
+    /* ------------------------------------------------------------------ */
+
+    const phases = [
+      {
+        name: 'Acquisition',
+        accent: '#3B82F6',
+        accentLight: '#EFF6FF',
+        processes: [
+          { id: 'acq-1', name: 'Referrals Only', status: 'warning', metric: '100% of leads', detail: 'No active marketing, no outbound. All clients come from word-of-mouth.', risk: 'Single channel dependency' },
+          { id: 'acq-2', name: 'Inbound Calls', status: 'normal', metric: '500+/mo', detail: 'RingCentral VoIP - 4 hrs/day team time. NOT integrated with ZOHO.' },
+          { id: 'acq-3', name: 'WhatsApp', status: 'unknown', metric: 'Volume unknown', detail: 'WhatsApp Business used but API integration status unknown.' },
+          { id: 'acq-4', name: 'Manual Lead Entry', status: 'automate', metric: '5-10 min each', detail: 'Manually entering 20-50 leads/month into ZOHO.', savings: '$2,080/yr' },
+        ],
+      },
+      {
+        name: 'Onboarding',
+        accent: '#8B5CF6',
+        accentLight: '#F5F3FF',
+        processes: [
+          { id: 'onb-1', name: 'Intake Call', status: 'normal', metric: '10-60+ min', detail: '20-50 new clients/month. Highly variable call length.' },
+          { id: 'onb-2', name: 'Health Sherpa Quoting', status: 'normal', metric: '20-45 min', detail: 'ACA plan comparison via certified platform.' },
+          { id: 'onb-3', name: 'Consent Collection', status: 'critical', metric: 'Via Cliq/Email', detail: 'NO SMS CONSENT CAPTURED. Cannot legally do bulk SMS marketing.', risk: 'TCPA Compliance Gap' },
+          { id: 'onb-4', name: 'Document Collection', status: 'automate', metric: '30-60 min/case', detail: 'Manual follow-up for missing documents.', savings: '$4,160/yr' },
+          { id: 'onb-5', name: 'Application Submit', status: 'normal', metric: '15-30 min', detail: 'Submission through Health Sherpa or carrier portal.' },
+        ],
+      },
+      {
+        name: 'Policy Servicing',
+        accent: '#EC4899',
+        accentLight: '#FDF2F8',
+        processes: [
+          { id: 'svc-1', name: 'Policy Verification', status: 'critical', metric: '8-15 min each', detail: 'Mery = 100% FTE on this alone. 3,000 policies at peak, 300 normal. Manual Healthcare.gov lookup.', savings: '$34,580/yr', risk: '1 FTE Bottleneck' },
+          { id: 'svc-2', name: 'Payment Check', status: 'normal', metric: 'Monthly', detail: 'Download carrier lists, cross-reference manually.' },
+          { id: 'svc-3', name: 'Payment Follow-up', status: 'automate', metric: '5-7 min each', detail: '45-80 clients/month. Manual SMS one-by-one via RingCentral.', savings: '$6,240/yr' },
+          { id: 'svc-4', name: 'Admin Tasks', status: 'automate', metric: '25 min each', detail: 'Yuliana 80% on admin. ~100 tasks/month.', savings: '$10,920/yr' },
+          { id: 'svc-5', name: 'ID Card Requests', status: 'normal', metric: '10 min each', detail: '~100 requests/month for ID cards and doctor lists.' },
+        ],
+      },
+      {
+        name: 'Retention',
+        accent: '#F59E0B',
+        accentLight: '#FFFBEB',
+        processes: [
+          { id: 'ret-1', name: 'Renewal Outreach', status: 'warning', metric: 'Not systematic', detail: 'No automated renewal reminders. Ad-hoc contact during OE.', savings: '$8,320/yr', risk: 'Churn Risk' },
+          { id: 'ret-2', name: 'Open Enrollment', status: 'normal', metric: 'Oct-Dec', detail: 'Peak season. All hands on deck.' },
+          { id: 'ret-3', name: 'Win-back', status: 'missing', metric: 'Not defined', detail: 'No win-back process exists.', risk: 'Lost Revenue' },
+        ],
+      },
+      {
+        name: 'Not Being Done',
+        accent: '#EF4444',
+        accentLight: '#FEF2F2',
+        processes: [
+          { id: 'gap-1', name: 'Birthday Outreach', status: 'missing', metric: 'Never', detail: 'Zero birthday messages sent. Quick win opportunity.', savings: '$2,600/yr revenue' },
+          { id: 'gap-2', name: 'Medicare Age Trigger', status: 'missing', metric: 'Never', detail: 'Not tracking clients turning 65. Missing Medicare cross-sell.', savings: '$15,000+/yr revenue' },
+          { id: 'gap-3', name: 'Email Marketing', status: 'missing', metric: '0 campaigns', detail: '3,000 client emails, ZERO campaigns ever sent.', savings: '$15,600/yr revenue' },
+          { id: 'gap-4', name: 'Outbound Sales', status: 'missing', metric: 'Never', detail: 'No time for outbound. Staff fully consumed by service.', savings: 'TBD after automation' },
+        ],
+      },
+    ];
+
+    const statusConfig = {
+      critical:  { label: 'Critical',       color: '#EF4444', bg: '#FEF2F2', border: 'solid' },
+      automate:  { label: 'Automate',       color: '#10B981', bg: '#ECFDF5', border: 'solid' },
+      warning:   { label: 'Warning',        color: '#F59E0B', bg: '#FFFBEB', border: 'solid' },
+      missing:   { label: 'Missing',        color: '#F87171', bg: '#FEF2F2', border: 'dashed' },
+      normal:    { label: 'Normal',         color: '#9CA3AF', bg: '#F9FAFB', border: 'solid' },
+      unknown:   { label: 'Unknown',        color: '#818CF8', bg: '#EEF2FF', border: 'solid' },
+    };
+
+    const roiMetrics = [
+      { label: 'Annual Savings', value: '$78,936', sub: 'Identified opportunity' },
+      { label: 'Implementation Cost', value: '$21,500', sub: 'Full automation build' },
+      { label: 'Payback Period', value: '3.3 months', sub: 'Time to break even' },
+      { label: '3-Year ROI', value: '1,002%', sub: 'Return on investment' },
+    ];
+
+    const keyFindings = [
+      {
+        title: 'Critical Issues',
+        color: '#EF4444',
+        items: [
+          'Policy Verification consumes 1 FTE (Mery 100%)',
+          'No SMS consent captured',
+          'RingCentral not integrated with ZOHO',
+        ],
+      },
+      {
+        title: 'Top ROI Opportunities',
+        color: '#10B981',
+        items: [
+          'Policy Verification RPA $34,580/yr',
+          'Email Marketing $15,600/yr',
+          'ZOHO Workflow Automation $10,920/yr',
+        ],
+      },
+      {
+        title: 'Quick Wins',
+        color: '#3B82F6',
+        items: [
+          'Add SMS consent checkbox to intake',
+          'Birthday automation in ZOHO',
+          'Medicare age trigger (65)',
+        ],
+      },
+    ];
+
+    /* ------------------------------------------------------------------ */
+    /*  COMPONENTS                                                         */
+    /* ------------------------------------------------------------------ */
+
+    function StatusDot({ status }) {
+      const cfg = statusConfig[status];
+      const isDashed = cfg.border === 'dashed';
+      return (
+        <span
+          style={{
+            display: 'inline-block',
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            backgroundColor: isDashed ? 'transparent' : cfg.color,
+            border: isDashed ? `2px dashed ${cfg.color}` : 'none',
+            flexShrink: 0,
+          }}
+        />
+      );
+    }
+
+    function ProcessCard({ process, phaseAccent, isSelected, onClick }) {
+      const cfg = statusConfig[process.status];
+      const isDashed = cfg.border === 'dashed';
+      return (
+        <div
+          onClick={onClick}
+          className="card-hover cursor-pointer rounded-lg bg-white p-3.5 mb-2.5"
+          style={{
+            borderLeft: `3px ${isDashed ? 'dashed' : 'solid'} ${cfg.color}`,
+            boxShadow: isSelected
+              ? `0 0 0 2px ${phaseAccent}22, 0 4px 15px rgba(0,0,0,0.08)`
+              : '0 1px 4px rgba(0,0,0,0.06)',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <div className="flex items-start gap-2">
+            <StatusDot status={process.status} />
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-semibold text-gray-800 leading-tight">{process.name}</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">{process.metric}</p>
+              {process.savings && (
+                <p className="text-[11px] font-medium text-emerald-600 mt-1">{process.savings}</p>
+              )}
+              {process.risk && (
+                <p className="text-[11px] font-medium text-red-500 mt-0.5">{process.risk}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function PhaseColumn({ phase, selectedId, onSelect }) {
+      return (
+        <div className="phase-col flex-shrink-0" style={{ width: 232 }}>
+          {/* Phase header */}
+          <div className="mb-3 pb-2" style={{ borderBottom: `2px solid ${phase.accent}` }}>
+            <div className="flex items-center gap-2">
+              <span
+                className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                style={{ backgroundColor: phase.accent }}
+              />
+              <h3 className="text-sm font-bold text-gray-800 tracking-tight">{phase.name}</h3>
+            </div>
+            <p className="text-[11px] text-gray-400 mt-0.5 pl-[18px]">
+              {phase.processes.length} process{phase.processes.length !== 1 ? 'es' : ''}
+            </p>
+          </div>
+          {/* Cards */}
+          <div>
+            {phase.processes.map((proc) => (
+              <ProcessCard
+                key={proc.id}
+                process={proc}
+                phaseAccent={phase.accent}
+                isSelected={selectedId === proc.id}
+                onClick={() => onSelect(proc.id === selectedId ? null : proc.id)}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function DetailPanel({ process, phaseAccent, onClose }) {
+      if (!process) return null;
+      const cfg = statusConfig[process.status];
+      return (
+        <div className="detail-enter mt-6 rounded-xl bg-white p-6" style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.08)' }}>
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <span
+                className="w-3 h-3 rounded-full flex-shrink-0"
+                style={{
+                  backgroundColor: cfg.border === 'dashed' ? 'transparent' : cfg.color,
+                  border: cfg.border === 'dashed' ? `2px dashed ${cfg.color}` : `2px solid ${cfg.color}`,
+                }}
+              />
+              <div>
+                <h4 className="text-base font-bold text-gray-800">{process.name}</h4>
+                <span
+                  className="inline-block mt-1 text-[11px] font-medium px-2 py-0.5 rounded-full"
+                  style={{ backgroundColor: cfg.bg, color: cfg.color }}
+                >
+                  {cfg.label}
+                </span>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors text-sm"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+            {/* Detail */}
+            <div className="sm:col-span-2">
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Process Detail</p>
+              <p className="text-sm text-gray-700 leading-relaxed">{process.detail}</p>
+            </div>
+            {/* Meta */}
+            <div className="space-y-3">
+              <div>
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Time / Volume</p>
+                <p className="text-sm font-medium text-gray-800">{process.metric}</p>
+              </div>
+              {process.savings && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Estimated Savings</p>
+                  <p className="text-sm font-bold text-emerald-600">{process.savings}</p>
+                </div>
+              )}
+              {process.risk && (
+                <div>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Risk</p>
+                  <p className="text-sm font-bold text-red-500">{process.risk}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [selectedId, setSelectedId] = useState(null);
+
+      const selectedProcess = (() => {
+        if (!selectedId) return null;
+        for (const phase of phases) {
+          const p = phase.processes.find((pr) => pr.id === selectedId);
+          if (p) return { ...p, phaseAccent: phase.accent };
+        }
+        return null;
+      })();
+
+      return (
+        <div className="min-h-screen bg-white">
+          {/* ---- HEADER ---- */}
+          <header className="border-b border-gray-100">
+            <div className="max-w-7xl mx-auto px-6 py-8">
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Aston Insurance Group</h1>
+                  <p className="text-sm text-gray-500 mt-1 font-medium">Operations & Automation Opportunity Map</p>
+                </div>
+                <div className="flex items-center gap-5 text-[12px] text-gray-400 font-medium">
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m0 0a4 4 0 118 0m-8 0a4 4 0 008 0m-4-8a4 4 0 100-8 4 4 0 000 8z"/></svg>
+                    ~3,000 Clients
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    5 Team Members
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    90% ACA Focus
+                  </span>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+            {/* ---- ROI SUMMARY ---- */}
+            <section>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {roiMetrics.map((m, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl bg-white p-5"
+                    style={{ boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}
+                  >
+                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{m.label}</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">{m.value}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{m.sub}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* ---- LEGEND ---- */}
+            <section>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-gray-500">
+                <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mr-1">Status:</span>
+                {Object.entries(statusConfig).map(([key, cfg]) => (
+                  <span key={key} className="flex items-center gap-1.5">
+                    <StatusDot status={key} />
+                    {cfg.label}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            {/* ---- PHASE COLUMNS ---- */}
+            <section>
+              <div className="overflow-x-auto -mx-6 px-6 pb-2">
+                <div className="flex gap-4" style={{ minWidth: '1180px' }}>
+                  {phases.map((phase) => (
+                    <PhaseColumn
+                      key={phase.name}
+                      phase={phase}
+                      selectedId={selectedId}
+                      onSelect={setSelectedId}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* ---- DETAIL PANEL ---- */}
+            {selectedProcess && (
+              <DetailPanel
+                process={selectedProcess}
+                phaseAccent={selectedProcess.phaseAccent}
+                onClose={() => setSelectedId(null)}
+              />
+            )}
+
+            {/* ---- KEY FINDINGS ---- */}
+            <section>
+              <h2 className="text-sm font-bold text-gray-800 mb-4 tracking-tight">Key Findings</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {keyFindings.map((finding, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl bg-white p-5"
+                    style={{
+                      boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
+                      borderLeft: `3px solid ${finding.color}`,
+                    }}
+                  >
+                    <h4 className="text-sm font-bold text-gray-800 mb-3">{finding.title}</h4>
+                    <ul className="space-y-2">
+                      {finding.items.map((item, j) => (
+                        <li key={j} className="flex items-start gap-2 text-[13px] text-gray-600 leading-snug">
+                          <span
+                            className="w-1.5 h-1.5 rounded-full mt-[5px] flex-shrink-0"
+                            style={{ backgroundColor: finding.color }}
+                          />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </main>
+
+          {/* ---- FOOTER ---- */}
+          <footer className="border-t border-gray-100 mt-8">
+            <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-400">
+              <span>Operations Analysis &middot; Aston Insurance Group &middot; March 2026</span>
+              <span className="mt-1 sm:mt-0">Prepared by <span className="font-semibold text-gray-500">Run Crewless</span></span>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

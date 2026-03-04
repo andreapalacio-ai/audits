@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aston Insurance Group | Operations Transformation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #FFFFFF; }
+
+    /* Toggle pill */
+    .toggle-track {
+      width: 320px;
+      height: 52px;
+      border-radius: 26px;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.4s ease;
+      user-select: none;
+    }
+    .toggle-track.before-state {
+      background-color: #FEF2F2;
+      border: 1px solid #FECACA;
+    }
+    .toggle-track.after-state {
+      background-color: #F0FDF4;
+      border: 1px solid #BBF7D0;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      height: 44px;
+      width: 154px;
+      border-radius: 22px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+    .toggle-thumb.before-pos {
+      left: 3px;
+      background-color: #DC2626;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    }
+    .toggle-thumb.after-pos {
+      left: 161px;
+      background-color: #16A34A;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+    }
+    .toggle-label {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.4s ease;
+      pointer-events: none;
+    }
+    .toggle-label-left {
+      left: 0;
+      width: 160px;
+    }
+    .toggle-label-right {
+      right: 0;
+      width: 160px;
+    }
+
+    /* Card transitions */
+    .process-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .process-card .border-indicator {
+      transition: background-color 0.5s ease;
+    }
+    .stat-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .financial-card {
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Timeline */
+    .timeline-container {
+      transition: opacity 0.5s ease, max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), margin 0.5s ease;
+      overflow: hidden;
+    }
+    .timeline-container.hidden-timeline {
+      opacity: 0;
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .timeline-container.visible-timeline {
+      opacity: 1;
+      max-height: 500px;
+      margin-top: 48px;
+    }
+
+    /* Savings badge */
+    .savings-badge {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .savings-badge.hidden-badge {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    .savings-badge.visible-badge {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Content swap animation */
+    .content-value {
+      transition: opacity 0.35s ease;
+    }
+
+    /* Subtle animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    /* Print styles */
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const processes = [
+      {
+        id: 1,
+        title: "Policy Verification",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+          </svg>
+        ),
+        before: { metric: "160 hrs/mo", detail: "1 FTE dedicated (Mery 100%)", severity: "red" },
+        after: { metric: "48 hrs/mo", detail: "70% reduction via RPA", severity: "green" },
+        savings: "$34,580/yr",
+      },
+      {
+        id: 2,
+        title: "Payment Follow-up",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+          </svg>
+        ),
+        before: { metric: "Manual SMS", detail: "5-7 min per client, one-by-one", severity: "red" },
+        after: { metric: "Bulk Automated", detail: "80% time reduction", severity: "green" },
+        savings: "$6,240/yr",
+      },
+      {
+        id: 3,
+        title: "Admin Tasks",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+        ),
+        before: { metric: "160 hrs/mo", detail: "Yuliana 80% + Silvia 20%", severity: "amber" },
+        after: { metric: "96 hrs/mo", detail: "40% reduction via workflows", severity: "green" },
+        savings: "$20,010/yr",
+      },
+      {
+        id: 4,
+        title: "Email Marketing",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+        ),
+        before: { metric: "0 campaigns", detail: "Zero activity despite 3,000 contacts", severity: "red" },
+        after: { metric: "2-4/month", detail: "Automated cross-sell sequences", severity: "green" },
+        savings: "$26,252/yr revenue",
+      },
+      {
+        id: 5,
+        title: "Birthday Outreach",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          </svg>
+        ),
+        before: { metric: "Not Done", detail: "Zero engagement touchpoints", severity: "red" },
+        after: { metric: "Automated", detail: "250 touchpoints/month", severity: "green" },
+        savings: "$9,875/yr",
+      },
+      {
+        id: 6,
+        title: "Medicare Triggers",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+        before: { metric: "Not Done", detail: "Missing revenue from clients turning 65", severity: "red" },
+        after: { metric: "Automated", detail: "Auto-flag 6 months before 65th birthday", severity: "green" },
+        savings: "$9,000-$18,000/yr",
+      },
+      {
+        id: 7,
+        title: "CRM Integration",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.869-2.313a4.5 4.5 0 00-1.242-7.244l4.5-4.5a4.5 4.5 0 016.364 6.364l-1.757 1.757" />
+          </svg>
+        ),
+        before: { metric: "Disconnected", detail: "RingCentral NOT linked to ZOHO", severity: "amber" },
+        after: { metric: "Integrated", detail: "Call logs auto-sync to client records", severity: "green" },
+        savings: "Context + Efficiency",
+      },
+      {
+        id: 8,
+        title: "Doc Tracking",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 0v1.5c0 .621-.504 1.125-1.125 1.125" />
+          </svg>
+        ),
+        before: { metric: "Excel Spreadsheets", detail: "5+ hrs/week manual tracking", severity: "amber" },
+        after: { metric: "ZOHO Workflow", detail: "Automated status tracking", severity: "green" },
+        savings: "$5,070/yr",
+      },
+    ];
+
+    const summaryStats = [
+      {
+        label: "Automated Processes",
+        before: "0",
+        after: "8",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        ),
+      },
+      {
+        label: "Manual Hours/Month",
+        before: "400+",
+        after: "150-200",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        ),
+      },
+      {
+        label: "Marketing Campaigns/yr",
+        before: "0",
+        after: "24-48",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
+        ),
+      },
+      {
+        label: "Staff Focus",
+        before: "Reactive Only",
+        after: "Proactive Sales",
+        icon: (
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+          </svg>
+        ),
+      },
+    ];
+
+    const timelinePhases = [
+      { phase: "Phase 1", period: "Month 1-2", label: "Quick Wins", color: "#16A34A" },
+      { phase: "Phase 2", period: "Month 2-4", label: "Foundation", color: "#2563EB" },
+      { phase: "Phase 3", period: "Month 4-6", label: "Advanced RPA", color: "#7C3AED" },
+      { phase: "Done", period: "Month 6+", label: "Full ROI", color: "#059669" },
+    ];
+
+    function severityBorderColor(severity) {
+      if (severity === "red") return "#EF4444";
+      if (severity === "amber") return "#F59E0B";
+      return "#22C55E";
+    }
+
+    function App() {
+      const [isAfter, setIsAfter] = useState(false);
+
+      return (
+        <div className="min-h-screen bg-white">
+          {/* Header */}
+          <header className="border-b border-gray-100">
+            <div className="max-w-6xl mx-auto px-6 py-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">A</span>
+                    </div>
+                    <div>
+                      <h1 className="text-xl font-bold text-gray-900 tracking-tight">Aston Insurance Group</h1>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1 ml-[52px]">Operations Transformation: Before vs. After</p>
+                </div>
+                <div className="flex items-center gap-4 ml-[52px] sm:ml-0">
+                  <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Toggle View</span>
+                  <div
+                    className={`toggle-track ${isAfter ? 'after-state' : 'before-state'}`}
+                    onClick={() => setIsAfter(!isAfter)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsAfter(!isAfter); }}
+                    aria-label={isAfter ? 'Showing After Automation state. Click to show Current State.' : 'Showing Current State. Click to show After Automation.'}
+                  >
+                    <span
+                      className="toggle-label toggle-label-left"
+                      style={{ color: isAfter ? '#9CA3AF' : 'transparent' }}
+                    >
+                      Current State
+                    </span>
+                    <span
+                      className="toggle-label toggle-label-right"
+                      style={{ color: isAfter ? 'transparent' : '#9CA3AF' }}
+                    >
+                      After Automation
+                    </span>
+                    <div className={`toggle-thumb ${isAfter ? 'after-pos' : 'before-pos'}`}>
+                      {isAfter ? 'After Automation' : 'Current State'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="max-w-6xl mx-auto px-6 py-10">
+
+            {/* Summary Stats */}
+            <section className="mb-12">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {summaryStats.map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="stat-card rounded-xl p-5 border"
+                    style={{
+                      backgroundColor: isAfter ? '#F0FDF4' : '#FEF7F7',
+                      borderColor: isAfter ? '#DCFCE7' : '#FEE2E2',
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <span style={{ color: isAfter ? '#16A34A' : '#9CA3AF' }}>{stat.icon}</span>
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{stat.label}</span>
+                    </div>
+                    <div
+                      className="text-2xl font-bold tracking-tight"
+                      style={{ color: isAfter ? '#15803D' : '#991B1B' }}
+                    >
+                      {isAfter ? stat.after : stat.before}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Section title */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Process Transformations</h2>
+              <p className="text-sm text-gray-500 mt-1">8 operational processes analyzed and optimized</p>
+            </div>
+
+            {/* Process Cards Grid */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+              {processes.map((proc) => {
+                const data = isAfter ? proc.after : proc.before;
+                const borderColor = severityBorderColor(data.severity);
+                return (
+                  <div
+                    key={proc.id}
+                    className="process-card bg-white rounded-xl border border-gray-100 overflow-hidden"
+                    style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)' }}
+                  >
+                    <div className="flex">
+                      <div
+                        className="border-indicator w-1 shrink-0"
+                        style={{ backgroundColor: borderColor }}
+                      />
+                      <div className="flex-1 p-5">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                              style={{
+                                backgroundColor: isAfter ? '#F0FDF4' : '#F9FAFB',
+                                color: isAfter ? '#16A34A' : '#6B7280',
+                              }}
+                            >
+                              {proc.icon}
+                            </div>
+                            <div>
+                              <h3 className="text-sm font-semibold text-gray-900">{proc.title}</h3>
+                              <span
+                                className="inline-block mt-1 text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full"
+                                style={{
+                                  backgroundColor: isAfter ? '#DCFCE7' : (data.severity === 'amber' ? '#FEF3C7' : '#FEE2E2'),
+                                  color: isAfter ? '#15803D' : (data.severity === 'amber' ? '#92400E' : '#991B1B'),
+                                }}
+                              >
+                                {isAfter ? 'Automated' : (data.severity === 'amber' ? 'Needs Improvement' : 'Critical')}
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            className={`savings-badge ${isAfter ? 'visible-badge' : 'hidden-badge'}`}
+                          >
+                            {isAfter && (
+                              <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1">
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                                </svg>
+                                {proc.savings}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="mt-2">
+                          <div className="text-lg font-bold text-gray-900 tracking-tight">{data.metric}</div>
+                          <p className="text-sm text-gray-500 mt-0.5">{data.detail}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </section>
+
+            {/* Financial Impact Section */}
+            <section className="mb-0">
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Financial Impact</h2>
+                <p className="text-sm text-gray-500 mt-1">Quantified cost analysis and projected savings</p>
+              </div>
+
+              <div
+                className="financial-card rounded-xl border overflow-hidden"
+                style={{
+                  backgroundColor: isAfter ? '#FAFFFE' : '#FFFAFA',
+                  borderColor: isAfter ? '#DCFCE7' : '#FEE2E2',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                }}
+              >
+                <div className="p-6">
+                  <div className="flex items-center gap-2 mb-6">
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center"
+                      style={{
+                        backgroundColor: isAfter ? '#DCFCE7' : '#FEE2E2',
+                        color: isAfter ? '#16A34A' : '#DC2626',
+                      }}
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+                      {isAfter ? 'Projected Returns' : 'Current Cost Exposure'}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    {isAfter ? (
+                      <>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Annual Savings</p>
+                          <p className="text-2xl font-bold text-emerald-700">$78,936</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Implementation Cost</p>
+                          <p className="text-2xl font-bold text-gray-900">$21,500</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Payback Period</p>
+                          <p className="text-2xl font-bold text-emerald-700">3.3 mo</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">3-Year Cumulative</p>
+                          <p className="text-2xl font-bold text-emerald-700">$208,758</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Automatable Labor Cost</p>
+                          <p className="text-2xl font-bold text-red-700">$143,780<span className="text-sm font-medium text-red-400">/yr</span></p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">FTE Lost to Verification</p>
+                          <p className="text-2xl font-bold text-red-700">1 FTE</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Marketing Revenue</p>
+                          <p className="text-2xl font-bold text-red-700">$0</p>
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Concentration Risk</p>
+                          <p className="text-2xl font-bold text-red-700">90% ACA</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Implementation Timeline -- After mode only */}
+            <section className={`timeline-container ${isAfter ? 'visible-timeline' : 'hidden-timeline'}`}>
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 tracking-tight">Implementation Timeline</h2>
+                <p className="text-sm text-gray-500 mt-1">Phased rollout to minimize disruption</p>
+              </div>
+
+              <div
+                className="rounded-xl border border-emerald-100 bg-white p-6 lg:p-8"
+                style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+              >
+                <div className="relative">
+                  {/* Connector line */}
+                  <div className="hidden md:block absolute top-6 left-[calc(12.5%+16px)] right-[calc(12.5%+16px)] h-0.5 bg-gray-200" style={{ zIndex: 0 }} />
+                  <div
+                    className="hidden md:block absolute top-6 left-[calc(12.5%+16px)] h-0.5 bg-emerald-400"
+                    style={{
+                      zIndex: 1,
+                      width: isAfter ? '100%' : '0%',
+                      maxWidth: 'calc(75% - 32px)',
+                      transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s',
+                    }}
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-4 relative" style={{ zIndex: 2 }}>
+                    {timelinePhases.map((phase, idx) => (
+                      <div key={idx} className="flex flex-col items-center text-center">
+                        <div
+                          className="w-12 h-12 rounded-full flex items-center justify-center border-2 bg-white mb-3"
+                          style={{
+                            borderColor: phase.color,
+                            boxShadow: `0 0 0 4px ${phase.color}15`,
+                          }}
+                        >
+                          <span className="text-xs font-bold" style={{ color: phase.color }}>
+                            {idx === 3 ? (
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                              </svg>
+                            ) : (
+                              `0${idx + 1}`
+                            )}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-semibold text-gray-900">{phase.phase}</h4>
+                        <p className="text-xs text-gray-400 mt-0.5">{phase.period}</p>
+                        <span
+                          className="inline-block mt-2 text-xs font-medium px-3 py-1 rounded-full"
+                          style={{
+                            backgroundColor: `${phase.color}10`,
+                            color: phase.color,
+                          }}
+                        >
+                          {phase.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </main>
+
+          {/* Footer */}
+          <footer className="border-t border-gray-100 mt-16">
+            <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded bg-gray-900 flex items-center justify-center">
+                  <span className="text-white font-bold text-[10px]">A</span>
+                </div>
+                <span className="text-sm text-gray-400">Aston Insurance Group</span>
+                <span className="text-gray-200 mx-1">|</span>
+                <span className="text-sm text-gray-400">Operations Transformation Analysis</span>
+              </div>
+              <div className="flex items-center gap-1 text-sm text-gray-400">
+                <span>March 2026</span>
+                <span className="text-gray-200 mx-1">|</span>
+                <span>Prepared by <span className="font-medium text-gray-500">Run Crewless</span></span>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
