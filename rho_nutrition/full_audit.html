@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rho Nutrition — Full Operations Audit · Crewless</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #0a0a0a; line-height: 1.6; }
+
+    /* ── Layout ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid #F0F0F0;
+      padding: 16px 60px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: #0D9B6C; }
+    .topbar-nav { display: flex; gap: 28px; }
+    .topbar-nav a { font-size: 12px; font-weight: 600; color: #888; text-decoration: none; letter-spacing: 0.05em; transition: color .15s; }
+    .topbar-nav a:hover { color: #0a0a0a; }
+    .topbar-right { font-size: 11px; color: #ccc; letter-spacing: 0.06em; }
+
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0 40px 120px; }
+
+    /* ── Hero ── */
+    .hero { padding: 80px 0 64px; border-bottom: 1px solid #F0F0F0; margin-bottom: 72px; }
+    .hero-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #0D9B6C; margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 900; line-height: 1.05; margin-bottom: 20px; }
+    .hero-sub { font-size: 18px; font-weight: 300; color: #555; line-height: 1.6; max-width: 640px; margin-bottom: 48px; }
+    .hero-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid #F0F0F0; border-radius: 12px; overflow: hidden; }
+    .hero-metric { padding: 24px 20px; border-right: 1px solid #F0F0F0; }
+    .hero-metric:last-child { border-right: none; }
+    .hero-metric-val { font-size: 28px; font-weight: 900; line-height: 1; }
+    .hero-metric-lbl { font-size: 12px; font-weight: 600; color: #888; margin-top: 6px; }
+
+    /* ── Section ── */
+    section { margin-bottom: 80px; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #0D9B6C; margin-bottom: 12px; }
+    .section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 900; line-height: 1.1; margin-bottom: 8px; }
+    .section-sub { font-size: 15px; color: #666; margin-bottom: 36px; max-width: 680px; }
+    .divider { border: none; border-top: 1px solid #F0F0F0; margin: 56px 0; }
+
+    /* ── Pain Points ── */
+    .pain-card {
+      border: 1px solid #F0F0F0; border-radius: 10px;
+      border-left: 4px solid #EF4444; padding: 24px 28px;
+      margin-bottom: 16px; position: relative;
+    }
+    .pain-card.amber { border-left-color: #F59E0B; }
+    .pain-number { font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: #ccc; text-transform: uppercase; margin-bottom: 6px; }
+    .pain-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .pain-body { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+    .pain-stat {
+      display: inline-block; background: #FEF2F2; color: #DC2626;
+      font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; margin-right: 8px; margin-top: 4px;
+    }
+    .pain-stat.amber { background: #FFFBEB; color: #D97706; }
+
+    /* ── Opportunities ── */
+    .opp-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid #F0F0F0; border-radius: 12px; overflow: hidden; }
+    .opp-row {
+      display: grid; grid-template-columns: 24px 1fr 140px 110px;
+      gap: 0; align-items: stretch; border-bottom: 1px solid #F0F0F0;
+    }
+    .opp-row:last-child { border-bottom: none; }
+    .opp-row.header { background: #F9FAFB; }
+    .opp-cell { padding: 14px 18px; font-size: 13px; color: #333; border-right: 1px solid #F0F0F0; display: flex; align-items: center; }
+    .opp-cell:last-child { border-right: none; }
+    .opp-cell.hdr { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #999; }
+    .opp-num { font-size: 11px; font-weight: 700; color: #ccc; display: flex; align-items: center; justify-content: center; padding: 14px 0 14px 12px; }
+    .opp-name { font-weight: 700; color: #0a0a0a; }
+    .opp-name-sub { font-size: 12px; color: #888; font-weight: 400; display: block; margin-top: 2px; }
+    .opp-phase { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 5px; }
+    .phase-q1 { background: #DCFCE7; color: #15803D; }
+    .phase-q2 { background: #DBEAFE; color: #1D4ED8; }
+    .phase-q3 { background: #F3E8FF; color: #7C3AED; }
+    .opp-roi { font-weight: 700; font-size: 13px; color: #0D9B6C; }
+
+    /* ── Deep Opp Cards ── */
+    .opp-deep { border: 1px solid #F0F0F0; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+    .opp-deep-header {
+      background: #F9FAFB; padding: 18px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .opp-deep-title { font-size: 15px; font-weight: 800; }
+    .opp-deep-body { padding: 20px 24px; }
+    .opp-deep-body p { font-size: 14px; color: #444; line-height: 1.65; margin-bottom: 12px; }
+    .opp-deep-body p:last-child { margin-bottom: 0; }
+    .roi-box {
+      background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px;
+      padding: 14px 18px; margin-top: 16px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+    }
+    .roi-box-item { }
+    .roi-box-val { font-size: 17px; font-weight: 900; color: #0D9B6C; }
+    .roi-box-lbl { font-size: 11px; color: #666; margin-top: 2px; }
+    .tools-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tool-chip { font-size: 11px; font-weight: 600; background: #F1F5F9; color: #475569; padding: 4px 10px; border-radius: 5px; }
+
+    /* ── Roadmap ── */
+    .phase-block { border: 1px solid #F0F0F0; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+    .phase-block-header { padding: 16px 24px; border-bottom: 1px solid #F0F0F0; display: flex; align-items: center; justify-content: space-between; }
+    .phase-block-header.q1 { background: #F0FDF4; }
+    .phase-block-header.q2 { background: #EFF6FF; }
+    .phase-block-header.q3 { background: #FAF5FF; }
+    .phase-title { font-size: 16px; font-weight: 800; }
+    .phase-desc { font-size: 13px; color: #666; margin-top: 2px; }
+    .phase-block ul { list-style: none; padding: 0; }
+    .phase-block li {
+      padding: 13px 24px; font-size: 14px; border-bottom: 1px solid #F5F5F5;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .phase-block li:last-child { border-bottom: none; }
+    .phase-chk { color: #0D9B6C; font-weight: 900; flex-shrink: 0; margin-top: 1px; }
+    .phase-chk.blue { color: #3B82F6; }
+    .phase-chk.purple { color: #8B5CF6; }
+    .li-title { font-weight: 700; display: block; }
+    .li-sub { font-size: 12px; color: #888; margin-top: 2px; display: block; }
+
+    /* ── ROI Table ── */
+    table.roi-table { width: 100%; border-collapse: collapse; border: 1px solid #F0F0F0; border-radius: 10px; overflow: hidden; font-size: 14px; }
+    table.roi-table th { background: #F9FAFB; padding: 12px 16px; text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #999; border-bottom: 1px solid #F0F0F0; }
+    table.roi-table td { padding: 14px 16px; border-bottom: 1px solid #F5F5F5; vertical-align: top; }
+    table.roi-table tr:last-child td { border-bottom: none; }
+    table.roi-table .green { color: #0D9B6C; font-weight: 700; }
+    table.roi-table .total-row td { background: #F0FDF4; font-weight: 800; font-size: 15px; }
+    .confidence { font-size: 11px; font-weight: 700; padding: 3px 7px; border-radius: 5px; }
+    .conf-high { background: #DCFCE7; color: #15803D; }
+    .conf-med { background: #FEF9C3; color: #A16207; }
+    .conf-low { background: #FEE2E2; color: #B91C1C; }
+
+    /* ── Red Flags ── */
+    .flag-card {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 18px 20px; border: 1px solid #F0F0F0; border-radius: 8px; margin-bottom: 12px;
+    }
+    .flag-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+    .flag-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+    .flag-body { font-size: 13px; color: #555; line-height: 1.55; }
+
+    /* ── Callout ── */
+    .callout {
+      background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px;
+      padding: 24px 28px; margin: 32px 0;
+    }
+    .callout-quote { font-size: 18px; font-weight: 600; color: #0a0a0a; line-height: 1.5; font-style: italic; margin-bottom: 8px; }
+    .callout-attr { font-size: 12px; color: #666; font-weight: 600; }
+
+    /* ── Footer ── */
+    .footer { border-top: 1px solid #F0F0F0; padding: 32px 60px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-brand { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; color: #0D9B6C; }
+    .footer-meta { font-size: 11px; color: #ccc; }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 0 20px 80px; }
+      .topbar { padding: 14px 20px; }
+      .topbar-nav { display: none; }
+      .hero-metrics { grid-template-columns: 1fr 1fr; }
+      .opp-row { grid-template-columns: 18px 1fr 90px 90px; }
+      .roi-box { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<div class="topbar">
+  <span class="topbar-brand">CREWLESS</span>
+  <nav class="topbar-nav">
+    <a href="#pain-points">Pain Points</a>
+    <a href="#opportunities">Opportunities</a>
+    <a href="#roi">ROI Summary</a>
+    <a href="#roadmap">Roadmap</a>
+  </nav>
+  <span class="topbar-right">Rho Nutrition · Confidential · March 2026</span>
+</div>
+
+<div class="wrap">
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <p class="hero-tag">Crewless · Full Operations Audit</p>
+    <h1>Rho Nutrition<br>Operations &amp; Revenue Analysis</h1>
+    <p class="hero-sub">A comprehensive audit of your retention, customer experience, and revenue systems — and the AI automation roadmap to recover $6M–$8M/year.</p>
+    <div class="hero-metrics">
+      <div class="hero-metric">
+        <div class="hero-metric-val">$18–20M</div>
+        <div class="hero-metric-lbl">Monthly Revenue</div>
+      </div>
+      <div class="hero-metric">
+        <div class="hero-metric-val">65,000</div>
+        <div class="hero-metric-lbl">Active Subscribers</div>
+      </div>
+      <div class="hero-metric">
+        <div class="hero-metric-val">~3 mo</div>
+        <div class="hero-metric-lbl">Avg. Subscriber LTV</div>
+      </div>
+      <div class="hero-metric">
+        <div class="hero-metric-val">1.7/5</div>
+        <div class="hero-metric-lbl">Trustpilot Score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EXECUTIVE SUMMARY ── -->
+  <section id="summary">
+    <p class="section-label">Executive Summary</p>
+    <h2 class="section-title">The product works. The operations don't.</h2>
+    <p class="section-sub">Rho Nutrition has built a nine-figure DTC brand in under four years. The growth engine — paid media, product quality, and subscription conversion — is clearly working. What hasn't kept pace is everything that happens after the purchase.</p>
+
+    <p style="font-size:15px; color:#444; line-height:1.7; margin-bottom:16px;">
+      At 65,000 active subscribers renewing every 28 days, the retention layer is the single highest-leverage area in the business. George has already identified this: his stated north star is moving average LTV from ~3 months to 4–5 months — the "escape velocity" threshold where subscribers have purchased enough products to stay indefinitely.
+    </p>
+    <p style="font-size:15px; color:#444; line-height:1.7; margin-bottom:16px;">
+      Every month that passes without fixing the retention and CS infrastructure is a month where roughly 21,500 subscribers churn — the majority of them silently, without a single automated attempt to save them or bring them back.
+    </p>
+    <p style="font-size:15px; color:#444; line-height:1.7; margin-bottom:0;">
+      The opportunity is not to rebuild the business. It's to build the automation layer on top of what's already working — and capture the revenue that's currently falling through the gaps.
+    </p>
+
+    <div class="callout">
+      <p class="callout-quote">"The easiest customer to have is the one to keep."</p>
+      <p class="callout-attr">— George Padilla, CEO, Rho Nutrition</p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── BUSINESS SNAPSHOT ── -->
+  <section id="snapshot">
+    <p class="section-label">Business Snapshot</p>
+    <h2 class="section-title">What we know about the business</h2>
+    <p class="section-sub">Confirmed directly in the discovery conversation with George Padilla.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
+      <div class="pain-card" style="border-left-color:#0D9B6C;">
+        <div class="pain-number">Revenue Model</div>
+        <div class="pain-title" style="font-size:15px;">Subscription-First DTC</div>
+        <div class="pain-body">65–67% of new customers subscribe on first purchase. 28-day renewal cycle. ~$120 blended AOV. 80% DTC (Shopify + Amazon); 20% retail (Sprouts, GNC, Vitamin Shoppe).</div>
+      </div>
+      <div class="pain-card" style="border-left-color:#0D9B6C;">
+        <div class="pain-number">CS Operations</div>
+        <div class="pain-title" style="font-size:15px;">18 Nearshore Agents</div>
+        <div class="pain-body">15 frontline agents + 3 team leads, nearshore. CS Director is Texas-based. Team handles an estimated 4,000–7,000 tickets/week across Zendesk. Agents currently tab-switch between Zendesk, Shopify, and Retextion on every ticket.</div>
+      </div>
+      <div class="pain-card" style="border-left-color:#0D9B6C;">
+        <div class="pain-number">Tech Stack (Confirmed)</div>
+        <div class="pain-title" style="font-size:15px;">Key Platforms</div>
+        <div class="pain-body">Shopify (DTC), Amazon, Zendesk (CS), Klaviyo (email), Postscript (SMS — signed, never activated), Retextion (subscription management), Atria (creative management), Meta + TV + podcast (media).</div>
+      </div>
+      <div class="pain-card" style="border-left-color:#0D9B6C;">
+        <div class="pain-number">LTV Mechanics</div>
+        <div class="pain-title" style="font-size:15px;">The Escape Velocity Model</div>
+        <div class="pain-body">Current avg LTV: ~3 months. George's target: 4–5 products purchased = retained forever. Adding 1 month to avg LTV across 65K subscribers = <strong>~$7.8M incremental annual revenue</strong> without a single new customer acquisition.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── PAIN POINTS ── -->
+  <section id="pain-points">
+    <p class="section-label">Confirmed Pain Points</p>
+    <h2 class="section-title">5 operational failures confirmed in discovery</h2>
+    <p class="section-sub">Each was verbatim confirmed by George. These are not assumptions — they are documented failures with measurable revenue impact.</p>
+
+    <div class="pain-card">
+      <div class="pain-number">Pain Point 01</div>
+      <div class="pain-title">Postscript SMS: Signed, Paid, Never Activated</div>
+      <div class="pain-body">
+        George confirmed Postscript is under contract and the platform is being paid for — generating exactly $0 in revenue. No abandoned cart recovery sequences. No subscription churn-moment intervention. No win-back triggers. This is the highest-certainty, zero-disruption opportunity in the entire business. The infrastructure is already paid for. It just needs to be turned on.
+      </div>
+      <span class="pain-stat">~$900K–$1.8M/year recoverable</span>
+      <span class="pain-stat">Confirmed active contract</span>
+    </div>
+
+    <div class="pain-card">
+      <div class="pain-number">Pain Point 02</div>
+      <div class="pain-title">Pre-Renewal Email Notifications Are Broken</div>
+      <div class="pain-body">
+        "I didn't receive the renewal email" is the #2 driver of CS ticket volume — confirmed by George. Subscribers are being charged without prior notification, generating both CS burden and chargeback risk. The FTC's 2023 rules on subscription transparency require clear pre-renewal disclosure. This is simultaneously a compliance risk and a customer experience failure. A rebuilt Klaviyo pre-renewal flow (7 days + 3 days + 24 hours before charge) would eliminate this ticket category and reduce chargeback exposure.
+      </div>
+      <span class="pain-stat">~15% of all Zendesk tickets</span>
+      <span class="pain-stat">FTC compliance risk</span>
+    </div>
+
+    <div class="pain-card">
+      <div class="pain-number">Pain Point 03</div>
+      <div class="pain-title">"Where's My Package?" Is a Fully Manual Process</div>
+      <div class="pain-body">
+        Shipping and tracking inquiries account for approximately 25% of all CS ticket volume. Every one of these tickets is answered manually — an agent opens Zendesk, looks up the order in Shopify, copies the tracking number, pastes it into a reply. This is a pure data-lookup task that should never require a human agent. A shipping automation layer (Wonderment or Malomo) can proactively push shipping events via email and SMS, and an automated Zendesk response can resolve these tickets before they're opened.
+      </div>
+      <span class="pain-stat">~25% of ticket volume</span>
+      <span class="pain-stat">Fully automatable</span>
+    </div>
+
+    <div class="pain-card">
+      <div class="pain-number">Pain Point 04</div>
+      <div class="pain-title">Trustpilot 1.7/5 — Suppressing Conversion at Scale</div>
+      <div class="pain-body">
+        The Trustpilot score (1.7/5, 88% one-star) is visible in Google search results for Rho Nutrition. George said this "pisses him off." The reviews are overwhelmingly about operational failures — subscription confusion, shipping, CS response times — not product quality. This is a conversion problem masquerading as a reputation problem. The fix is not disputing reviews; it's routing happy customers to Trustpilot proactively via a post-delivery Klaviyo fork, while routing unhappy customers to CS resolution before they go public.
+      </div>
+      <span class="pain-stat">1.7/5 on Trustpilot</span>
+      <span class="pain-stat">88% one-star</span>
+      <span class="pain-stat">Visible in Google search</span>
+    </div>
+
+    <div class="pain-card amber">
+      <div class="pain-number">Pain Point 05</div>
+      <div class="pain-title">No Win-Back System for Churned Subscribers</div>
+      <div class="pain-body">
+        At an estimated ~33% monthly churn rate, approximately 21,500 subscribers are leaving every month. There is currently no automated win-back sequence — no email, no SMS, no incentive offer, nothing. Every churned subscriber is treated as a permanent loss. A structured win-back automation (day 0, day 7, day 30 with a pull-forward incentive) recovering even 2–3% of churned subscribers would generate $51,600–$78,000/month in recovered revenue with zero new acquisition cost.
+      </div>
+      <span class="pain-stat amber">~21,500 churned/month</span>
+      <span class="pain-stat amber">Zero recovery system</span>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── OPPORTUNITIES ── -->
+  <section id="opportunities">
+    <p class="section-label">AI &amp; Automation Opportunities</p>
+    <h2 class="section-title">15 opportunities identified across 3 quarters</h2>
+    <p class="section-sub">Each opportunity maps to a confirmed pain point or a documented revenue gap. Ordered by implementation priority and confidence.</p>
+
+    <!-- Quick reference table -->
+    <div class="opp-grid" style="margin-bottom:40px;">
+      <div class="opp-row header">
+        <div style="width:28px; padding:12px 0 12px 12px;"></div>
+        <div class="opp-cell hdr">Opportunity</div>
+        <div class="opp-cell hdr">Est. Annual ROI</div>
+        <div class="opp-cell hdr">Phase</div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">1</div>
+        <div class="opp-cell"><div><span class="opp-name">Postscript SMS Activation</span><span class="opp-name-sub">Cart recovery + churn-moment + win-back triggers</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$900K–$1.8M</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q1">Q1</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">2</div>
+        <div class="opp-cell"><div><span class="opp-name">Pre-Renewal Klaviyo Flow Rebuild</span><span class="opp-name-sub">7-day + 3-day + 24-hour notification sequence</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$200K–$400K</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q1">Q1</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">3</div>
+        <div class="opp-cell"><div><span class="opp-name">Trustpilot Review Repair Flow</span><span class="opp-name-sub">Post-delivery satisfaction fork → review or CS</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$200K–$500K</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q1">Q1</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">4</div>
+        <div class="opp-cell"><div><span class="opp-name">Shipping &amp; Tracking Automation</span><span class="opp-name-sub">Wonderment/Malomo + Zendesk auto-reply</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$150K–$300K (cost)</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q1">Q1</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">5</div>
+        <div class="opp-cell"><div><span class="opp-name">Post-Purchase LTV Extension Sequence</span><span class="opp-name-sub">Day 7 / 14 / 21 education + cross-sell trigger</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$1.5M–$3.9M</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">6</div>
+        <div class="opp-cell"><div><span class="opp-name">Win-Back Sequence for Churned Subscribers</span><span class="opp-name-sub">D0 + D7 + D30 incentive, email + SMS</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$620K–$1.2M</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">7</div>
+        <div class="opp-cell"><div><span class="opp-name">Zendesk Context Integration</span><span class="opp-name-sub">Shopify + Retextion data in agent workspace</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$180K–$360K (cost)</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">8</div>
+        <div class="opp-cell"><div><span class="opp-name">Zendesk AI Ticket Deflection</span><span class="opp-name-sub">30–40% deflection on top 3 ticket types</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$120K–$240K (cost)</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">9</div>
+        <div class="opp-cell"><div><span class="opp-name">Customer Health Goal Questionnaire</span><span class="opp-name-sub">Typeform → Klaviyo profile tags → personalized journeys</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">Supports LTV extension</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">10</div>
+        <div class="opp-cell"><div><span class="opp-name">24/7 AI Phone Agent</span><span class="opp-name-sub">Bland AI / Vapi — order lookup, cancel save, tracking</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$200K–$400K (cost)</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">11</div>
+        <div class="opp-cell"><div><span class="opp-name">Leadership KPI Dashboard</span><span class="opp-name-sub">Live: LTV, churn, ticket vol, Trustpilot, revenue</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">Operational clarity</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q2">Q2</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">12</div>
+        <div class="opp-cell"><div><span class="opp-name">Multi-Product Escape Velocity Triggers</span><span class="opp-name-sub">Month 2–4 product recommendation flows</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">$1M–$2M</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q3">Q3</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">13</div>
+        <div class="opp-cell"><div><span class="opp-name">Creative Performance AI Dashboard</span><span class="opp-name-sub">Meta data → AI brief generation → faster iteration</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">CAC reduction</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q3">Q3</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">14</div>
+        <div class="opp-cell"><div><span class="opp-name">AI Science Research Monitoring</span><span class="opp-name-sub">PubMed / clinical database summarization</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">Competitive edge</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q3">Q3</span></div>
+      </div>
+      <div class="opp-row">
+        <div class="opp-num">15</div>
+        <div class="opp-cell"><div><span class="opp-name">Wholesale Operations Automation</span><span class="opp-name-sub">EDI + PO confirmations + fulfillment status</span></div></div>
+        <div class="opp-cell"><span class="opp-roi">Operational efficiency</span></div>
+        <div class="opp-cell"><span class="opp-phase phase-q3">Q3</span></div>
+      </div>
+    </div>
+
+    <!-- Deep dives -->
+    <h3 style="font-size:18px; font-weight:800; margin-bottom:20px;">Deep Dive: Q1 Priority Opportunities</h3>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">1. Postscript SMS — Activate What's Already Paid For</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">Cart recovery · Subscription churn-moment · Win-back triggers</div>
+        </div>
+        <span class="opp-phase phase-q1">Q1 — Week 1</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>George confirmed Postscript is under active contract and generating zero revenue. This is not a capability gap — it's an activation gap. The platform is already integrated, the contract is signed. The sequences just haven't been built.</p>
+        <p><strong>What we build:</strong> A 3-touch abandoned cart sequence (1hr, 24hr, 72hr). A pre-churn SMS at the 28-day renewal moment ("Your order is about to renew — manage here"). A win-back trigger at day 0 of churn with a pull-forward offer. All connected to Retextion subscription data.</p>
+        <p><strong>Why it's conservative:</strong> Cart recovery SMS industry benchmarks range from 5–15% recovery. At Rho's cart volume, even 5% recovery is significant. We've modeled at the low end.</p>
+        <div class="roi-box">
+          <div class="roi-box-item"><div class="roi-box-val">$900K</div><div class="roi-box-lbl">Conservative annual</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">$1.8M</div><div class="roi-box-lbl">Midpoint annual</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">$0</div><div class="roi-box-lbl">Marginal platform cost</div></div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Postscript</span>
+          <span class="tool-chip">Retextion</span>
+          <span class="tool-chip">Shopify</span>
+          <span class="tool-chip">Klaviyo (coordination)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">2. Pre-Renewal Klaviyo Flow Rebuild</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">Eliminate #2 CS ticket driver · Reduce chargebacks · FTC compliance</div>
+        </div>
+        <span class="opp-phase phase-q1">Q1 — Week 1</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>"I didn't receive the renewal email" is the second-highest volume ticket category. Subscribers are being charged without warning, generating CS volume, chargebacks, and frustration — all of which feed the Trustpilot score problem.</p>
+        <p><strong>What we build:</strong> A Klaviyo pre-renewal sequence triggered by Retextion subscription data: 7 days before charge (announcement + manage link), 3 days before (reminder with product image), 24 hours before (final notice). Each email includes a one-click manage/pause link. Deliverability-optimized with proper sender warming.</p>
+        <p><strong>Compliance note:</strong> The FTC's 2023 updated negative option rules specifically require pre-renewal notification for subscription products. This isn't just good UX — it's regulatory protection.</p>
+        <div class="roi-box">
+          <div class="roi-box-item"><div class="roi-box-val">~15%</div><div class="roi-box-lbl">Tickets eliminated</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">$200K–$400K</div><div class="roi-box-lbl">Annual cost savings</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">Low</div><div class="roi-box-lbl">Chargeback risk (reduced)</div></div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Klaviyo</span>
+          <span class="tool-chip">Retextion</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">3. Trustpilot Review Repair Flow</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">1.7 → 3.5+ in 60–90 days · Conversion rate recovery</div>
+        </div>
+        <span class="opp-phase phase-q1">Q1 — Week 2</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>The 1.7/5 Trustpilot score is visible in Google search results for every prospective customer searching "Rho Nutrition." This is a conversion problem — not primarily a reputation problem. It exists because the only customers who know Trustpilot exists are the ones who sought it out to complain. Happy customers don't go looking for review platforms.</p>
+        <p><strong>What we build:</strong> A post-delivery Klaviyo fork triggered 7 days after confirmed delivery. A satisfaction check ("How's your order?") routes positives to a Trustpilot direct-link email, and negatives to a CS ticket auto-creation with priority escalation. This ensures the review distribution reflects the actual customer experience rather than a selection bias of frustrated customers.</p>
+        <p><strong>Target:</strong> 3.5+ score is achievable within 60–90 days at current subscriber volume. Each point of Trustpilot score improvement has a measurable impact on Google SERP appearance and DTC conversion rate.</p>
+        <div class="roi-box">
+          <div class="roi-box-item"><div class="roi-box-val">3.5+</div><div class="roi-box-lbl">Target score in 60–90 days</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">$200K–$500K</div><div class="roi-box-lbl">Est. annual conversion recovery</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">Zero</div><div class="roi-box-lbl">Disruption to existing flows</div></div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Klaviyo</span>
+          <span class="tool-chip">Trustpilot</span>
+          <span class="tool-chip">Zendesk</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">4. Shipping &amp; Tracking Automation</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">Eliminate ~25% of ticket volume · Proactive vs. reactive</div>
+        </div>
+        <span class="opp-phase phase-q1">Q1 — Week 2</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>"Where's my package?" represents approximately 25% of all CS ticket volume. Every single one of these tickets is answerable by a database lookup — no judgment, no empathy, no human required. The current process has an agent manually looking up the order in Shopify, copying the tracking number, and pasting it into a reply.</p>
+        <p><strong>What we build:</strong> Wonderment or Malomo integration to push proactive shipping event notifications (shipped, out for delivery, delivered) via email and SMS before customers need to ask. A Zendesk auto-responder triggered on keyword detection ("where is my order," "tracking," "package") that auto-populates tracking data. This converts a reactive ticket into a proactive notification.</p>
+        <div class="roi-box">
+          <div class="roi-box-item"><div class="roi-box-val">~60–80%</div><div class="roi-box-lbl">Ticket reduction in category</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">$150K–$300K</div><div class="roi-box-lbl">Annual CS cost savings</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">+CSAT</div><div class="roi-box-lbl">Experience improvement</div></div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Wonderment or Malomo</span>
+          <span class="tool-chip">Zendesk</span>
+          <span class="tool-chip">Shopify</span>
+          <span class="tool-chip">Klaviyo</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:800; margin-bottom:20px; margin-top:40px;">Q2 Opportunities: Revenue &amp; Infrastructure</h3>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">5. Post-Purchase LTV Extension Sequence</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">The single highest-leverage lever in the business</div>
+        </div>
+        <span class="opp-phase phase-q2">Q2</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>George's stated north star is extending average LTV from ~3 months to 4–5 months. There is currently no systematic mechanism to make this happen. Subscribers either renew out of habit or churn — there's no structured education, no deliberate cross-sell, and no data-driven personalization in the post-purchase journey.</p>
+        <p><strong>What we build:</strong> A structured post-purchase Klaviyo sequence: Day 7 (product education, how to get results), Day 14 (social proof from customers like them, introduce second product category), Day 21 (cross-sell trigger pointing toward escape velocity products). Personalized by health goal data from the questionnaire (Opportunity 9). Connected to purchase history to avoid recommending products already subscribed.</p>
+        <div class="roi-box">
+          <div class="roi-box-item"><div class="roi-box-val">$1.5M–$3.9M</div><div class="roi-box-lbl">Est. annual impact</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">+0.5–1 mo</div><div class="roi-box-lbl">Target LTV extension</div></div>
+          <div class="roi-box-item"><div class="roi-box-val">65K</div><div class="roi-box-lbl">Subscribers impacted</div></div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Klaviyo</span>
+          <span class="tool-chip">Shopify</span>
+          <span class="tool-chip">Retextion</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">10. 24/7 AI Phone Agent</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">George said "I will consider phone" — this is the opening</div>
+        </div>
+        <span class="opp-phase phase-q2">Q2</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>George explicitly opened the door on phone support in the discovery call: "I will consider phone." A 24/7 AI phone agent handles the top 3 ticket categories autonomously — order lookup, subscription cancellation save attempts, and tracking inquiries — without adding headcount.</p>
+        <p><strong>What we build:</strong> An AI voice agent (Bland AI, Vapi, or Synthflow) connected to Shopify order data and Retextion subscription API. Handles inbound calls: "What is your order number?" → pulls data → answers tracking, status, renewal questions in real time. For cancellation requests, executes a save flow (pause offer, discount offer) before processing. Escalates to human agent only when needed.</p>
+        <p><strong>Why this is the right time:</strong> After Q1 systems are live, the top ticket categories will be largely deflected digitally. Phone volume is the residual — and the highest-value interactions. This is where a save attempt on a phone call can recover a $120/month subscriber.</p>
+        <div class="tools-row">
+          <span class="tool-chip">Bland AI / Vapi / Synthflow</span>
+          <span class="tool-chip">Shopify API</span>
+          <span class="tool-chip">Retextion API</span>
+          <span class="tool-chip">Zendesk (escalation)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-deep">
+      <div class="opp-deep-header">
+        <div>
+          <div class="opp-deep-title">9. Customer Health Goal Questionnaire</div>
+          <div style="font-size:12px; color:#888; margin-top:3px;">Personalization engine for all downstream Klaviyo flows</div>
+        </div>
+        <span class="opp-phase phase-q2">Q2</span>
+      </div>
+      <div class="opp-deep-body">
+        <p>Rho Nutrition sells science-backed nutrition products. The customers who stay longest are the ones who see results. The customers who churn are the ones who don't know how to use the product correctly or don't understand which products match their health goals. A customer goal questionnaire at onboarding captures this intent and routes it into every subsequent communication.</p>
+        <p><strong>What we build:</strong> A Typeform questionnaire triggered post-purchase (embedded in welcome email + SMS). Captures: primary health goal, experience level, products already using. Webhook pushes responses to Shopify customer notes and Klaviyo profile properties. Every downstream flow (education, cross-sell, win-back) then personalizes based on these tags. The customer who wants "performance" gets a different Day 14 email than the customer who wants "recovery."</p>
+        <div class="tools-row">
+          <span class="tool-chip">Typeform</span>
+          <span class="tool-chip">Klaviyo</span>
+          <span class="tool-chip">Shopify</span>
+          <span class="tool-chip">Retextion</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── ROI TABLE ── -->
+  <section id="roi">
+    <p class="section-label">Revenue Impact Summary</p>
+    <h2 class="section-title">Conservative ROI by opportunity</h2>
+    <p class="section-sub">All estimates are conservative and based on confirmed business data. Confidence ratings reflect the strength of the underlying assumptions.</p>
+
+    <table class="roi-table">
+      <thead>
+        <tr>
+          <th>Opportunity</th>
+          <th>Conservative</th>
+          <th>Midpoint</th>
+          <th>Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Postscript SMS activation</strong><br><span style="font-size:12px;color:#888;">Cart recovery + churn-moment + win-back</span></td>
+          <td class="green">$900K</td>
+          <td class="green">$1.35M</td>
+          <td><span class="confidence conf-high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Pre-renewal email flow rebuild</strong><br><span style="font-size:12px;color:#888;">CS cost savings + chargeback reduction</span></td>
+          <td class="green">$200K</td>
+          <td class="green">$300K</td>
+          <td><span class="confidence conf-high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Trustpilot repair → conversion recovery</strong><br><span style="font-size:12px;color:#888;">Score improvement + DTC conversion rate</span></td>
+          <td class="green">$200K</td>
+          <td class="green">$350K</td>
+          <td><span class="confidence conf-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Shipping tracking automation</strong><br><span style="font-size:12px;color:#888;">CS cost savings (25% ticket reduction)</span></td>
+          <td class="green">$150K</td>
+          <td class="green">$225K</td>
+          <td><span class="confidence conf-high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Post-purchase LTV extension (Klaviyo)</strong><br><span style="font-size:12px;color:#888;">+0.5–1 month LTV across 65K subscribers</span></td>
+          <td class="green">$1.5M</td>
+          <td class="green">$2.7M</td>
+          <td><span class="confidence conf-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Win-back sequence for churned subscribers</strong><br><span style="font-size:12px;color:#888;">2–3% recovery × 21,500 churned/month</span></td>
+          <td class="green">$620K</td>
+          <td class="green">$930K</td>
+          <td><span class="confidence conf-high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Zendesk context + AI deflection</strong><br><span style="font-size:12px;color:#888;">Handle time reduction + 30–40% deflection</span></td>
+          <td class="green">$300K</td>
+          <td class="green">$500K</td>
+          <td><span class="confidence conf-high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Multi-product escape velocity triggers</strong><br><span style="font-size:12px;color:#888;">Month 2–4 product recommendation flows</span></td>
+          <td class="green">$1.0M</td>
+          <td class="green">$1.5M</td>
+          <td><span class="confidence conf-med">Medium</span></td>
+        </tr>
+        <tr class="total-row">
+          <td>Total Estimated Annual Impact</td>
+          <td class="green">$4.9M</td>
+          <td class="green">$7.9M</td>
+          <td><span class="confidence conf-med">Conservative</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:12px; color:#999; margin-top:16px; line-height:1.6;">
+      <strong>Methodology note:</strong> Postscript SMS modeled at 5–8% cart recovery (industry low end), $120 AOV. Win-back modeled at 2–3% reactivation of 21,500 monthly churned subscribers × $120 × 12. LTV extension modeled at 0.5–1 month added × 65,000 subscribers × $120. Trustpilot conversion modeled at 0.1–0.2% CVR improvement on estimated monthly DTC traffic. Zendesk savings modeled at 2–3 minutes handle time saved × 5,000+ weekly tickets × nearshore labor rate.
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── RED FLAGS ── -->
+  <section id="red-flags">
+    <p class="section-label">Red Flags</p>
+    <h2 class="section-title">Issues requiring immediate attention</h2>
+    <p class="section-sub">These are not future risks — they are active revenue leaks and compliance exposures happening right now.</p>
+
+    <div class="flag-card">
+      <div class="flag-icon">🔴</div>
+      <div>
+        <div class="flag-title">Postscript contract active, $0 revenue generated</div>
+        <div class="flag-body">The platform is paid for. There is no cart recovery, no churn-moment SMS, no win-back trigger. Every week this remains inactive is $17,000–$35,000 in unrecovered revenue.</div>
+      </div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-icon">🔴</div>
+      <div>
+        <div class="flag-title">Trustpilot 1.7/5 visible in Google search results</div>
+        <div class="flag-body">Every prospective customer searching "Rho Nutrition" sees a 1.7-star rating in the knowledge panel. This is actively suppressing conversion on $18–20M/month in revenue. Every week of inaction compounds.</div>
+      </div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-icon">🔴</div>
+      <div>
+        <div class="flag-title">Pre-renewal notifications unreliable — FTC compliance risk</div>
+        <div class="flag-body">Charging subscribers without documented pre-renewal notification creates chargeback exposure and potential regulatory risk under FTC negative option rules. This is the simplest fix with the highest compliance ROI.</div>
+      </div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-icon">🟠</div>
+      <div>
+        <div class="flag-title">21,500 subscribers churning monthly with zero recovery system</div>
+        <div class="flag-body">Every churned subscriber is treated as a permanent loss. A 2–3% recovery rate on this volume would generate over $600K/year in recovered revenue with no new acquisition cost.</div>
+      </div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-icon">🟠</div>
+      <div>
+        <div class="flag-title">Zendesk not connected to Shopify or Retextion</div>
+        <div class="flag-body">Every CS ticket requires manual tab-switching between three systems. At 5,000+ tickets/week, this represents hundreds of hours of avoidable human time per month.</div>
+      </div>
+    </div>
+    <div class="flag-card">
+      <div class="flag-icon">🟠</div>
+      <div>
+        <div class="flag-title">BBB complaints on file</div>
+        <div class="flag-body">Unresolved billing and shipping disputes filed with the Better Business Bureau. Signals systemic CS process failures that reach beyond Trustpilot. Should be reviewed and resolved as part of the CS process audit.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── ROADMAP ── -->
+  <section id="roadmap">
+    <p class="section-label">Implementation Roadmap</p>
+    <h2 class="section-title">90-day build plan, 3 phases</h2>
+    <p class="section-sub">Sequenced to deliver revenue impact in the first 30 days and compound quarterly. Zero disruption to existing infrastructure at each stage.</p>
+
+    <div class="phase-block">
+      <div class="phase-block-header q1">
+        <div>
+          <div class="phase-title">Q1 — Foundation &amp; Quick Wins (Days 1–30)</div>
+          <div class="phase-desc">Activate paid-for tools. Fix broken flows. Start the Trustpilot repair.</div>
+        </div>
+        <span class="opp-phase phase-q1">Est. Impact: $1.5M–$3M/year</span>
+      </div>
+      <ul>
+        <li><span class="phase-chk">✓</span><span><span class="li-title">Postscript SMS: Abandoned cart (3-touch) + churn-moment + win-back trigger</span><span class="li-sub">Connected to Retextion subscription data. Zero marginal platform cost.</span></span></li>
+        <li><span class="phase-chk">✓</span><span><span class="li-title">Pre-renewal Klaviyo flow rebuild (7-day / 3-day / 24-hour)</span><span class="li-sub">Eliminates #2 ticket driver. Strengthens FTC compliance.</span></span></li>
+        <li><span class="phase-chk">✓</span><span><span class="li-title">Trustpilot review repair flow (post-delivery satisfaction fork)</span><span class="li-sub">Happy path → Trustpilot link. Unhappy path → CS ticket auto-created.</span></span></li>
+        <li><span class="phase-chk">✓</span><span><span class="li-title">Shipping &amp; tracking automation (Wonderment/Malomo + Zendesk auto-reply)</span><span class="li-sub">Eliminates ~25% of CS ticket volume. Proactive notifications replace reactive lookups.</span></span></li>
+      </ul>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-block-header q2">
+        <div>
+          <div class="phase-title">Q2 — Revenue Infrastructure (Days 31–90)</div>
+          <div class="phase-desc">Build the retention engine. Extend LTV. Connect the data layer.</div>
+        </div>
+        <span class="opp-phase phase-q2">Est. Impact: $2.5M–$5M/year</span>
+      </div>
+      <ul>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Post-purchase LTV extension sequence (Day 7 / 14 / 21)</span><span class="li-sub">Product education → cross-sell → escape velocity product introduction.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Win-back automation for churned subscribers (D0 / D7 / D30 incentive)</span><span class="li-sub">Email + SMS. 2–3% recovery target. $620K–$1.2M annual impact.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Zendesk ↔ Shopify + Retextion context integration</span><span class="li-sub">Full order + subscription data in agent workspace. Eliminates tab-switching.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Zendesk AI ticket deflection (30–40% on top 3 categories)</span><span class="li-sub">Auto-draft + auto-tag + auto-route. Scales CS capacity without headcount.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Customer health goal questionnaire → personalized Klaviyo journeys</span><span class="li-sub">Typeform → Shopify notes + Klaviyo profile tags → personalized flows.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">24/7 AI phone agent (Bland AI / Vapi)</span><span class="li-sub">Order lookup + cancellation save flow + tracking. Escalates to human when needed.</span></span></li>
+        <li><span class="phase-chk blue">✓</span><span><span class="li-title">Leadership KPI dashboard (LTV, churn, ticket vol, Trustpilot, revenue)</span><span class="li-sub">Live visibility for George + Ryan. Connects all data sources into one view.</span></span></li>
+      </ul>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-block-header q3">
+        <div>
+          <div class="phase-title">Q3 — Advanced Systems (Days 91–180)</div>
+          <div class="phase-desc">Multi-product engine. Creative AI. Science ops. Wholesale automation.</div>
+        </div>
+        <span class="opp-phase phase-q3">Strategic compounding</span>
+      </div>
+      <ul>
+        <li><span class="phase-chk purple">✓</span><span><span class="li-title">Multi-product escape velocity triggers (Month 2–4 product flows)</span><span class="li-sub">Personalized by purchase history + goal data. Drives 4–5 product threshold.</span></span></li>
+        <li><span class="phase-chk purple">✓</span><span><span class="li-title">Creative performance AI dashboard (Meta data → AI brief generation)</span><span class="li-sub">Compresses creative iteration cycle. Reduces CAC over time.</span></span></li>
+        <li><span class="phase-chk purple">✓</span><span><span class="li-title">AI science research monitoring (PubMed / clinical database summarization)</span><span class="li-sub">Keeps formulation team ahead of the research curve. Competitive edge.</span></span></li>
+        <li><span class="phase-chk purple">✓</span><span><span class="li-title">Wholesale operations automation (EDI + PO confirmations + fulfillment status)</span><span class="li-sub">Streamlines Sprouts, GNC, Vitamin Shoppe fulfillment workflows.</span></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── CLOSING ── -->
+  <section id="closing">
+    <p class="section-label">The Partnership Model</p>
+    <h2 class="section-title">Infrastructure, not campaigns</h2>
+    <p class="section-sub" style="margin-bottom:24px;">Crewless builds automated systems that operate without human input — not marketing campaigns that require ongoing management. The distinction matters.</p>
+
+    <p style="font-size:15px; color:#444; line-height:1.7; margin-bottom:16px;">
+      George already understands the leverage model. He hires nearshore in Colombia to reduce the cost of repetitive human work. Automation eliminates repetitive work entirely — not just cheapens it. Every system we build runs on its own, 24/7, indefinitely.
+    </p>
+    <p style="font-size:15px; color:#444; line-height:1.7; margin-bottom:16px;">
+      The CMO keeps creating campaigns. The CS team keeps handling complex escalations. What we build is the infrastructure underneath — the automated triggers, the data connections, the AI layers — that make every human action more leveraged and every customer touchpoint more consistent.
+    </p>
+    <p style="font-size:15px; color:#444; line-height:1.7;">
+      George mentioned wanting to bring in a "Head of AI" eventually. Crewless serves as a fractional Head of AI during this buildout — strategy, implementation, and ongoing optimization — until the business is ready to hire that role in-house.
+    </p>
+
+    <div class="callout" style="margin-top:32px;">
+      <p class="callout-quote">"The easiest customer to have is the one to keep."</p>
+      <p class="callout-attr">— George Padilla, CEO, Rho Nutrition · Discovery Call, February 2026</p>
+      <p style="font-size:14px; color:#555; margin-top:12px; font-style:normal;">Every system in this roadmap exists to make keeping customers easier, more automated, and more certain — at scale.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<div class="footer">
+  <span class="footer-brand">CREWLESS</span>
+  <span class="footer-meta">Rho Nutrition Operations Audit · Confidential · March 2026</span>
+</div>
+
+</body>
+</html>
