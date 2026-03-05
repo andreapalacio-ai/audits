@@ -331,16 +331,29 @@
     margin-bottom: 28px;
     line-height: 1.6;
   }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .cta-btn {
     display: inline-block;
     background: var(--green);
     color: #fff;
     font-size: 14px;
     font-weight: 700;
-    padding: 14px 32px;
+    padding: 14px 28px;
     border-radius: 8px;
     text-decoration: none;
     letter-spacing: .02em;
+  }
+  .cta-btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: .02em;
+    border: 2px solid #374151;
   }
   .cta-note {
     font-size: 12px;
@@ -371,7 +384,7 @@
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">Run Crewless × Rho Nutrition</div>
+  <div class="topbar-brand">Crewless × Rho Nutrition</div>
   <div class="topbar-date">March 2025</div>
 </div>
 
@@ -531,15 +544,18 @@
   <!-- CTA -->
   <div class="cta-box">
     <h2>Ready to move forward?</h2>
-    <p>Reply to this email and I'll send over the agreement.<br>I have two spots available for the next 60 days.</p>
-    <a href="mailto:teapalacio@gmail.com" class="cta-btn">Reply to Andrea</a>
-    <div class="cta-note">Questions? Reply to this email or text directly.</div>
+    <p>Review the agreement, then pay to lock in your spot.<br>I have two openings for the next 60 days.</p>
+    <div class="cta-btns">
+      <a href="https://andreapalacio-ai.github.io/audits/rho_nutrition/agreement.html" class="cta-btn" target="_blank">Review &amp; Sign Agreement →</a>
+      <a href="https://buy.stripe.com/aFa4gzcLafygg8ffbU7wA0b" class="cta-btn-outline" target="_blank">Pay $6,500 via Stripe</a>
+    </div>
+    <div class="cta-note">Payment confirms acceptance of the agreement · Questions? Reply to this email</div>
   </div>
 
 </div>
 
 <div class="footer">
-  <strong>Andrea Palacio</strong> · Run Crewless · <a href="mailto:teapalacio@gmail.com" style="color: var(--green); text-decoration: none;">teapalacio@gmail.com</a>
+  <strong>Andrea Palacio</strong> · Crewless · <a href="mailto:teapalacio@gmail.com" style="color: var(--green); text-decoration: none;">teapalacio@gmail.com</a>
 </div>
 
 </body>

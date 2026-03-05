@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Agreement — Crewless × Rho Nutrition</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #0D9B6C;
+    --green-light: #E8F7F2;
+    --green-mid: #B8E8D8;
+    --black: #0A0A0A;
+    --gray: #6B7280;
+    --light: #F9FAFB;
+    --border: #E5E7EB;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: var(--black);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand { font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: .04em; text-transform: uppercase; }
+  .topbar-date { font-size: 12px; color: var(--gray); }
+
+  .wrap { max-width: 680px; margin: 0 auto; padding: 60px 24px 100px; }
+
+  /* HEADER */
+  .doc-header { margin-bottom: 48px; border-bottom: 2px solid var(--border); padding-bottom: 32px; }
+  .doc-tag {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .doc-header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .parties {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .party-box {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .party-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .party-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .party-detail { font-size: 12px; color: var(--gray); }
+
+  /* SECTIONS */
+  .section { margin-bottom: 40px; }
+  .section-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .section h2 {
+    font-size: 17px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+  .section p {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.75;
+    margin-bottom: 10px;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* LISTS */
+  .terms-list { list-style: none; margin: 10px 0; }
+  .terms-list li {
+    font-size: 14px;
+    color: #374151;
+    padding: 8px 0 8px 22px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    line-height: 1.6;
+  }
+  .terms-list li:last-child { border-bottom: none; }
+  .terms-list li::before {
+    content: '·';
+    position: absolute;
+    left: 6px;
+    color: var(--green);
+    font-weight: 900;
+    font-size: 18px;
+    top: 6px;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #1F2937;
+    line-height: 1.7;
+  }
+
+  /* PAYMENT BOX */
+  .payment-box {
+    background: var(--black);
+    border-radius: 14px;
+    padding: 28px 32px;
+    color: #fff;
+    margin: 20px 0;
+  }
+  .payment-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    margin-bottom: 8px;
+  }
+  .payment-amount {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .payment-sub { font-size: 13px; color: #9CA3AF; margin-bottom: 20px; }
+  .payment-btn {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: .02em;
+  }
+  .payment-note {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 12px;
+  }
+
+  /* SIGNATURE */
+  .sig-box {
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 32px;
+    background: var(--green-light);
+    margin-top: 48px;
+  }
+  .sig-box h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--black);
+  }
+  .sig-box p {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .sig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .sig-line {
+    border-top: 1px solid #374151;
+    padding-top: 8px;
+  }
+  .sig-line .name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .sig-line .role { font-size: 12px; color: var(--gray); }
+  .sig-line .date-label { font-size: 11px; color: var(--gray); margin-top: 12px; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 12px 20px; }
+    .wrap { padding: 40px 20px 80px; }
+    .parties { grid-template-columns: 1fr; }
+    .sig-grid { grid-template-columns: 1fr; }
+    .payment-box { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Crewless × Rho Nutrition</div>
+  <div class="topbar-date">Effective March 2025</div>
+</div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-tag">Service Agreement</div>
+    <h1>Customer Experience AI — Service Agreement</h1>
+    <div class="parties">
+      <div class="party-box">
+        <div class="party-label">Service Provider</div>
+        <div class="party-name">Andrea Palacio</div>
+        <div class="party-detail">Crewless<br>teapalacio@gmail.com</div>
+      </div>
+      <div class="party-box">
+        <div class="party-label">Client</div>
+        <div class="party-name">Rho Nutrition</div>
+        <div class="party-detail">George Padilla, CEO<br>Rho Nutrition, Inc.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. SCOPE -->
+  <div class="section">
+    <div class="section-num">Section 01</div>
+    <h2>Scope of Work</h2>
+    <p>Andrea Palacio ("Provider") agrees to design, build, and deliver the following two systems for Rho Nutrition ("Client"):</p>
+    <ul class="terms-list">
+      <li><strong>Zendesk AI Support Agent</strong> — An AI system integrated with Zendesk, Shopify, and Retextion that pulls full customer context (order history, subscription status, past interactions) and drafts personalized responses for each ticket. Includes escalation logic to route tickets to human agents when appropriate.</li>
+      <li><strong>24/7 Voice Agent</strong> — An AI phone agent trained on the Client's macro library, product catalog, and business rules, capable of handling Tier 1 customer calls with natural language responses and intelligent escalation to human agents.</li>
+    </ul>
+    <p style="margin-top: 12px;">This agreement covers only the two systems above. No other services, tools, or systems are included in this scope.</p>
+  </div>
+
+  <!-- 2. TIMELINE -->
+  <div class="section">
+    <div class="section-num">Section 02</div>
+    <h2>Timeline & Delivery</h2>
+    <p>Both systems will be delivered within <strong>30 days</strong> of the date the Provider receives all required access and materials from the Client (see Section 5).</p>
+    <p>Delivery includes a testing period during which the Client's team reviews AI drafts and voice agent responses before either system goes live. The Provider will refine both systems based on team feedback during this period at no additional charge.</p>
+  </div>
+
+  <!-- 3. PAYMENT -->
+  <div class="section">
+    <div class="section-num">Section 03</div>
+    <h2>Payment</h2>
+    <p>The total fee for both systems is a one-time payment of <strong>$6,500 USD</strong>, due in full upon signing this agreement. Work begins upon receipt of payment.</p>
+
+    <div class="payment-box">
+      <div class="payment-label">One-Time Setup Fee</div>
+      <div class="payment-amount">$6,500</div>
+      <div class="payment-sub">Secure payment via Stripe · Both systems included</div>
+      <a href="https://buy.stripe.com/aFa4gzcLafygg8ffbU7wA0b" class="payment-btn" target="_blank">Pay $6,500 via Stripe →</a>
+      <div class="payment-note">Payment confirms acceptance of this agreement.</div>
+    </div>
+
+    <p>The Client may optionally continue with a monthly retainer of <strong>$1,500/month</strong> after delivery, which covers ongoing system maintenance, training data updates, and access to the Provider during business hours. The retainer is month-to-month and may be cancelled at any time with 7 days' written notice.</p>
+  </div>
+
+  <!-- 4. SATISFACTION GUARANTEE -->
+  <div class="section">
+    <div class="section-num">Section 04</div>
+    <h2>Satisfaction Guarantee</h2>
+    <div class="highlight">
+      If either system does not meet the Client's reasonable quality standards upon delivery, the Provider will continue refining and improving both systems at no additional charge until the Client is satisfied with the outcome. This commitment has no time limit and is binding on the Provider.
+    </div>
+    <p>"Satisfied" means the AI response drafts and voice agent responses are accurate, appropriately personalized, and consistent with the Client's existing quality standards for customer communication.</p>
+  </div>
+
+  <!-- 5. CLIENT RESPONSIBILITIES -->
+  <div class="section">
+    <div class="section-num">Section 05</div>
+    <h2>Client Responsibilities</h2>
+    <p>The Client agrees to provide the following within 5 business days of payment to allow work to begin:</p>
+    <ul class="terms-list">
+      <li>Read-only or admin access to Zendesk, Shopify, and Retextion</li>
+      <li>Full Zendesk macro library (exported or shared)</li>
+      <li>A sample of 300+ real customer ticket interactions for training</li>
+      <li>Written refund policy, cancellation policy, and escalation rules</li>
+      <li>Full product catalog with descriptions, FAQs, and key product details</li>
+      <li>One designated contact on the customer service team to provide feedback during the testing period</li>
+    </ul>
+    <p style="margin-top: 12px;">Delays in providing the above materials will extend the delivery timeline accordingly. The 30-day clock starts from the date all materials are received.</p>
+  </div>
+
+  <!-- 6. HANDOVER -->
+  <div class="section">
+    <div class="section-num">Section 06</div>
+    <h2>Handover & Documentation</h2>
+    <p>Upon completion and Client approval of both systems, the Provider will deliver a full Standard Operating Procedure (SOP) document covering:</p>
+    <ul class="terms-list">
+      <li>How to update and expand the AI training data over time</li>
+      <li>How to adjust escalation rules and response logic</li>
+      <li>How to add new macros and product information</li>
+      <li>How to monitor performance and identify areas for improvement</li>
+      <li>Recommended practices for getting the best results from both systems</li>
+    </ul>
+    <p style="margin-top: 12px;">The Client's team will be able to manage both systems independently after handover using this documentation.</p>
+  </div>
+
+  <!-- 7. OWNERSHIP -->
+  <div class="section">
+    <div class="section-num">Section 07</div>
+    <h2>Ownership & Intellectual Property</h2>
+    <p>Upon receipt of full payment, all custom systems, workflows, integrations, and documentation built for the Client under this agreement become the sole property of Rho Nutrition. The Provider retains no ownership over any deliverable produced under this agreement.</p>
+    <p>Third-party tools and platforms used in the build (Zendesk, Shopify, Retextion, etc.) remain subject to their own terms of service.</p>
+  </div>
+
+  <!-- 8. CONFIDENTIALITY -->
+  <div class="section">
+    <div class="section-num">Section 08</div>
+    <h2>Confidentiality</h2>
+    <p>Both parties agree to keep confidential any non-public business information shared during this engagement. The Provider will not share, disclose, or use any Client data, customer information, or business processes for any purpose outside of delivering the services described in this agreement.</p>
+  </div>
+
+  <!-- 9. TERMINATION -->
+  <div class="section">
+    <div class="section-num">Section 09</div>
+    <h2>Termination</h2>
+    <p>Either party may terminate this agreement with written notice. If the Client terminates before delivery, the $6,500 setup fee is non-refundable for work already completed. If the Provider is unable to deliver the agreed systems, a full refund will be issued.</p>
+    <p>The monthly retainer (if active) may be cancelled at any time with 7 days' written notice, with no penalties or fees.</p>
+  </div>
+
+  <!-- 10. GOVERNING LAW -->
+  <div class="section">
+    <div class="section-num">Section 10</div>
+    <h2>Governing Law</h2>
+    <p>This agreement is governed by the laws of the State of Florida. Any disputes arising from this agreement will be resolved through good-faith negotiation between the parties.</p>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="sig-box">
+    <h3>Acceptance of Terms</h3>
+    <p>By completing payment via the Stripe link in Section 3, the Client confirms they have read, understood, and agreed to all terms of this agreement. Payment serves as the Client's electronic signature and acceptance of this contract.</p>
+    <p>If you prefer to sign a physical copy, reply to <a href="mailto:teapalacio@gmail.com" style="color: var(--green); font-weight: 600;">teapalacio@gmail.com</a> and a PDF version will be sent for signature.</p>
+    <div class="sig-grid">
+      <div class="sig-line">
+        <div class="name">Andrea Palacio</div>
+        <div class="role">Crewless — Service Provider</div>
+        <div class="date-label">Date: March 2025</div>
+      </div>
+      <div class="sig-line">
+        <div class="name">George Padilla</div>
+        <div class="role">CEO — Rho Nutrition, Client</div>
+        <div class="date-label">Date: _______________</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Crewless</strong> · Andrea Palacio · <a href="mailto:teapalacio@gmail.com" style="color: var(--green); text-decoration: none;">teapalacio@gmail.com</a>
+</div>
+
+</body>
+</html>
