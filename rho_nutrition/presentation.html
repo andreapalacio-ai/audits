@@ -11,12 +11,9 @@
     html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #0a0a0a; }
 
     /* ── Slide shell ── */
-    #deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-    .slide { position: absolute; inset: 0; display: flex; flex-direction: column;
-             opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
-             transform: translateX(40px); }
-    .slide.active  { opacity: 1; pointer-events: all; transform: translateX(0); }
-    .slide.exit    { opacity: 0; transform: translateX(-40px); }
+    #deck { width: 100vw; height: 100vh; overflow: hidden; }
+    .slide { display: none; width: 100%; height: 100%; flex-direction: column; }
+    .slide.active { display: flex; }
 
     /* ── Shared ── */
     .topbar { border-bottom: 1px solid #F0F0F0; padding: 18px 56px;
@@ -502,7 +499,6 @@
 <script>
   const TOTAL = 8;
   let current = 0;
-  let busy = false;
 
   function show(idx) {
     document.querySelectorAll('.slide').forEach((s, i) => {
@@ -515,19 +511,10 @@
   }
 
   function go(dir) {
-    if (busy) return;
     const next = current + dir;
     if (next < 0 || next >= TOTAL) return;
-    busy = true;
-    const currentSlide = document.getElementById('s' + current);
-    currentSlide.classList.remove('active');
-    currentSlide.classList.add('exit');
-    setTimeout(() => {
-      currentSlide.classList.remove('exit');
-      current = next;
-      show(current);
-      busy = false;
-    }, 280);
+    current = next;
+    show(current);
   }
 
   document.addEventListener('keydown', e => {
