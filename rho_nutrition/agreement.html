@@ -371,19 +371,45 @@
 
   <!-- SIGNATURE -->
   <div class="sig-box">
-    <h3>Acceptance of Terms</h3>
-    <p>By completing payment via the Stripe link in Section 3, the Client confirms they have read, understood, and agreed to all terms of this agreement. Payment serves as the Client's electronic signature and acceptance of this contract.</p>
-    <p>If you prefer to sign a physical copy, reply to <a href="mailto:andrea@runcrewless.com" style="color: var(--green); font-weight: 600;">andrea@runcrewless.com</a> and a PDF version will be sent for signature.</p>
-    <div class="sig-grid">
-      <div class="sig-line">
-        <div class="name">Andrea Palacio</div>
-        <div class="role">Crewless — Service Provider</div>
-        <div class="date-label">Date: March 2025</div>
+    <h3>Sign This Agreement</h3>
+    <p>Enter your full name, confirm you've read the agreement, and click the button below. This will open an email confirmation for you to send — your sent email serves as your electronic signature.</p>
+
+    <div id="sig-form">
+      <div style="margin-bottom: 16px;">
+        <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6B7280; margin-bottom:6px;">Full Name</label>
+        <input id="sig-name" type="text" placeholder="George Padilla" style="width:100%; padding:12px 14px; border:1.5px solid #D1D5DB; border-radius:8px; font-size:14px; font-family:inherit; outline:none; transition:border .2s;" onfocus="this.style.borderColor='#0D9B6C'" onblur="this.style.borderColor='#D1D5DB'">
       </div>
-      <div class="sig-line">
-        <div class="name">George Padilla</div>
-        <div class="role">CEO — Rho Nutrition, Client</div>
-        <div class="date-label">Date: _______________</div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display:block; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6B7280; margin-bottom:6px;">Title & Company</label>
+        <input id="sig-title" type="text" placeholder="CEO, Rho Nutrition" style="width:100%; padding:12px 14px; border:1.5px solid #D1D5DB; border-radius:8px; font-size:14px; font-family:inherit; outline:none; transition:border .2s;" onfocus="this.style.borderColor='#0D9B6C'" onblur="this.style.borderColor='#D1D5DB'">
+      </div>
+
+      <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; margin-bottom:20px;">
+        <input id="sig-check" type="checkbox" style="margin-top:3px; accent-color:#0D9B6C; width:16px; height:16px; flex-shrink:0;">
+        <span style="font-size:13px; color:#374151; line-height:1.6;">I have read and understood all terms of this agreement and agree to be bound by them. I understand that submitting this form constitutes my electronic signature.</span>
+      </label>
+
+      <button onclick="signAgreement()" style="width:100%; background:#0D9B6C; color:#fff; font-size:15px; font-weight:700; padding:15px; border:none; border-radius:8px; cursor:pointer; font-family:inherit; letter-spacing:.02em;">Sign Agreement →</button>
+      <p id="sig-error" style="display:none; color:#DC2626; font-size:13px; margin-top:10px; text-align:center;"></p>
+    </div>
+
+    <div id="sig-success" style="display:none; text-align:center; padding:20px 0;">
+      <div style="font-size:36px; margin-bottom:12px;">✓</div>
+      <div style="font-size:17px; font-weight:800; color:#0D9B6C; margin-bottom:8px;">Agreement Sent</div>
+      <p style="font-size:14px; color:#374151;">Your email client opened with a pre-filled confirmation. Hit send to complete your signature. Andrea will receive it immediately.</p>
+    </div>
+
+    <div style="margin-top:28px; padding-top:20px; border-top:1px solid #D1D5DB; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+      <div>
+        <div style="font-size:12px; color:#6B7280; margin-bottom:6px;">Service Provider</div>
+        <div style="font-size:14px; font-weight:700;">Andrea Palacio</div>
+        <div style="font-size:12px; color:#6B7280;">Crewless · March 2025</div>
+      </div>
+      <div>
+        <div style="font-size:12px; color:#6B7280; margin-bottom:6px;">Client</div>
+        <div style="font-size:14px; font-weight:700;" id="preview-name">_______________</div>
+        <div style="font-size:12px; color:#6B7280;" id="preview-date"></div>
       </div>
     </div>
   </div>
@@ -393,6 +419,42 @@
 <div class="footer">
   <strong>Crewless</strong> · Andrea Palacio · <a href="mailto:andrea@runcrewless.com" style="color: var(--green); text-decoration: none;">andrea@runcrewless.com</a>
 </div>
+
+<script>
+  // Auto-fill today's date in preview
+  const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('preview-date').textContent = today;
+
+  // Update preview name as user types
+  document.getElementById('sig-name').addEventListener('input', function() {
+    document.getElementById('preview-name').textContent = this.value || '_______________';
+  });
+
+  function signAgreement() {
+    const name = document.getElementById('sig-name').value.trim();
+    const title = document.getElementById('sig-title').value.trim();
+    const checked = document.getElementById('sig-check').checked;
+    const error = document.getElementById('sig-error');
+
+    if (!name) { error.textContent = 'Please enter your full name.'; error.style.display = 'block'; return; }
+    if (!checked) { error.textContent = 'Please confirm you have read and agree to the terms.'; error.style.display = 'block'; return; }
+    error.style.display = 'none';
+
+    const subject = encodeURIComponent('Agreement Signed — Rho Nutrition × Crewless');
+    const body = encodeURIComponent(
+      'Hi Andrea,\n\n' +
+      'I, ' + name + (title ? ' (' + title + ')' : '') + ', confirm that I have read and agree to all terms of the Customer Experience AI Service Agreement with Crewless, dated March 2025.\n\n' +
+      'Signed on: ' + today + '\n\n' +
+      'I understand this email serves as my electronic signature and acceptance of the agreement.\n\n' +
+      '— ' + name
+    );
+
+    window.location.href = 'mailto:andrea@runcrewless.com?subject=' + subject + '&body=' + body;
+
+    document.getElementById('sig-form').style.display = 'none';
+    document.getElementById('sig-success').style.display = 'block';
+  }
+</script>
 
 </body>
 </html>
