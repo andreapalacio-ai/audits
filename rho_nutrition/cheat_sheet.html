@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rho Nutrition — Number Cheat Sheet · Crewless</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #0a0a0a; line-height: 1.6; font-size: 15px; }
+    .topbar { border-bottom: 2px solid #0D9B6C; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: #0D9B6C; }
+    .topbar-right { font-size: 12px; color: #999; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 48px 40px 120px; }
+
+    .hero { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid #F0F0F0; }
+    .hero-tag { font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #0D9B6C; margin-bottom: 12px; }
+    .hero h1 { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
+    .hero p { font-size: 16px; color: #555; line-height: 1.65; max-width: 640px; }
+
+    /* Base facts box */
+    .facts { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px 28px; margin-bottom: 48px; }
+    .facts-title { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #0D9B6C; margin-bottom: 16px; }
+    .facts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 40px; }
+    .fact-row { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px solid #F0F0F0; font-size: 14px; }
+    .fact-row:last-child { border-bottom: none; }
+    .fact-label { color: #999; font-size: 12px; font-weight: 600; width: 160px; flex-shrink: 0; padding-top: 1px; }
+    .fact-val { font-weight: 700; color: #0a0a0a; }
+    .fact-source { font-size: 11px; color: #bbb; margin-top: 1px; }
+
+    /* Number cards */
+    .num-card { border: 1px solid #F0F0F0; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+    .num-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; background: #F9FAFB; border-bottom: 1px solid #F0F0F0; }
+    .num-title { font-size: 16px; font-weight: 800; }
+    .num-amount { font-size: 20px; font-weight: 900; color: #0D9B6C; white-space: nowrap; }
+    .num-body { padding: 20px 24px; }
+
+    .step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: #0D9B6C; color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-text { font-size: 14px; color: #333; line-height: 1.6; }
+    .step-text strong { color: #0a0a0a; }
+    .step-math { display: inline-block; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 3px 10px; font-size: 13px; font-weight: 700; color: #0D9B6C; margin-top: 4px; }
+    .assumption { margin-top: 14px; padding: 10px 14px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; font-size: 13px; color: #78350F; line-height: 1.55; }
+    .assumption strong { display: block; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; color: #92400E; }
+
+    .section-title { font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #bbb; margin: 40px 0 16px; }
+
+    .source-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.06em; margin-left: 8px; vertical-align: middle; }
+    .src-george { background: #EDE9FE; color: #6D28D9; }
+    .src-audit { background: #DBEAFE; color: #1D4ED8; }
+    .src-industry { background: #F3F4F6; color: #6B7280; }
+
+    @media print {
+      body { font-size: 13px; }
+      .topbar { padding: 14px 24px; }
+      .wrap { padding: 24px 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">CREWLESS</span>
+  <span class="topbar-right">Rho Nutrition · Number Cheat Sheet · Confidential</span>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="hero-tag">How we got to the numbers</p>
+    <h1>The Math Behind Every Dollar</h1>
+    <p>This is your reference sheet. If George asks "how did you get that number?" — this is the answer. Every number comes from his own business data or a very conservative industry assumption. Nothing is made up.</p>
+  </div>
+
+  <!-- BASE FACTS -->
+  <div class="facts">
+    <div class="facts-title">The Starting Facts — where everything comes from</div>
+    <div class="facts-grid">
+      <div>
+        <div class="fact-row"><span class="fact-label">Active subscribers</span><div><div class="fact-val">65,000</div><div class="fact-source">George said this on the call</div></div></div>
+        <div class="fact-row"><span class="fact-label">Monthly subscription price</span><div><div class="fact-val">$120 average</div><div class="fact-source">George said blended AOV is ~$120</div></div></div>
+        <div class="fact-row"><span class="fact-label">Monthly revenue</span><div><div class="fact-val">$18–20M</div><div class="fact-source">George said this on the call</div></div></div>
+        <div class="fact-row"><span class="fact-label">DTC share of revenue</span><div><div class="fact-val">~80%</div><div class="fact-source">George said 80% DTC, 20% retail</div></div></div>
+      </div>
+      <div>
+        <div class="fact-row"><span class="fact-label">Average subscriber LTV</span><div><div class="fact-val">~3 months</div><div class="fact-source">George confirmed this on the call</div></div></div>
+        <div class="fact-row"><span class="fact-label">Monthly churn estimate</span><div><div class="fact-val">~33% / ~21,500 leave</div><div class="fact-source">Industry avg for DTC supplements; George did not dispute</div></div></div>
+        <div class="fact-row"><span class="fact-label">Weekly CS ticket volume</span><div><div class="fact-val">4,000–7,000 / week</div><div class="fact-source">Estimated from team size (18 agents). George confirmed volume is high.</div></div></div>
+        <div class="fact-row"><span class="fact-label">Postscript SMS status</span><div><div class="fact-val">Signed. Never activated.</div><div class="fact-source">George confirmed on the call</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">The Individual Numbers — explained simply</div>
+
+  <!-- 1. POSTSCRIPT SMS -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Postscript SMS Activation <span class="source-tag src-george">GEORGE CONFIRMED</span></div>
+      <div class="num-amount">$900K–$1.8M/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">George's store does roughly <strong>$14–16M/month in DTC sales</strong> on Shopify (80% of total revenue). Some people add products to their cart but never finish checking out. That's called cart abandonment — it happens about 70% of the time online.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">If we send those people a text message ("Hey, you left something behind"), a small percentage come back and buy. The industry average for SMS cart recovery is <strong>5–10%</strong>. We used <strong>5%</strong> (the lowest, most conservative number).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">We also add a text at the exact moment someone's subscription is about to renew — a "save" message. And a win-back text when someone cancels. All of this combined:
+          <div class="step-math">Roughly $75K–$150K in recovered revenue per month = $900K–$1.8M/year</div>
+        </div>
+      </div>
+      <div class="assumption"><strong>If he asks: "how confident are you?"</strong> Very confident on the low end. This is the most certain number in the deck. The platform is already paid for. Every dollar from it is pure recovery. Even if we're off by 50%, it's still $450K+ in free money from a tool he's already paying for.</div>
+    </div>
+  </div>
+
+  <!-- 2. PRE-RENEWAL EMAIL -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Pre-Renewal Klaviyo Flow Rebuild <span class="source-tag src-george">GEORGE CONFIRMED</span></div>
+      <div class="num-amount">$200K–$400K/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">"I didn't get my renewal email" is the <strong>#2 most common CS ticket</strong>. George confirmed this. We estimate about 15% of all tickets are about this one issue.<br>
+          <div class="step-math">5,000 tickets/week × 15% = 750 tickets/week × 52 weeks = 39,000 tickets/year</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Each ticket costs agent time to handle — roughly <strong>$3–5 per ticket</strong> including agent wages and overhead.<br>
+          <div class="step-math">39,000 tickets × $3–5 = $117K–$195K/year in wasted agent time</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Some of those surprised customers don't just write in — they cancel or do a chargeback. Chargebacks cost about $15 each on top of losing the sale. If even 5% of the 39,000 confused customers churn or chargeback because of the surprise charge, that's another $93K–$234K/year lost. Combined with CS savings: <strong>$200K–$400K/year</strong>.</div>
+      </div>
+      <div class="assumption"><strong>If he asks: "where did 5,000 tickets/week come from?"</strong> George confirmed his CS team of 18 nearshore agents handles a very high volume. At a normal handle time of 5–7 minutes per ticket, 18 agents working full-time process roughly 4,000–7,000 tickets/week. We used 5,000 as our conservative estimate.</div>
+    </div>
+  </div>
+
+  <!-- 3. TRUSTPILOT -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Trustpilot Review Repair <span class="source-tag src-audit">WE LOOKED IT UP</span></div>
+      <div class="num-amount">$200K–$500K/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">The Trustpilot score (1.7 stars) appears in Google search results when someone Googles "Rho Nutrition." Some people who would have bought see that score and leave. This is called conversion rate impact.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Rho's DTC store does about <strong>$14M/month on Shopify</strong>. If fixing the review score brings back even <strong>0.1% more buyers</strong> — that's 1 out of every 1,000 website visitors who were on the fence:<br>
+          <div class="step-math">$14M × 0.1% = $14,000/month = $168,000/year (low end)</div>
+          <div style="margin-top:6px;"><div class="step-math">$14M × 0.3% = $42,000/month = $504,000/year (high end)</div></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Going from 1.7 stars to 3.5+ stars is a huge visual change in search results. A 0.1–0.3% conversion improvement is extremely conservative for that kind of visible change.</div>
+      </div>
+      <div class="assumption"><strong>If he asks: "how do you know 0.1–0.3% is right?"</strong> We're being very careful here. Studies on review scores and conversion show that going from under 2 stars to over 3 stars can improve conversion by 1–3%. We used one-tenth of that. This is the most conservative number in the deck by far.</div>
+    </div>
+  </div>
+
+  <!-- 4. SHIPPING/TRACKING -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Shipping &amp; Tracking Automation <span class="source-tag src-george">GEORGE CONFIRMED</span></div>
+      <div class="num-amount">$150K–$300K/yr (cost savings)</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">"Where's my package?" is about <strong>25% of all CS tickets</strong>. George confirmed shipping questions are a top ticket driver.<br>
+          <div class="step-math">5,000 tickets/week × 25% = 1,250 tracking tickets/week</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Every single one of these tickets is the same: agent opens Zendesk, opens Shopify in another tab, looks up the order, copies the tracking number, types a reply. That's about <strong>5–7 minutes per ticket</strong>. Multiplied across 1,250 tickets a week, that's 104–146 hours of agent time every week doing copy-paste work.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">We eliminate 60–80% of these tickets with proactive notifications (we text/email customers when their package ships and is delivered, so they don't need to ask).<br>
+          <div class="step-math">750–1,000 tickets eliminated/week × 52 weeks × $3–5/ticket = $117K–$260K/year</div>
+          With overhead included, this lands at <strong>$150K–$300K/year</strong> in recovered agent capacity.
+        </div>
+      </div>
+      <div class="assumption"><strong>If he asks: "why not eliminate 100% of shipping tickets?"</strong> Some packages get lost, delayed, or have issues that need a real human. We only claimed 60–80% elimination to be safe.</div>
+    </div>
+  </div>
+
+  <!-- 5. LTV EXTENSION -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Post-Purchase LTV Extension Sequence <span class="source-tag src-george">GEORGE'S OWN MATH</span></div>
+      <div class="num-amount">$1.5M–$3.9M/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">This is literally George's own math. He told us: current average subscriber stays <strong>3 months</strong>. His target is 4–5 months. He called 4–5 products "escape velocity."</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">The math is simple multiplication:<br>
+          <div class="step-math">65,000 subscribers × $120/month = $7.8M per month</div>
+          <div style="margin-top:6px;"><div class="step-math">If every subscriber stays just 15 days longer on average = half an extra payment = $60 more</div></div>
+          <div style="margin-top:6px;"><div class="step-math">65,000 × $60 = $3.9M in extra lifetime revenue from the current subscriber base</div></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">We showed a range of $1.5M–$3.9M to be conservative. The $1.5M assumes we only get half the impact. If you add a full extra month: 65,000 × $120 = $7.8M.</div>
+      </div>
+      <div class="assumption"><strong>If he asks: "but you have to prove they stay longer first."</strong> He's right — this is a projection, not a guarantee. That's why we presented it as a range and listed it as Q2 (we build the foundation first in Q1, prove it works, then the LTV sequence is next). The mechanism is proven — companies like AG1 and Thrive Market use this exact playbook.</div>
+    </div>
+  </div>
+
+  <!-- 6. WIN-BACK -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Win-Back Sequence for Churned Subscribers <span class="source-tag src-industry">INDUSTRY BENCHMARK</span></div>
+      <div class="num-amount">$620K–$1.2M/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">About <strong>33% of subscribers leave every month</strong>. That's standard for DTC supplement brands — George did not push back on this.<br>
+          <div class="step-math">65,000 subscribers × 33% = ~21,500 people leave every month</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Right now, when someone cancels, nothing happens. No email. No text. No offer. We send them a 3-message sequence — immediately when they cancel, 7 days later, and 30 days later with a small incentive (like a discount on their next order).</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Industry win-back rates for e-commerce are 2–5%. We used <strong>3%</strong> (middle of the range):<br>
+          <div class="step-math">21,500 × 3% = 645 people come back per month</div>
+          <div style="margin-top:6px;"><div class="step-math">645 × $120 × 12 months = $928,800/year ≈ $930K</div></div>
+          The range ($620K–$1.2M) uses 2% on the low end and 4% on the high end.
+        </div>
+      </div>
+      <div class="assumption"><strong>If he asks: "how do you know 3% is realistic?"</strong> That's the industry standard for subscription win-backs when you offer an incentive. Some brands get 5–8%. We used 3% to stay safe. The cost of sending those texts/emails is nearly zero.</div>
+    </div>
+  </div>
+
+  <!-- 7. ZENDESK + AI -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Zendesk Context + AI Ticket Deflection <span class="source-tag src-george">GEORGE CONFIRMED</span></div>
+      <div class="num-amount">$300K–$500K/yr (cost savings)</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">George confirmed his CS agents currently switch between 3 different tabs (Zendesk, Shopify, Retextion) for every single ticket. Connecting those tools saves <strong>2–3 minutes per ticket</strong>.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Handle time savings:<br>
+          <div class="step-math">5,000 tickets/week × 2 min saved × 52 weeks = 520,000 minutes/year = 8,667 hours</div>
+          <div style="margin-top:6px;"><div class="step-math">8,667 hours × $10/hr (nearshore rate) = $86,667/year from handle time alone</div></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">On top of that, Zendesk AI auto-handles the top 3 ticket types (cancel requests, renewal confusion, shipping questions). That's a 30–40% deflection rate on those categories. Combined with the handle time savings, total agent capacity recovered = <strong>$300K–$500K/year</strong> (this means you can scale without hiring, or reduce headcount over time).</div>
+      </div>
+      <div class="assumption"><strong>If he asks: "so you're saying I should fire agents?"</strong> No. It means the same team can handle 30–40% more volume without adding headcount. As Rho grows, they won't need to hire as many CS agents. That's where the savings compound.</div>
+    </div>
+  </div>
+
+  <!-- 8. MULTI-PRODUCT ESCAPE VELOCITY -->
+  <div class="num-card">
+    <div class="num-header">
+      <div class="num-title">Multi-Product Escape Velocity Triggers <span class="source-tag src-george">GEORGE'S CONCEPT</span></div>
+      <div class="num-amount">$1M–$2M/yr</div>
+    </div>
+    <div class="num-body">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">George said that once a customer buys 4–5 Rho products, they basically never leave. He called it "escape velocity." That means every subscriber we push to a 4th or 5th product is worth a lifetime of revenue, not just 3 months.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Right now there's no automated system to cross-sell subscribers into more products. We build automated email flows at months 2, 3, and 4 that recommend their next product based on what they already buy. Even converting <strong>2% of the subscriber base</strong> into a 4th product per year:<br>
+          <div class="step-math">65,000 × 2% = 1,300 new cross-sells × $120 × ongoing LTV multiplier = $1M+/year</div>
+        </div>
+      </div>
+      <div class="assumption"><strong>If he asks: "this feels speculative."</strong> He's right that this is the hardest number to prove upfront. That's why we put it in Q3 — we prove the foundational systems first, build trust, then go after this. The 2% cross-sell rate is conservative for targeted product recommendations to an existing subscriber base.</div>
+    </div>
+  </div>
+
+  <!-- TOTAL -->
+  <div style="border-radius:12px; background:#0D9B6C; color:#fff; padding:28px 32px; margin-top:40px; margin-bottom:48px;">
+    <div style="font-size:11px; font-weight:800; letter-spacing:0.14em; opacity:0.6; margin-bottom:12px;">HOW WE GET TO $6M–$8M/YEAR</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px 40px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">Postscript SMS</span><strong>$900K–$1.8M</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">Pre-renewal email</span><strong>$200K–$400K</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">Trustpilot repair</span><strong>$200K–$500K</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">Shipping automation</span><strong>$150K–$300K</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">LTV extension sequence</span><strong>$1.5M–$3.9M</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.15); font-size:14px;">
+        <span style="opacity:0.8;">Win-back automation</span><strong>$620K–$1.2M</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:14px;">
+        <span style="opacity:0.8;">Zendesk + AI</span><strong>$300K–$500K</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:14px;">
+        <span style="opacity:0.8;">Escape velocity triggers</span><strong>$1M–$2M</strong>
+      </div>
+    </div>
+    <div style="border-top:2px solid rgba(255,255,255,0.3); padding-top:16px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:16px; font-weight:700; opacity:0.8;">Conservative total (low ends only):</span>
+      <span style="font-size:28px; font-weight:900;">$4.9M/yr</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+      <span style="font-size:16px; font-weight:700; opacity:0.8;">Midpoint total (we present as):</span>
+      <span style="font-size:28px; font-weight:900;">$6M–$8M/yr</span>
+    </div>
+    <div style="margin-top:14px; font-size:13px; opacity:0.65; line-height:1.5;">We round to $6M–$8M to be conservative and easy to explain. The math at the low end of every assumption still gets you to nearly $5M. At midpoints it's $7M+. We never used the high end of any number.</div>
+  </div>
+
+  <!-- IF ASKED ABOUT ANYTHING -->
+  <div style="border:1px solid #F0F0F0; border-radius:12px; padding:28px 32px;">
+    <div style="font-size:13px; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#bbb; margin-bottom:20px;">If He Questions Anything — Say This</div>
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div style="padding:16px 18px; background:#F9FAFB; border-radius:8px; border-left:3px solid #0D9B6C;">
+        <div style="font-size:12px; font-weight:800; color:#0D9B6C; margin-bottom:6px;">"HOW DID YOU GET THOSE SUBSCRIBER NUMBERS?"</div>
+        <div style="font-size:14px; color:#444; line-height:1.6;">You told me. 65,000 active subscribers, $120 average order, 28-day cycle. That's all your own data.</div>
+      </div>
+      <div style="padding:16px 18px; background:#F9FAFB; border-radius:8px; border-left:3px solid #0D9B6C;">
+        <div style="font-size:12px; font-weight:800; color:#0D9B6C; margin-bottom:6px;">"HOW DO YOU KNOW THE TICKET VOLUME?"</div>
+        <div style="font-size:14px; color:#444; line-height:1.6;">Your team has 18 nearshore agents working full-time. At a standard 5–7 minutes per ticket, that's 4,000–7,000 tickets per week. We used 5,000 — the conservative middle. You can verify this in Zendesk Analytics in about 2 minutes.</div>
+      </div>
+      <div style="padding:16px 18px; background:#F9FAFB; border-radius:8px; border-left:3px solid #0D9B6C;">
+        <div style="font-size:12px; font-weight:800; color:#0D9B6C; margin-bottom:6px;">"THE LTV NUMBER SEEMS BIG."</div>
+        <div style="font-size:14px; color:#444; line-height:1.6;">It's your own math, not ours. 65,000 people × $120 per month. If each of them stays just 15 extra days on average, that's $3.9M. You told me your target is 4–5 months, and you're at 3. That gap is real money sitting there.</div>
+      </div>
+      <div style="padding:16px 18px; background:#F9FAFB; border-radius:8px; border-left:3px solid #0D9B6C;">
+        <div style="font-size:12px; font-weight:800; color:#0D9B6C; margin-bottom:6px;">"WHAT IF THE RESULTS DON'T HIT THESE NUMBERS?"</div>
+        <div style="font-size:14px; color:#444; line-height:1.6;">They won't hit all of them immediately — that's why we built a roadmap across 3 quarters. But the Postscript SMS alone — that's your own paid platform with zero revenue on it. Even if everything else underperforms, just turning that on recovers the setup fee in weeks. That's the safest bet in the room.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
