@@ -4,638 +4,541 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rho Nutrition — Automation Roadmap · Crewless</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body, #root { width: 100%; height: 100%; overflow: hidden; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #0a0a0a; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; background: #fff; color: #0a0a0a; }
 
-    .slide { position: absolute; inset: 0; display: flex; flex-direction: column; }
-    .slide-enter { animation: slideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .slide-exit  { animation: slideOut 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .slide-enter-back { animation: slideInBack 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-    .slide-exit-back  { animation: slideOutBack 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    /* ── Slide shell ── */
+    #deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    .slide { position: absolute; inset: 0; display: flex; flex-direction: column;
+             opacity: 0; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease;
+             transform: translateX(40px); }
+    .slide.active  { opacity: 1; pointer-events: all; transform: translateX(0); }
+    .slide.exit    { opacity: 0; transform: translateX(-40px); }
 
-    @keyframes slideIn     { from { transform: translateX(60px);  opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOut    { from { transform: translateX(0);     opacity: 1; } to { transform: translateX(-60px); opacity: 0; } }
-    @keyframes slideInBack { from { transform: translateX(-60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-    @keyframes slideOutBack{ from { transform: translateX(0);     opacity: 1; } to { transform: translateX(60px); opacity: 0; } }
+    /* ── Shared ── */
+    .topbar { border-bottom: 1px solid #F0F0F0; padding: 18px 56px;
+              display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .topbar-brand { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: #0D9B6C; }
+    .topbar-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: #bbb; text-transform: uppercase; }
+    .topbar-meta  { font-size: 11px; color: #ccc; }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-up   { animation: fadeUp 0.5s ease forwards; }
-    .delay-1   { animation-delay: 0.1s; opacity: 0; }
-    .delay-2   { animation-delay: 0.2s; opacity: 0; }
-    .delay-3   { animation-delay: 0.3s; opacity: 0; }
-    .delay-4   { animation-delay: 0.4s; opacity: 0; }
-    .delay-5   { animation-delay: 0.5s; opacity: 0; }
-    .delay-6   { animation-delay: 0.6s; opacity: 0; }
-    .delay-7   { animation-delay: 0.7s; opacity: 0; }
-    .delay-8   { animation-delay: 0.8s; opacity: 0; }
+    .body { flex: 1; padding: 40px 56px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .body-wide { flex-direction: row; align-items: center; gap: 56px; }
+
+    h1 { font-size: clamp(44px, 6vw, 80px); font-weight: 900; line-height: 1.05; }
+    h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 900; line-height: 1.1; }
+    .sub { font-size: 15px; color: #888; margin-top: 8px; }
+    .label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 8px;
+           border-radius: 4px; letter-spacing: 0.06em; }
+
+    /* ── Cards ── */
+    .card { border-radius: 10px; border: 1px solid #F0F0F0; }
+    .card-left-red   { border-left: 3px solid #EF4444; }
+    .card-left-amber { border-left: 3px solid #F59E0B; }
+    .card-left-gray  { border-left: 3px solid #D1D5DB; }
+    .card-left-green { border-left: 3px solid #0D9B6C; }
+
+    /* ── Nav pill ── */
+    #nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+           display: flex; align-items: center; gap: 16px;
+           background: rgba(0,0,0,0.07); backdrop-filter: blur(8px);
+           border-radius: 999px; padding: 9px 22px; z-index: 100; user-select: none; }
+    #nav button { background: none; border: none; cursor: pointer; font-size: 18px;
+                  color: #0a0a0a; line-height: 1; padding: 0 4px; }
+    #nav button:disabled { color: #ccc; cursor: default; }
+    #nav span { font-size: 12px; color: #888; font-weight: 500; letter-spacing: 0.05em; }
+
+    /* ── Vertical accent line (slide 1) ── */
+    .accent-line { position: absolute; right: 8vw; top: 15%; bottom: 15%; width: 3px;
+                   background: linear-gradient(to bottom, transparent, #0D9B6C, transparent); }
+
+    /* ── Grid helpers ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+    /* ── Big metric ── */
+    .metric-val { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; line-height: 1; }
+    .metric-lbl { font-size: 13px; font-weight: 600; color: #0a0a0a; margin-top: 6px; }
+    .metric-sub { font-size: 11px; color: #bbb; margin-top: 2px; }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+<div id="deck">
 
-    const G = "#0D9B6C";   /* brand green */
-    const R = "#EF4444";   /* critical red */
-
-    /* ── Navigation chrome ─────────────────────────────────── */
-    function Nav({ current, total, onPrev, onNext }) {
-      return (
-        <div style={{
-          position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)",
-          display: "flex", alignItems: "center", gap: 16,
-          background: "rgba(0,0,0,0.06)", backdropFilter: "blur(8px)",
-          borderRadius: 999, padding: "8px 20px", zIndex: 100
-        }}>
-          <button onClick={onPrev} disabled={current === 0}
-            style={{ background: "none", border: "none", cursor: current === 0 ? "default" : "pointer",
-              color: current === 0 ? "#ccc" : "#0a0a0a", fontSize: 18, lineHeight: 1, padding: "0 4px" }}>
-            ←
-          </button>
-          <span style={{ fontSize: 12, color: "#888", fontWeight: 500, letterSpacing: "0.05em" }}>
-            {current + 1} / {total}
-          </span>
-          <button onClick={onNext} disabled={current === total - 1}
-            style={{ background: "none", border: "none", cursor: current === total - 1 ? "default" : "pointer",
-              color: current === total - 1 ? "#ccc" : "#0a0a0a", fontSize: 18, lineHeight: 1, padding: "0 4px" }}>
-            →
-          </button>
-        </div>
-      );
-    }
-
-    /* ── Shared layout primitives ───────────────────────────── */
-    const TopBar = ({ label }) => (
-      <div style={{ padding: "20px 56px", borderBottom: "1px solid #F0F0F0",
-        display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", color: G }}>CREWLESS</span>
-        {label && <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", color: "#bbb", textTransform: "uppercase" }}>{label}</span>}
-        <span style={{ fontSize: 11, color: "#ccc" }}>Rho Nutrition · March 2026</span>
-      </div>
-    );
-
-    const Tag = ({ text, color = G }) => (
-      <span style={{ background: color + "18", color, fontSize: 11, fontWeight: 700,
-        padding: "3px 8px", borderRadius: 4, letterSpacing: "0.06em" }}>
-        {text}
-      </span>
-    );
-
-    /* ═══════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════
        SLIDE 1 — TITLE
-    ═══════════════════════════════════════════════════════════ */
-    function Slide1() {
-      return (
-        <div className="slide" style={{ justifyContent: "center", alignItems: "flex-start", padding: "0 10vw" }}>
-          <div style={{ maxWidth: 720 }}>
-            <div className="fade-up delay-1" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em",
-              color: G, marginBottom: 32, textTransform: "uppercase" }}>
-              Crewless · Automation Audit
-            </div>
-            <h1 className="fade-up delay-2" style={{ fontSize: "clamp(44px, 6vw, 80px)", fontWeight: 900,
-              lineHeight: 1.05, color: "#0a0a0a", marginBottom: 24 }}>
-              Rho Nutrition
-            </h1>
-            <p className="fade-up delay-3" style={{ fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 300,
-              color: "#666", lineHeight: 1.5, marginBottom: 48, maxWidth: 560 }}>
-              A full audit of your operations, retention, and revenue systems — and the roadmap to recover $13.5M.
-            </p>
-            <div className="fade-up delay-4" style={{ display: "flex", gap: 32 }}>
-              {[
-                { label: "Revenue Gap", value: "$14.7M/yr" },
-                { label: "Total Investment", value: "$94K" },
-                { label: "3-Year Benefit", value: "$31.8M" },
-              ].map(m => (
-                <div key={m.label}>
-                  <div style={{ fontSize: "clamp(22px, 2.8vw, 36px)", fontWeight: 900, color: "#0a0a0a", lineHeight: 1 }}>{m.value}</div>
-                  <div style={{ fontSize: 12, color: "#999", marginTop: 4, fontWeight: 500 }}>{m.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Decorative vertical accent */}
-          <div className="fade-up delay-5" style={{
-            position: "absolute", right: "8vw", top: "15%", bottom: "15%",
-            width: 3, background: `linear-gradient(to bottom, transparent, ${G}, transparent)`
-          }} />
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s0">
+    <div class="body" style="justify-content:center; align-items:flex-start; padding: 0 10vw;">
+      <p class="label" style="color:#0D9B6C; margin-bottom:32px;">Crewless · Automation Audit</p>
+      <h1 style="margin-bottom:20px;">Rho Nutrition</h1>
+      <p style="font-size:clamp(17px,2.2vw,26px); font-weight:300; color:#666; line-height:1.55; max-width:560px; margin-bottom:48px;">
+        A full audit of your operations, retention, and revenue systems —<br>and the roadmap to recover $13.5M.
+      </p>
+      <div style="display:flex; gap:40px;">
+        <div>
+          <div class="metric-val">$14.7M</div>
+          <div class="metric-lbl">Revenue Gap</div>
+          <div class="metric-sub">per year, recoverable</div>
         </div>
-      );
-    }
+        <div>
+          <div class="metric-val">$94K</div>
+          <div class="metric-lbl">Total Investment</div>
+          <div class="metric-sub">all 3 phases</div>
+        </div>
+        <div>
+          <div class="metric-val" style="color:#0D9B6C;">$31.8M</div>
+          <div class="metric-lbl">3-Year Benefit</div>
+          <div class="metric-sub">net cumulative</div>
+        </div>
+      </div>
+    </div>
+    <div class="accent-line"></div>
+  </div>
 
-    /* ═══════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════
        SLIDE 2 — WHAT WE FOUND
-    ═══════════════════════════════════════════════════════════ */
-    const FINDINGS = [
-      { status: "Missing",  label: "Post-purchase LTV sequence",   gap: "$3.9M–7.8M/yr",   detail: "No education or cross-sell after purchase. LTV stuck at 3 months." },
-      { status: "Inactive", label: "Postscript SMS — never live",  gap: "$1.4M–2.5M/yr",   detail: "Contract signed and paid. Platform has never been activated." },
-      { status: "Missing",  label: "Win-back sequence",            gap: "$620K–1.86M/yr",  detail: "21,500 subscribers churn every month. Zero outreach." },
-      { status: "Critical", label: "Trustpilot 1.7/5 — unmanaged",gap: "$420K–1.4M/yr",   detail: "88% one-star reviews. All operational. Killing D2C conversion." },
-      { status: "Broken",   label: "Pre-renewal notifications",    gap: "$97K–200K/yr",    detail: "Broken Klaviyo flow generates your #2 ticket type every day." },
-    ];
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s1">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">The Diagnosis</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body">
+      <h2 style="margin-bottom:8px;">What we found</h2>
+      <p class="sub" style="margin-bottom:36px;">
+        5 processes generating <strong style="color:#EF4444;">$14.7M/year</strong> in preventable loss
+      </p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
 
-    const STATUS_COLOR = {
-      Missing: R, Inactive: "#F59E0B", Critical: R, Broken: "#F59E0B", Manual: "#6B7280"
-    };
-
-    function Slide2() {
-      return (
-        <div className="slide">
-          <TopBar label="The Diagnosis" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 8 }}>
-              What we found
-            </h2>
-            <p className="fade-up delay-2" style={{ fontSize: 15, color: "#888", marginBottom: 40 }}>
-              5 processes generating <strong style={{ color: R }}>$14.7M/year</strong> in preventable loss
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {FINDINGS.map((f, i) => (
-                <div key={i} className={`fade-up delay-${i + 3}`}
-                  style={{ display: "flex", alignItems: "center", gap: 20, padding: "16px 20px",
-                    borderRadius: 8, border: "1px solid #F3F4F6",
-                    borderLeft: `3px solid ${STATUS_COLOR[f.status] || R}` }}>
-                  <Tag text={f.status} color={STATUS_COLOR[f.status] || R} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#0a0a0a" }}>{f.label}</div>
-                    <div style={{ fontSize: 12, color: "#999", marginTop: 2 }}>{f.detail}</div>
-                  </div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: R, whiteSpace: "nowrap" }}>{f.gap}</div>
-                </div>
-              ))}
-            </div>
+        <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
+          <span class="tag" style="background:#FEF2F218; color:#EF4444; background:rgba(239,68,68,0.1);">Missing</span>
+          <div style="flex:1;">
+            <div style="font-size:15px; font-weight:700;">Post-purchase LTV sequence</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">No education or cross-sell after purchase. LTV stuck at 3 months.</div>
           </div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$3.9M–7.8M/yr</div>
         </div>
-      );
-    }
 
-    /* ═══════════════════════════════════════════════════════════
+        <div class="card card-left-amber" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
+          <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B;">Inactive</span>
+          <div style="flex:1;">
+            <div style="font-size:15px; font-weight:700;">Postscript SMS — never live</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">Contract signed and paid. Platform has never been activated.</div>
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$1.4M–2.5M/yr</div>
+        </div>
+
+        <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
+          <span class="tag" style="background:rgba(239,68,68,0.1); color:#EF4444;">Missing</span>
+          <div style="flex:1;">
+            <div style="font-size:15px; font-weight:700;">Win-back sequence</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">21,500 subscribers churn every month. Zero outreach after they leave.</div>
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$620K–1.86M/yr</div>
+        </div>
+
+        <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
+          <span class="tag" style="background:rgba(239,68,68,0.1); color:#EF4444;">Critical</span>
+          <div style="flex:1;">
+            <div style="font-size:15px; font-weight:700;">Trustpilot 1.7/5 — unmanaged</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">88% one-star reviews. All operational. Killing D2C conversion.</div>
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$420K–1.4M/yr</div>
+        </div>
+
+        <div class="card card-left-amber" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
+          <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B;">Broken</span>
+          <div style="flex:1;">
+            <div style="font-size:15px; font-weight:700;">Pre-renewal notifications</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">Broken Klaviyo flow generates your #2 CS ticket type every single day.</div>
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$97K–200K/yr</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        SLIDE 3 — COST OF INACTION
-    ═══════════════════════════════════════════════════════════ */
-    const GAPS = [
-      { category: "Revenue / LTV",    amount: "$5.3M–10.3M" },
-      { category: "SMS Revenue",      amount: "$1.4M–2.5M" },
-      { category: "Reputation Loss",  amount: "$420K–1.4M" },
-      { category: "CS Inefficiency",  amount: "$415K–600K" },
-      { category: "Win-Back",         amount: "$620K–1.86M" },
-    ];
-
-    function Slide3() {
-      return (
-        <div className="slide">
-          <TopBar label="Cost of Inaction" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", gap: 64, alignItems: "center" }}>
-            <div style={{ flex: 1 }}>
-              <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 12 }}>
-                Every month without action costs you
-              </h2>
-              <div className="fade-up delay-2" style={{ fontSize: "clamp(48px, 7vw, 96px)", fontWeight: 900,
-                color: R, lineHeight: 1, marginBottom: 8 }}>
-                $1.2M+
-              </div>
-              <p className="fade-up delay-3" style={{ fontSize: 15, color: "#888", marginBottom: 40 }}>
-                in recoverable, preventable losses
-              </p>
-              <div className="fade-up delay-4" style={{ padding: "20px 24px", borderRadius: 8, background: "#FEF2F2", border: "1px solid #FCA5A5" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: R, letterSpacing: "0.1em", marginBottom: 6 }}>ANNUAL TOTAL</div>
-                <div style={{ fontSize: 36, fontWeight: 900, color: R }}>$14.7M / year</div>
-                <div style={{ fontSize: 13, color: "#888", marginTop: 4 }}>across 10 unoptimized processes — conservative estimate</div>
-              </div>
-            </div>
-
-            <div style={{ width: 320, flexShrink: 0 }}>
-              <div className="fade-up delay-2" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
-                color: "#bbb", textTransform: "uppercase", marginBottom: 16 }}>
-                Breakdown by category
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {GAPS.map((g, i) => (
-                  <div key={i} className={`fade-up delay-${i + 3}`}
-                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
-                      padding: "12px 16px", borderRadius: 6, border: "1px solid #F3F4F6" }}>
-                    <span style={{ fontSize: 13, color: "#555" }}>{g.category}</span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: R }}>{g.amount}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">Cost of Inaction</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body body-wide">
+      <div style="flex:1;">
+        <h2 style="margin-bottom:12px;">Every month without action costs you</h2>
+        <div style="font-size:clamp(52px,7vw,96px); font-weight:900; color:#EF4444; line-height:1; margin-bottom:8px;">$1.2M+</div>
+        <p style="font-size:15px; color:#888; margin-bottom:36px;">in recoverable, preventable losses</p>
+        <div style="padding:20px 24px; border-radius:10px; background:#FEF2F2; border:1px solid #FCA5A5;">
+          <div class="label" style="color:#EF4444; margin-bottom:6px;">Annual Total</div>
+          <div style="font-size:36px; font-weight:900; color:#EF4444;">$14.7M / year</div>
+          <div style="font-size:13px; color:#888; margin-top:4px;">across 10 unoptimized processes — conservative estimate</div>
+        </div>
+      </div>
+      <div style="width:300px; flex-shrink:0;">
+        <div class="label" style="color:#bbb; margin-bottom:16px;">Breakdown by category</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
+            <span style="font-size:13px; color:#555;">Revenue / LTV</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$5.3M–10.3M</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
+            <span style="font-size:13px; color:#555;">SMS Revenue</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$1.4M–2.5M</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
+            <span style="font-size:13px; color:#555;">Reputation Loss</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$420K–1.4M</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
+            <span style="font-size:13px; color:#555;">CS Inefficiency</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$415K–600K</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
+            <span style="font-size:13px; color:#555;">Win-Back</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$620K–1.86M</span>
           </div>
         </div>
-      );
-    }
+      </div>
+    </div>
+  </div>
 
-    /* ═══════════════════════════════════════════════════════════
-       SLIDE 4 — THE LTV MATH
-    ═══════════════════════════════════════════════════════════ */
-    const LTV_ROWS = [
-      { days: "+15 days", scenario: "3.0 → 3.5 months avg LTV", value: "$3.9M/yr",  cume: "$11.7M over 3 yrs", highlight: false },
-      { days: "+30 days", scenario: "3.0 → 4.0 months avg LTV", value: "$7.8M/yr",  cume: "$23.4M over 3 yrs", highlight: true  },
-      { days: "+60 days", scenario: "3.0 → 5.0 months avg LTV", value: "$15.6M/yr", cume: "$46.8M over 3 yrs", highlight: false },
-    ];
-
-    function Slide4() {
-      return (
-        <div className="slide">
-          <TopBar label="The LTV Math" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
-              <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 8 }}>
-                The LTV lever
-              </h2>
-              <p className="fade-up delay-2" style={{ fontSize: 15, color: "#888", marginBottom: 12 }}>
-                65,000 subscribers · $120 blended AOV — how much is each extra day worth?
-              </p>
-              <div className="fade-up delay-3" style={{ fontSize: 13, fontWeight: 600, color: G, marginBottom: 36 }}>
-                Every 15 days of average LTV extension = $3.9M in zero-CAC revenue
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 40 }}>
-                {LTV_ROWS.map((r, i) => (
-                  <div key={i} className={`fade-up delay-${i + 4}`}
-                    style={{ borderRadius: 10, padding: "28px 24px",
-                      background: r.highlight ? G : "#fff",
-                      border: r.highlight ? "none" : "1px solid #F0F0F0" }}>
-                    <div style={{ fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 900, marginBottom: 4,
-                      color: r.highlight ? "#fff" : G }}>
-                      {r.days}
-                    </div>
-                    <div style={{ fontSize: 12, marginBottom: 20, color: r.highlight ? "rgba(255,255,255,0.7)" : "#aaa" }}>
-                      {r.scenario}
-                    </div>
-                    <div style={{ fontSize: "clamp(20px, 2.2vw, 28px)", fontWeight: 800,
-                      color: r.highlight ? "#fff" : "#0a0a0a" }}>
-                      {r.value}
-                    </div>
-                    <div style={{ fontSize: 12, marginTop: 4, color: r.highlight ? "rgba(255,255,255,0.6)" : "#bbb" }}>
-                      {r.cume}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="fade-up delay-7" style={{ padding: "16px 24px", borderRadius: 8,
-                border: `1px solid ${G}30`, background: G + "08",
-                fontSize: 14, color: "#444", lineHeight: 1.6 }}>
-                <strong style={{ color: G }}>The mechanism:</strong> A post-purchase Klaviyo sequence (days 7, 14, 21) educates subscribers, drives cross-sell, and builds habit — pushing your base toward the 4–5 product escape velocity threshold where churn approaches zero.
-              </div>
-            </div>
+  <!-- ══════════════════════════════════════
+       SLIDE 4 — LTV MATH
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">The LTV Math</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body">
+      <div style="max-width:800px; margin:0 auto; width:100%;">
+        <h2 style="margin-bottom:8px;">The LTV lever</h2>
+        <p class="sub" style="margin-bottom:10px;">65,000 subscribers · $120 blended AOV — how much is each extra day worth?</p>
+        <p style="font-size:13px; font-weight:600; color:#0D9B6C; margin-bottom:36px;">
+          Every 15 days of average LTV extension = $3.9M in zero-CAC revenue
+        </p>
+        <div class="grid-3" style="margin-bottom:36px;">
+          <div class="card" style="padding:28px 24px;">
+            <div style="font-size:clamp(28px,3vw,40px); font-weight:900; color:#0D9B6C; margin-bottom:4px;">+15 days</div>
+            <div style="font-size:12px; color:#aaa; margin-bottom:20px;">3.0 → 3.5 months avg LTV</div>
+            <div style="font-size:clamp(20px,2.2vw,28px); font-weight:800;">$3.9M/yr</div>
+            <div style="font-size:12px; color:#bbb; margin-top:4px;">$11.7M over 3 years</div>
+          </div>
+          <div style="border-radius:10px; padding:28px 24px; background:#0D9B6C;">
+            <div style="font-size:clamp(28px,3vw,40px); font-weight:900; color:#fff; margin-bottom:4px;">+30 days</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.65); margin-bottom:20px;">3.0 → 4.0 months avg LTV</div>
+            <div style="font-size:clamp(20px,2.2vw,28px); font-weight:800; color:#fff;">$7.8M/yr</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.55); margin-top:4px;">$23.4M over 3 years</div>
+          </div>
+          <div class="card" style="padding:28px 24px;">
+            <div style="font-size:clamp(28px,3vw,40px); font-weight:900; color:#0D9B6C; margin-bottom:4px;">+60 days</div>
+            <div style="font-size:12px; color:#aaa; margin-bottom:20px;">3.0 → 5.0 months avg LTV</div>
+            <div style="font-size:clamp(20px,2.2vw,28px); font-weight:800;">$15.6M/yr</div>
+            <div style="font-size:12px; color:#bbb; margin-top:4px;">$46.8M over 3 years</div>
           </div>
         </div>
-      );
-    }
+        <div style="padding:16px 24px; border-radius:8px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05); font-size:14px; color:#444; line-height:1.6;">
+          <strong style="color:#0D9B6C;">The mechanism:</strong> A post-purchase Klaviyo sequence (days 7, 14, 21) educates subscribers, drives cross-sell, and builds habit — pushing your base toward the 4–5 product escape velocity threshold where churn approaches zero.
+        </div>
+      </div>
+    </div>
+  </div>
 
-    /* ═══════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════
        SLIDE 5 — ROADMAP
-    ═══════════════════════════════════════════════════════════ */
-    const ROADMAP = [
-      {
-        q: "Q1",
-        label: "Foundation",
-        months: "Month 1–3",
-        cost: "$13K–24K",
-        impact: "$2M–4.1M/yr",
-        color: "#3B82F6",
-        items: [
-          { name: "Trustpilot review repair",    roi: "1,890x" },
-          { name: "Postscript SMS activation",   roi: "1,587x" },
-          { name: "Pre-renewal Klaviyo rebuild",  roi: "325x"   },
-          { name: "Shipping/tracking automation", roi: "171x"   },
-        ]
-      },
-      {
-        q: "Q2",
-        label: "Retention Engine",
-        months: "Month 3–6",
-        cost: "$40K–67K",
-        impact: "$4.76M–9.97M/yr",
-        color: G,
-        items: [
-          { name: "Post-purchase LTV sequence",  roi: "1,950x" },
-          { name: "Win-back sequence",           roi: "1,116x" },
-          { name: "Zendesk ↔ Shopify/Retextion", roi: "130x"   },
-          { name: "AI ticket deflection",        roi: "68x"    },
-        ]
-      },
-      {
-        q: "Q3",
-        label: "Scale",
-        months: "Month 6–9",
-        cost: "$41K–73K",
-        impact: "$2.05M–3.6M/yr",
-        color: "#8B5CF6",
-        items: [
-          { name: "Escape velocity triggers",   roi: "879x" },
-          { name: "Creative AI dashboard",      roi: "420x" },
-          { name: "Wholesale automation",       roi: "—"    },
-          { name: "Science research AI",        roi: "—"    },
-        ]
-      }
-    ];
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s4">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">The Roadmap</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body">
+      <h2 style="margin-bottom:8px;">3-phase quarterly roadmap</h2>
+      <p class="sub" style="margin-bottom:32px;">Built around your business — no disruption, no sprints. Quarterly milestones with measurable ROI gates.</p>
+      <div class="grid-3">
 
-    function Slide5() {
-      return (
-        <div className="slide">
-          <TopBar label="The Roadmap" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 8 }}>
-              3-phase quarterly roadmap
-            </h2>
-            <p className="fade-up delay-2" style={{ fontSize: 15, color: "#888", marginBottom: 36 }}>
-              Built around your business — no disruption, no sprints. Quarterly milestones with measurable ROI gates.
-            </p>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20 }}>
-              {ROADMAP.map((ph, i) => (
-                <div key={i} className={`fade-up delay-${i + 3}`}
-                  style={{ borderRadius: 10, border: "1px solid #F0F0F0", overflow: "hidden" }}>
-                  <div style={{ padding: "20px 24px", borderBottom: `3px solid ${ph.color}` }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", color: ph.color }}>{ph.q} — {ph.label}</span>
-                    </div>
-                    <div style={{ fontSize: 11, color: "#bbb", marginBottom: 16 }}>{ph.months}</div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <div>
-                        <div style={{ fontSize: 11, color: "#bbb", marginBottom: 2 }}>Investment</div>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: "#0a0a0a" }}>{ph.cost}</div>
-                      </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ fontSize: 11, color: "#bbb", marginBottom: 2 }}>Impact</div>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: ph.color }}>{ph.impact}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ padding: "16px 24px" }}>
-                    {ph.items.map((item, j) => (
-                      <div key={j} style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
-                        padding: "8px 0", borderBottom: j < ph.items.length - 1 ? "1px solid #F8F8F8" : "none" }}>
-                        <span style={{ fontSize: 12, color: "#555" }}>{item.name}</span>
-                        {item.roi !== "—" && (
-                          <span style={{ fontSize: 11, fontWeight: 700, color: ph.color }}>{item.roi}</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+        <!-- Q1 -->
+        <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
+          <div style="padding:20px 24px; border-bottom:3px solid #3B82F6;">
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#3B82F6; margin-bottom:4px;">Q1 — Foundation</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 1–3</div>
+            <div style="display:flex; justify-content:space-between;">
+              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$13K–24K</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#3B82F6;">$2M–4.1M/yr</div></div>
             </div>
           </div>
+          <div style="padding:16px 24px;">
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Trustpilot review repair</span><span style="font-weight:700; color:#3B82F6;">1,890x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Postscript SMS activation</span><span style="font-weight:700; color:#3B82F6;">1,587x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Pre-renewal Klaviyo rebuild</span><span style="font-weight:700; color:#3B82F6;">325x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Shipping / tracking automation</span><span style="font-weight:700; color:#3B82F6;">171x</span></div>
+          </div>
         </div>
-      );
-    }
 
-    /* ═══════════════════════════════════════════════════════════
+        <!-- Q2 -->
+        <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
+          <div style="padding:20px 24px; border-bottom:3px solid #0D9B6C;">
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#0D9B6C; margin-bottom:4px;">Q2 — Retention Engine</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 3–6</div>
+            <div style="display:flex; justify-content:space-between;">
+              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$40K–67K</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#0D9B6C;">$4.76M–9.97M/yr</div></div>
+            </div>
+          </div>
+          <div style="padding:16px 24px;">
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Post-purchase LTV sequence</span><span style="font-weight:700; color:#0D9B6C;">1,950x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Win-back sequence</span><span style="font-weight:700; color:#0D9B6C;">1,116x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Zendesk ↔ Shopify / Retextion</span><span style="font-weight:700; color:#0D9B6C;">130x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">AI ticket deflection</span><span style="font-weight:700; color:#0D9B6C;">68x</span></div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
+          <div style="padding:20px 24px; border-bottom:3px solid #8B5CF6;">
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#8B5CF6; margin-bottom:4px;">Q3 — Scale</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 6–9</div>
+            <div style="display:flex; justify-content:space-between;">
+              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$41K–73K</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#8B5CF6;">$2.05M–3.6M/yr</div></div>
+            </div>
+          </div>
+          <div style="padding:16px 24px;">
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Escape velocity triggers</span><span style="font-weight:700; color:#8B5CF6;">879x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Creative AI dashboard</span><span style="font-weight:700; color:#8B5CF6;">420x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Wholesale automation</span><span style="color:#ccc;">—</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Science research AI</span><span style="color:#ccc;">—</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        SLIDE 6 — THE INVESTMENT
-    ═══════════════════════════════════════════════════════════ */
-    const INV_METRICS = [
-      { label: "Total Implementation",  value: "$94,000",    sub: "across all 3 phases",         color: "#0a0a0a" },
-      { label: "Year 1 Net Benefit",    value: "$13.5M",     sub: "conservative midpoint",        color: G         },
-      { label: "Payback Period",        value: "< 3 days",   sub: "Q1 alone recovers full cost",  color: G         },
-      { label: "3-Year Cumulative",     value: "$31.8M",     sub: "net of all implementation",    color: G         },
-    ];
-
-    const YEAR_DATA = [
-      { year: "Year 1", benefit: "$13.5M", cumulative: "$13.5M", height: 33  },
-      { year: "Year 2", benefit: "$12.2M", cumulative: "$25.7M", height: 63  },
-      { year: "Year 3", benefit: "$6.1M",  cumulative: "$31.8M", height: 100 },
-    ];
-
-    function Slide6() {
-      return (
-        <div className="slide">
-          <TopBar label="The Investment" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", gap: 60, alignItems: "center" }}>
-            <div style={{ flex: 1 }}>
-              <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 36 }}>
-                The investment
-              </h2>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                {INV_METRICS.map((m, i) => (
-                  <div key={i} className={`fade-up delay-${i + 2}`}
-                    style={{ padding: "24px", borderRadius: 10,
-                      border: m.color === G ? `1px solid ${G}30` : "1px solid #F0F0F0",
-                      background: m.color === G ? G + "06" : "#fff" }}>
-                    <div style={{ fontSize: "clamp(24px, 2.8vw, 36px)", fontWeight: 900,
-                      color: m.color, lineHeight: 1, marginBottom: 6 }}>
-                      {m.value}
-                    </div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "#0a0a0a", marginBottom: 2 }}>{m.label}</div>
-                    <div style={{ fontSize: 11, color: "#bbb" }}>{m.sub}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="fade-up delay-6" style={{ marginTop: 20, padding: "14px 20px", borderRadius: 8,
-                background: "#F9FAFB", fontSize: 13, color: "#666", lineHeight: 1.5 }}>
-                <strong style={{ color: "#0a0a0a" }}>ROI: 33,700%</strong> — every $1 invested returns $338 over 3 years
-              </div>
-            </div>
-
-            <div style={{ width: 280, flexShrink: 0 }}>
-              <div className="fade-up delay-3" style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
-                color: "#bbb", textTransform: "uppercase", marginBottom: 20 }}>
-                Cumulative benefit
-              </div>
-              <div style={{ display: "flex", gap: 16, alignItems: "flex-end", height: 200 }}>
-                {YEAR_DATA.map((y, i) => (
-                  <div key={i} className={`fade-up delay-${i + 4}`}
-                    style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: G }}>{y.cumulative}</span>
-                    <div style={{ width: "100%", borderRadius: "6px 6px 0 0",
-                      height: y.height * 1.5 + "px", background: G,
-                      opacity: 0.4 + (i * 0.3) }} />
-                    <span style={{ fontSize: 11, color: "#bbb" }}>{y.year}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">The Investment</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body body-wide">
+      <div style="flex:1;">
+        <h2 style="margin-bottom:32px;">The investment</h2>
+        <div class="grid-2" style="margin-bottom:16px;">
+          <div class="card" style="padding:24px;">
+            <div class="metric-val">$94,000</div>
+            <div class="metric-lbl">Total Implementation</div>
+            <div class="metric-sub">across all 3 phases</div>
+          </div>
+          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
+            <div class="metric-val" style="color:#0D9B6C;">$13.5M</div>
+            <div class="metric-lbl">Year 1 Net Benefit</div>
+            <div class="metric-sub">conservative midpoint</div>
+          </div>
+          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
+            <div class="metric-val" style="color:#0D9B6C;">&lt; 3 days</div>
+            <div class="metric-lbl">Payback Period</div>
+            <div class="metric-sub">Q1 alone recovers full cost</div>
+          </div>
+          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
+            <div class="metric-val" style="color:#0D9B6C;">$31.8M</div>
+            <div class="metric-lbl">3-Year Cumulative</div>
+            <div class="metric-sub">net of all implementation</div>
           </div>
         </div>
-      );
-    }
+        <div style="padding:14px 20px; border-radius:8px; background:#F9FAFB; font-size:13px; color:#666;">
+          <strong style="color:#0a0a0a;">ROI: 33,700%</strong> — every $1 invested returns $338 over 3 years
+        </div>
+      </div>
 
-    /* ═══════════════════════════════════════════════════════════
+      <div style="width:260px; flex-shrink:0;">
+        <div class="label" style="color:#bbb; margin-bottom:20px;">Cumulative benefit</div>
+        <div style="display:flex; gap:16px; align-items:flex-end; height:220px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$13.5M</span>
+            <div style="width:100%; border-radius:6px 6px 0 0; height:75px; background:#0D9B6C; opacity:0.5;"></div>
+            <span style="font-size:11px; color:#bbb;">Year 1</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$25.7M</span>
+            <div style="width:100%; border-radius:6px 6px 0 0; height:145px; background:#0D9B6C; opacity:0.7;"></div>
+            <span style="font-size:11px; color:#bbb;">Year 2</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$31.8M</span>
+            <div style="width:100%; border-radius:6px 6px 0 0; height:180px; background:#0D9B6C;"></div>
+            <span style="font-size:11px; color:#bbb;">Year 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        SLIDE 7 — THE PARTNERSHIP
-    ═══════════════════════════════════════════════════════════ */
-    const PARTNERSHIP = [
-      { icon: "→", title: "Dedicated implementation team",  desc: "Engineers, automation specialists, and a strategist assigned to Rho Nutrition — not shared across projects." },
-      { icon: "→", title: "Weekly ROI reporting",           desc: "Every week, you see what moved. Revenue recovered, tickets deflected, LTV delta. Numbers, not decks." },
-      { icon: "→", title: "Quarterly business reviews",     desc: "End of each quarter: what shipped, what performed, what's next. You decide what goes in Q{n+1}." },
-      { icon: "→", title: "Zero-disruption implementation", desc: "Everything runs parallel to existing ops. Phased rollouts, no big-bang launches. Plane stays in the air." },
-    ];
-
-    function Slide7() {
-      return (
-        <div className="slide">
-          <TopBar label="The Partnership" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", gap: 60, alignItems: "center" }}>
-            <div style={{ flex: 1 }}>
-              <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 12 }}>
-                How we work together
-              </h2>
-              <p className="fade-up delay-2" style={{ fontSize: 15, color: "#888", marginBottom: 36 }}>
-                This isn't a vendor relationship. It's a partnership structured around measurable outcomes.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                {PARTNERSHIP.map((p, i) => (
-                  <div key={i} className={`fade-up delay-${i + 3}`}
-                    style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
-                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: G + "18",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      color: G, fontSize: 16, fontWeight: 700, flexShrink: 0 }}>
-                      {p.icon}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: "#0a0a0a", marginBottom: 3 }}>{p.title}</div>
-                      <div style={{ fontSize: 13, color: "#888", lineHeight: 1.5 }}>{p.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ width: 280, flexShrink: 0 }}>
-              <div className="fade-up delay-3" style={{ borderRadius: 10, border: `1px solid ${G}30`,
-                padding: 28, background: G + "06" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: G,
-                  textTransform: "uppercase", marginBottom: 20 }}>
-                  What you get
-                </div>
-                {[
-                  "Full audit documentation",
-                  "Custom automation builds",
-                  "Weekly performance reports",
-                  "Quarterly roadmap reviews",
-                  "Ongoing optimization",
-                  "Priority support",
-                ].map((item, i) => (
-                  <div key={i} style={{ display: "flex", gap: 10, alignItems: "center",
-                    padding: "9px 0", borderBottom: i < 5 ? "1px solid " + G + "20" : "none" }}>
-                    <span style={{ color: G, fontWeight: 700, fontSize: 14 }}>✓</span>
-                    <span style={{ fontSize: 13, color: "#444" }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s6">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">The Partnership</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body body-wide">
+      <div style="flex:1;">
+        <h2 style="margin-bottom:12px;">How we work together</h2>
+        <p class="sub" style="margin-bottom:36px;">This isn't a vendor relationship. It's a partnership structured around measurable outcomes.</p>
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(13,155,108,0.12); display:flex; align-items:center; justify-content:center; color:#0D9B6C; font-size:16px; font-weight:700; flex-shrink:0;">→</div>
+            <div><div style="font-size:15px; font-weight:700; margin-bottom:3px;">Dedicated implementation team</div><div style="font-size:13px; color:#888; line-height:1.5;">Engineers, automation specialists, and a strategist assigned to Rho Nutrition — not shared across projects.</div></div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(13,155,108,0.12); display:flex; align-items:center; justify-content:center; color:#0D9B6C; font-size:16px; font-weight:700; flex-shrink:0;">→</div>
+            <div><div style="font-size:15px; font-weight:700; margin-bottom:3px;">Weekly ROI reporting</div><div style="font-size:13px; color:#888; line-height:1.5;">Every week, you see what moved. Revenue recovered, tickets deflected, LTV delta. Numbers, not decks.</div></div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(13,155,108,0.12); display:flex; align-items:center; justify-content:center; color:#0D9B6C; font-size:16px; font-weight:700; flex-shrink:0;">→</div>
+            <div><div style="font-size:15px; font-weight:700; margin-bottom:3px;">Quarterly business reviews</div><div style="font-size:13px; color:#888; line-height:1.5;">End of each quarter: what shipped, what performed, what's next. You decide what goes in Q{n+1}.</div></div>
+          </div>
+          <div style="display:flex; gap:20px; align-items:flex-start;">
+            <div style="width:32px; height:32px; border-radius:50%; background:rgba(13,155,108,0.12); display:flex; align-items:center; justify-content:center; color:#0D9B6C; font-size:16px; font-weight:700; flex-shrink:0;">→</div>
+            <div><div style="font-size:15px; font-weight:700; margin-bottom:3px;">Zero-disruption implementation</div><div style="font-size:13px; color:#888; line-height:1.5;">Everything runs parallel to existing ops. Phased rollouts, no big-bang launches. The plane stays in the air.</div></div>
           </div>
         </div>
-      );
-    }
+      </div>
 
-    /* ═══════════════════════════════════════════════════════════
-       SLIDE 8 — THE ASK / NEXT STEPS
-    ═══════════════════════════════════════════════════════════ */
-    const ASKS = [
-      { num: "01", title: "Confirm Phase 1 scope",   desc: "Trustpilot repair + Postscript activation + pre-renewal fix + shipping automation. All four can begin within 5 business days of contract." },
-      { num: "02", title: "Set a kickoff date",       desc: "We're ready when you are. Earliest available slot: within 2 weeks. Implementation starts with a 90-minute systems onboarding call." },
-      { num: "03", title: "Agree on retainer terms",  desc: "Monthly partnership retainer covers implementation, reporting, and ongoing optimization. Scoped by phase — you're not committed beyond Q1 until Q1 delivers." },
-    ];
+      <div style="width:260px; flex-shrink:0; border-radius:10px; border:1px solid rgba(13,155,108,0.2); padding:28px; background:rgba(13,155,108,0.04);">
+        <div class="label" style="color:#0D9B6C; margin-bottom:20px;">What you get</div>
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Full audit documentation</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Custom automation builds</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Weekly performance reports</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Quarterly roadmap reviews</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Ongoing optimization</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Priority support</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function Slide8() {
-      return (
-        <div className="slide">
-          <TopBar label="Next Steps" />
-          <div style={{ flex: 1, padding: "40px 56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{ maxWidth: 760, margin: "0 auto", width: "100%" }}>
-              <h2 className="fade-up delay-1" style={{ fontSize: "clamp(28px, 3.5vw, 48px)", fontWeight: 900, marginBottom: 12 }}>
-                Three things to agree on today
-              </h2>
-              <p className="fade-up delay-2" style={{ fontSize: 15, color: "#888", marginBottom: 44 }}>
-                Everything else flows from these three decisions.
-              </p>
+  <!-- ══════════════════════════════════════
+       SLIDE 8 — THE ASK
+  ══════════════════════════════════════ -->
+  <div class="slide" id="s7">
+    <div class="topbar">
+      <span class="topbar-brand">CREWLESS</span>
+      <span class="topbar-label">Next Steps</span>
+      <span class="topbar-meta">Rho Nutrition · March 2026</span>
+    </div>
+    <div class="body">
+      <div style="max-width:760px; margin:0 auto; width:100%;">
+        <h2 style="margin-bottom:12px;">Three things to agree on today</h2>
+        <p class="sub" style="margin-bottom:40px;">Everything else flows from these three decisions.</p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 20, marginBottom: 44 }}>
-                {ASKS.map((a, i) => (
-                  <div key={i} className={`fade-up delay-${i + 3}`}
-                    style={{ display: "flex", gap: 28, alignItems: "flex-start", padding: "24px",
-                      borderRadius: 10, border: "1px solid #F0F0F0" }}>
-                    <div style={{ fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 900, color: G + "30",
-                      lineHeight: 1, flexShrink: 0 }}>
-                      {a.num}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 17, fontWeight: 700, color: "#0a0a0a", marginBottom: 6 }}>{a.title}</div>
-                      <div style={{ fontSize: 13, color: "#888", lineHeight: 1.6 }}>{a.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="fade-up delay-6" style={{ display: "flex", gap: 16, alignItems: "center",
-                padding: "20px 28px", borderRadius: 10, background: "#0a0a0a" }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, color: "#888", marginBottom: 4 }}>Phase 1 begins generating revenue</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: "#fff" }}>Within 30 days of kickoff</div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 12, color: "#666", marginBottom: 2 }}>Phase 1 payback</div>
-                  <div style={{ fontSize: 22, fontWeight: 900, color: G }}>< 3 days</div>
-                </div>
-              </div>
+        <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:40px;">
+          <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
+            <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">01</div>
+            <div>
+              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Confirm Phase 1 scope</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">Trustpilot repair + Postscript activation + pre-renewal fix + shipping automation. All four can begin within 5 business days of contract.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
+            <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">02</div>
+            <div>
+              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Set a kickoff date</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">We're ready when you are. Implementation starts with a 90-minute systems onboarding call. Earliest available: within 2 weeks.</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
+            <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">03</div>
+            <div>
+              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Agree on retainer terms</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">Monthly partnership retainer covers implementation, reporting, and optimization. Scoped by phase — you're not committed beyond Q1 until Q1 delivers.</div>
             </div>
           </div>
         </div>
-      );
-    }
 
-    /* ═══════════════════════════════════════════════════════════
-       APP SHELL
-    ═══════════════════════════════════════════════════════════ */
-    const SLIDES = [Slide1, Slide2, Slide3, Slide4, Slide5, Slide6, Slide7, Slide8];
-
-    function App() {
-      const [current, setCurrent] = useState(0);
-      const [animClass, setAnimClass] = useState("slide-enter");
-      const [visible, setVisible] = useState(0);
-      const transitioning = useRef(false);
-
-      const go = useCallback((dir) => {
-        if (transitioning.current) return;
-        const next = current + dir;
-        if (next < 0 || next >= SLIDES.length) return;
-        transitioning.current = true;
-
-        const exitClass = dir > 0 ? "slide-exit" : "slide-exit-back";
-        const enterClass = dir > 0 ? "slide-enter" : "slide-enter-back";
-
-        setAnimClass(exitClass);
-        setTimeout(() => {
-          setCurrent(next);
-          setVisible(next);
-          setAnimClass(enterClass);
-          setTimeout(() => { transitioning.current = false; }, 380);
-        }, 320);
-      }, [current]);
-
-      useEffect(() => {
-        const handler = (e) => {
-          if (e.key === "ArrowRight" || e.key === " " || e.key === "ArrowDown") { e.preventDefault(); go(1); }
-          if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); go(-1); }
-        };
-        window.addEventListener("keydown", handler);
-        return () => window.removeEventListener("keydown", handler);
-      }, [go]);
-
-      const SlideComponent = SLIDES[visible];
-
-      return (
-        <div style={{ width: "100vw", height: "100vh", position: "relative", overflow: "hidden" }}
-          onClick={() => go(1)}>
-          <div key={current} className={`slide ${animClass}`} style={{ cursor: "pointer" }}>
-            <SlideComponent />
+        <div style="display:flex; gap:0; align-items:center; padding:20px 28px; border-radius:10px; background:#0a0a0a; justify-content:space-between;">
+          <div>
+            <div style="font-size:13px; color:#888; margin-bottom:4px;">Phase 1 begins generating revenue</div>
+            <div style="font-size:18px; font-weight:800; color:#fff;">Within 30 days of kickoff</div>
           </div>
-          <Nav current={current} total={SLIDES.length} onPrev={(e) => { e.stopPropagation(); go(-1); }} onNext={(e) => { e.stopPropagation(); go(1); }} />
+          <div style="text-align:right;">
+            <div style="font-size:12px; color:#666; margin-bottom:2px;">Phase 1 payback</div>
+            <div style="font-size:22px; font-weight:900; color:#0D9B6C;">&lt; 3 days</div>
+          </div>
         </div>
-      );
-    }
+      </div>
+    </div>
+  </div>
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
+</div><!-- #deck -->
+
+<!-- Nav pill -->
+<div id="nav">
+  <button id="btn-prev" onclick="go(-1)">←</button>
+  <span id="counter">1 / 8</span>
+  <button id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+  const TOTAL = 8;
+  let current = 0;
+  let busy = false;
+
+  function show(idx) {
+    document.querySelectorAll('.slide').forEach((s, i) => {
+      s.classList.remove('active', 'exit');
+      if (i === idx) s.classList.add('active');
+    });
+    document.getElementById('counter').textContent = (idx + 1) + ' / ' + TOTAL;
+    document.getElementById('btn-prev').disabled = idx === 0;
+    document.getElementById('btn-next').disabled = idx === TOTAL - 1;
+  }
+
+  function go(dir) {
+    if (busy) return;
+    const next = current + dir;
+    if (next < 0 || next >= TOTAL) return;
+    busy = true;
+    const currentSlide = document.getElementById('s' + current);
+    currentSlide.classList.remove('active');
+    currentSlide.classList.add('exit');
+    setTimeout(() => {
+      currentSlide.classList.remove('exit');
+      current = next;
+      show(current);
+      busy = false;
+    }, 280);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); go(-1); }
+  });
+
+  document.getElementById('deck').addEventListener('click', () => go(1));
+
+  // init
+  show(0);
+</script>
 </body>
 </html>
