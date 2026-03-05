@@ -62,6 +62,10 @@
     .metric-val { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; line-height: 1; }
     .metric-lbl { font-size: 13px; font-weight: 600; color: #0a0a0a; margin-top: 6px; }
     .metric-sub { font-size: 11px; color: #bbb; margin-top: 2px; }
+
+    /* ── Plan check items ── */
+    .check-item { display: flex; gap: 10px; align-items: center; font-size: 12px; color: #333; padding: 5px 0; }
+    .check-item span.chk { color: #0D9B6C; font-weight: 800; font-size: 13px; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -75,23 +79,23 @@
       <p class="label" style="color:#0D9B6C; margin-bottom:32px;">Crewless · Automation Audit</p>
       <h1 style="margin-bottom:20px;">Rho Nutrition</h1>
       <p style="font-size:clamp(17px,2.2vw,26px); font-weight:300; color:#666; line-height:1.55; max-width:560px; margin-bottom:48px;">
-        A full audit of your operations, retention, and revenue systems —<br>and the roadmap to recover $13.5M.
+        A full audit of your operations, retention, and revenue systems —<br>and the roadmap to recover <strong style="color:#0a0a0a;">$6M–$8M/year</strong>.
       </p>
       <div style="display:flex; gap:40px;">
         <div>
-          <div class="metric-val">$14.7M</div>
-          <div class="metric-lbl">Revenue Gap</div>
-          <div class="metric-sub">per year, recoverable</div>
+          <div class="metric-val">$6M–$8M</div>
+          <div class="metric-lbl">Annual Revenue Gap</div>
+          <div class="metric-sub">conservative — defensible from your own data</div>
         </div>
         <div>
-          <div class="metric-val">$94K</div>
-          <div class="metric-lbl">Total Investment</div>
-          <div class="metric-sub">all 3 phases</div>
+          <div class="metric-val">From $8,500</div>
+          <div class="metric-lbl">Setup Fee to Start</div>
+          <div class="metric-sub">+ monthly retainer, no long-term lock-in</div>
         </div>
         <div>
-          <div class="metric-val" style="color:#0D9B6C;">$31.8M</div>
-          <div class="metric-lbl">3-Year Benefit</div>
-          <div class="metric-sub">net cumulative</div>
+          <div class="metric-val" style="color:#0D9B6C;">$20M+</div>
+          <div class="metric-lbl">3-Year Potential</div>
+          <div class="metric-sub">compounding as LTV improves</div>
         </div>
       </div>
     </div>
@@ -110,15 +114,15 @@
     <div class="body">
       <h2 style="margin-bottom:8px;">What we found</h2>
       <p class="sub" style="margin-bottom:36px;">
-        5 processes generating <strong style="color:#EF4444;">$14.7M/year</strong> in preventable loss
+        5 processes generating <strong style="color:#EF4444;">$6M–$8M/year</strong> in preventable loss — all fixable without changing what's working
       </p>
       <div style="display:flex; flex-direction:column; gap:12px;">
 
         <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
-          <span class="tag" style="background:#FEF2F218; color:#EF4444; background:rgba(239,68,68,0.1);">Missing</span>
+          <span class="tag" style="background:rgba(239,68,68,0.1); color:#EF4444;">Missing</span>
           <div style="flex:1;">
             <div style="font-size:15px; font-weight:700;">Post-purchase LTV sequence</div>
-            <div style="font-size:12px; color:#999; margin-top:2px;">No education or cross-sell after purchase. LTV stuck at 3 months.</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">No education or cross-sell after purchase. LTV stuck at 3 months — escape velocity is 4–5.</div>
           </div>
           <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$3.9M–7.8M/yr</div>
         </div>
@@ -127,36 +131,36 @@
           <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B;">Inactive</span>
           <div style="flex:1;">
             <div style="font-size:15px; font-weight:700;">Postscript SMS — never live</div>
-            <div style="font-size:12px; color:#999; margin-top:2px;">Contract signed and paid. Platform has never been activated.</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">Contract signed and paid. Platform has never been activated. Cart abandonment, churn signals — all missed.</div>
           </div>
-          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$1.4M–2.5M/yr</div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$900K–$1.8M/yr</div>
         </div>
 
         <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
           <span class="tag" style="background:rgba(239,68,68,0.1); color:#EF4444;">Missing</span>
           <div style="flex:1;">
             <div style="font-size:15px; font-weight:700;">Win-back sequence</div>
-            <div style="font-size:12px; color:#999; margin-top:2px;">21,500 subscribers churn every month. Zero outreach after they leave.</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">21,450 subscribers churn every month. Zero outreach after they leave. 2% come back if you ask.</div>
           </div>
-          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$620K–1.86M/yr</div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$620K–$1.2M/yr</div>
         </div>
 
         <div class="card card-left-red" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
           <span class="tag" style="background:rgba(239,68,68,0.1); color:#EF4444;">Critical</span>
           <div style="flex:1;">
             <div style="font-size:15px; font-weight:700;">Trustpilot 1.7/5 — unmanaged</div>
-            <div style="font-size:12px; color:#999; margin-top:2px;">88% one-star reviews. All operational. Killing D2C conversion.</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">Operational complaints, not product. Fixable. Every point gained converts buyers who Google you first.</div>
           </div>
-          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$420K–1.4M/yr</div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$200K–$500K/yr</div>
         </div>
 
         <div class="card card-left-amber" style="display:flex; align-items:center; gap:20px; padding:16px 20px;">
           <span class="tag" style="background:rgba(245,158,11,0.1); color:#F59E0B;">Broken</span>
           <div style="flex:1;">
-            <div style="font-size:15px; font-weight:700;">Pre-renewal notifications</div>
-            <div style="font-size:12px; color:#999; margin-top:2px;">Broken Klaviyo flow generates your #2 CS ticket type every single day.</div>
+            <div style="font-size:15px; font-weight:700;">Pre-renewal notifications + CS inefficiency</div>
+            <div style="font-size:12px; color:#999; margin-top:2px;">Broken Klaviyo flow = #2 ticket driver every day. Manual lookups on every ticket = $240K/yr in team time.</div>
           </div>
-          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$97K–200K/yr</div>
+          <div style="font-size:16px; font-weight:800; color:#EF4444; white-space:nowrap;">$340K–$440K/yr</div>
         </div>
 
       </div>
@@ -175,36 +179,36 @@
     <div class="body body-wide">
       <div style="flex:1;">
         <h2 style="margin-bottom:12px;">Every month without action costs you</h2>
-        <div style="font-size:clamp(52px,7vw,96px); font-weight:900; color:#EF4444; line-height:1; margin-bottom:8px;">$1.2M+</div>
-        <p style="font-size:15px; color:#888; margin-bottom:36px;">in recoverable, preventable losses</p>
+        <div style="font-size:clamp(52px,7vw,96px); font-weight:900; color:#EF4444; line-height:1; margin-bottom:8px;">$500K+</div>
+        <p style="font-size:15px; color:#888; margin-bottom:36px;">in recoverable, preventable losses — conservative estimate</p>
         <div style="padding:20px 24px; border-radius:10px; background:#FEF2F2; border:1px solid #FCA5A5;">
-          <div class="label" style="color:#EF4444; margin-bottom:6px;">Annual Total</div>
-          <div style="font-size:36px; font-weight:900; color:#EF4444;">$14.7M / year</div>
-          <div style="font-size:13px; color:#888; margin-top:4px;">across 10 unoptimized processes — conservative estimate</div>
+          <div class="label" style="color:#EF4444; margin-bottom:6px;">Conservative Annual Total</div>
+          <div style="font-size:36px; font-weight:900; color:#EF4444;">$6M–$8M / year</div>
+          <div style="font-size:13px; color:#888; margin-top:4px;">built from your own numbers — subscriber count, AOV, churn rate, ticket volume</div>
         </div>
       </div>
       <div style="width:300px; flex-shrink:0;">
         <div class="label" style="color:#bbb; margin-bottom:16px;">Breakdown by category</div>
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
-            <span style="font-size:13px; color:#555;">Revenue / LTV</span>
-            <span style="font-size:13px; font-weight:700; color:#EF4444;">$5.3M–10.3M</span>
+            <span style="font-size:13px; color:#555;">LTV / Retention</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$3.9M–7.8M</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
-            <span style="font-size:13px; color:#555;">SMS Revenue</span>
-            <span style="font-size:13px; font-weight:700; color:#EF4444;">$1.4M–2.5M</span>
+            <span style="font-size:13px; color:#555;">SMS Revenue (idle asset)</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$900K–$1.8M</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
-            <span style="font-size:13px; color:#555;">Reputation Loss</span>
-            <span style="font-size:13px; font-weight:700; color:#EF4444;">$420K–1.4M</span>
+            <span style="font-size:13px; color:#555;">Win-Back Revenue</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$620K–$1.2M</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
-            <span style="font-size:13px; color:#555;">CS Inefficiency</span>
-            <span style="font-size:13px; font-weight:700; color:#EF4444;">$415K–600K</span>
+            <span style="font-size:13px; color:#555;">Reputation (Trustpilot)</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$200K–$500K</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-radius:6px; border:1px solid #F3F4F6;">
-            <span style="font-size:13px; color:#555;">Win-Back</span>
-            <span style="font-size:13px; font-weight:700; color:#EF4444;">$620K–1.86M</span>
+            <span style="font-size:13px; color:#555;">CS Team Inefficiency</span>
+            <span style="font-size:13px; font-weight:700; color:#EF4444;">$240K–$350K</span>
           </div>
         </div>
       </div>
@@ -225,7 +229,7 @@
         <h2 style="margin-bottom:8px;">The LTV lever</h2>
         <p class="sub" style="margin-bottom:10px;">65,000 subscribers · $120 blended AOV — how much is each extra day worth?</p>
         <p style="font-size:13px; font-weight:600; color:#0D9B6C; margin-bottom:36px;">
-          Every 15 days of average LTV extension = $3.9M in zero-CAC revenue
+          Every 15 days of average LTV extension = $3.9M in zero-CAC revenue · This is George's math, not ours.
         </p>
         <div class="grid-3" style="margin-bottom:36px;">
           <div class="card" style="padding:28px 24px;">
@@ -248,7 +252,7 @@
           </div>
         </div>
         <div style="padding:16px 24px; border-radius:8px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05); font-size:14px; color:#444; line-height:1.6;">
-          <strong style="color:#0D9B6C;">The mechanism:</strong> A post-purchase Klaviyo sequence (days 7, 14, 21) educates subscribers, drives cross-sell, and builds habit — pushing your base toward the 4–5 product escape velocity threshold where churn approaches zero.
+          <strong style="color:#0D9B6C;">The mechanism:</strong> A post-purchase Klaviyo sequence (days 7, 14, 21) educates subscribers on their products, drives cross-sell, and builds habit — pushing your base toward the 4–5 product escape velocity threshold where churn approaches zero.
         </div>
       </div>
     </div>
@@ -265,24 +269,24 @@
     </div>
     <div class="body">
       <h2 style="margin-bottom:8px;">3-phase quarterly roadmap</h2>
-      <p class="sub" style="margin-bottom:32px;">Built around your business — no disruption, no sprints. Quarterly milestones with measurable ROI gates.</p>
+      <p class="sub" style="margin-bottom:32px;">Built around your business — no disruption. Every fix is additive. Nothing replaces what's running.</p>
       <div class="grid-3">
 
         <!-- Q1 -->
         <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
           <div style="padding:20px 24px; border-bottom:3px solid #3B82F6;">
-            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#3B82F6; margin-bottom:4px;">Q1 — Foundation</div>
-            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 1–3</div>
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#3B82F6; margin-bottom:4px;">Q1 — Foundation Repair</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">30 days · Fix what's leaking</div>
             <div style="display:flex; justify-content:space-between;">
-              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$13K–24K</div></div>
-              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#3B82F6;">$2M–4.1M/yr</div></div>
+              <div><div style="font-size:11px; color:#bbb;">Setup</div><div style="font-size:15px; font-weight:700;">$8,500</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#3B82F6;">$2M–$4M/yr</div></div>
             </div>
           </div>
           <div style="padding:16px 24px;">
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Trustpilot review repair</span><span style="font-weight:700; color:#3B82F6;">1,890x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Postscript SMS activation</span><span style="font-weight:700; color:#3B82F6;">1,587x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Pre-renewal Klaviyo rebuild</span><span style="font-weight:700; color:#3B82F6;">325x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Shipping / tracking automation</span><span style="font-weight:700; color:#3B82F6;">171x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Trustpilot review repair</span><span style="font-weight:700; color:#3B82F6;">< 3 days</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Postscript SMS activation</span><span style="font-weight:700; color:#3B82F6;">< 1 week</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Pre-renewal Klaviyo rebuild</span><span style="font-weight:700; color:#3B82F6;">< 2 weeks</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Shipping / tracking automation</span><span style="font-weight:700; color:#3B82F6;">3 weeks</span></div>
           </div>
         </div>
 
@@ -290,35 +294,35 @@
         <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
           <div style="padding:20px 24px; border-bottom:3px solid #0D9B6C;">
             <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#0D9B6C; margin-bottom:4px;">Q2 — Retention Engine</div>
-            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 3–6</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">60 days · Attack the LTV problem</div>
             <div style="display:flex; justify-content:space-between;">
-              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$40K–67K</div></div>
-              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#0D9B6C;">$4.76M–9.97M/yr</div></div>
+              <div><div style="font-size:11px; color:#bbb;">Setup</div><div style="font-size:15px; font-weight:700;">$8,000</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#0D9B6C;">$4M–$6M/yr</div></div>
             </div>
           </div>
           <div style="padding:16px 24px;">
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Post-purchase LTV sequence</span><span style="font-weight:700; color:#0D9B6C;">1,950x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Win-back sequence</span><span style="font-weight:700; color:#0D9B6C;">1,116x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Zendesk ↔ Shopify / Retextion</span><span style="font-weight:700; color:#0D9B6C;">130x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">AI ticket deflection</span><span style="font-weight:700; color:#0D9B6C;">68x</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Post-purchase LTV sequence</span><span style="font-weight:700; color:#0D9B6C;">< 1 week</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Win-back automation</span><span style="font-weight:700; color:#0D9B6C;">2–3 weeks</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Zendesk ↔ Shopify / Retextion</span><span style="font-weight:700; color:#0D9B6C;">4 weeks</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">AI ticket deflection</span><span style="font-weight:700; color:#0D9B6C;">5–6 weeks</span></div>
           </div>
         </div>
 
         <!-- Q3 -->
         <div style="border-radius:10px; border:1px solid #F0F0F0; overflow:hidden;">
           <div style="padding:20px 24px; border-bottom:3px solid #8B5CF6;">
-            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#8B5CF6; margin-bottom:4px;">Q3 — Scale</div>
-            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">Month 6–9</div>
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.1em; color:#8B5CF6; margin-bottom:4px;">Q3 — Scale Layer</div>
+            <div style="font-size:11px; color:#bbb; margin-bottom:16px;">90 days · Compound what's running</div>
             <div style="display:flex; justify-content:space-between;">
-              <div><div style="font-size:11px; color:#bbb;">Investment</div><div style="font-size:15px; font-weight:700;">$41K–73K</div></div>
-              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#8B5CF6;">$2.05M–3.6M/yr</div></div>
+              <div><div style="font-size:11px; color:#bbb;">Setup</div><div style="font-size:15px; font-weight:700;">$8,000</div></div>
+              <div style="text-align:right;"><div style="font-size:11px; color:#bbb;">Impact</div><div style="font-size:15px; font-weight:700; color:#8B5CF6;">$1.5M–$3M/yr</div></div>
             </div>
           </div>
           <div style="padding:16px 24px;">
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Escape velocity triggers</span><span style="font-weight:700; color:#8B5CF6;">879x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Creative AI dashboard</span><span style="font-weight:700; color:#8B5CF6;">420x</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Wholesale automation</span><span style="color:#ccc;">—</span></div>
-            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Science research AI</span><span style="color:#ccc;">—</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Escape velocity triggers</span><span style="font-weight:700; color:#8B5CF6;">3–5 weeks</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Creative AI dashboard</span><span style="font-weight:700; color:#8B5CF6;">4–6 weeks</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #F8F8F8; font-size:12px;"><span style="color:#555;">Wholesale automation</span><span style="color:#ccc;">TBD</span></div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:12px;"><span style="color:#555;">Science research AI</span><span style="color:#ccc;">TBD</span></div>
           </div>
         </div>
 
@@ -327,62 +331,105 @@
   </div>
 
   <!-- ══════════════════════════════════════
-       SLIDE 6 — THE INVESTMENT
+       SLIDE 6 — TWO PLANS
   ══════════════════════════════════════ -->
   <div class="slide" id="s5">
     <div class="topbar">
       <span class="topbar-brand">CREWLESS</span>
-      <span class="topbar-label">The Investment</span>
+      <span class="topbar-label">Choose Your Plan</span>
       <span class="topbar-meta">Rho Nutrition · March 2026</span>
     </div>
-    <div class="body body-wide">
-      <div style="flex:1;">
-        <h2 style="margin-bottom:32px;">The investment</h2>
-        <div class="grid-2" style="margin-bottom:16px;">
-          <div class="card" style="padding:24px;">
-            <div class="metric-val">$94,000</div>
-            <div class="metric-lbl">Total Implementation</div>
-            <div class="metric-sub">across all 3 phases</div>
+    <div class="body" style="justify-content:flex-start; padding-top:28px; padding-bottom:32px; gap:0;">
+      <h2 style="margin-bottom:6px;">Two ways to start</h2>
+      <p class="sub" style="margin-bottom:24px;">Both are additive — nothing replaces what's running. No big-bang launches. No disruption.</p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; flex:1; min-height:0;">
+
+        <!-- PLAN 1: COMPLETE SYSTEM -->
+        <div style="border-radius:12px; border:1px solid #0a0a0a; overflow:hidden; display:flex; flex-direction:column;">
+          <div style="padding:22px 28px; background:#0a0a0a; color:#fff; flex-shrink:0;">
+            <div style="font-size:10px; font-weight:700; letter-spacing:0.14em; color:rgba(255,255,255,0.4); margin-bottom:12px;">PLAN 1 — COMPLETE REVENUE SYSTEM</div>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:4px;">
+              <span style="font-size:clamp(28px,3vw,44px); font-weight:900;">$16,500</span>
+              <span style="font-size:13px; color:rgba(255,255,255,0.4);">setup fee</span>
+            </div>
+            <div style="font-size:13px; color:rgba(255,255,255,0.5); margin-bottom:2px;">then $3,500/month · cancel anytime</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.35); margin-bottom:18px;">Delivered in 90 days · Full retention engine built</div>
+            <div style="display:flex; gap:20px;">
+              <div>
+                <div style="font-size:10px; color:rgba(255,255,255,0.35); margin-bottom:2px;">Projected impact</div>
+                <div style="font-size:16px; font-weight:800; color:#0D9B6C;">$6M–$8M/yr</div>
+              </div>
+              <div>
+                <div style="font-size:10px; color:rgba(255,255,255,0.35); margin-bottom:2px;">Payback period</div>
+                <div style="font-size:16px; font-weight:800; color:#fff;">2–3 weeks</div>
+              </div>
+            </div>
           </div>
-          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
-            <div class="metric-val" style="color:#0D9B6C;">$13.5M</div>
-            <div class="metric-lbl">Year 1 Net Benefit</div>
-            <div class="metric-sub">conservative midpoint</div>
-          </div>
-          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
-            <div class="metric-val" style="color:#0D9B6C;">&lt; 3 days</div>
-            <div class="metric-lbl">Payback Period</div>
-            <div class="metric-sub">Q1 alone recovers full cost</div>
-          </div>
-          <div style="border-radius:10px; padding:24px; border:1px solid rgba(13,155,108,0.2); background:rgba(13,155,108,0.05);">
-            <div class="metric-val" style="color:#0D9B6C;">$31.8M</div>
-            <div class="metric-lbl">3-Year Cumulative</div>
-            <div class="metric-sub">net of all implementation</div>
+          <div style="padding:18px 28px; flex:1; overflow:auto;">
+            <div style="font-size:10px; font-weight:700; letter-spacing:0.12em; color:#bbb; margin-bottom:12px;">8 SYSTEMS BUILT &amp; HANDED OFF</div>
+            <div class="check-item"><span class="chk">✓</span>Trustpilot repair flow — post-delivery email split</div>
+            <div class="check-item"><span class="chk">✓</span>Postscript SMS fully activated — cart, churn, win-back texts</div>
+            <div class="check-item"><span class="chk">✓</span>Pre-renewal email sequence rebuilt in Klaviyo</div>
+            <div class="check-item"><span class="chk">✓</span>Shipping &amp; tracking automation — WISMO tickets eliminated</div>
+            <div class="check-item"><span class="chk">✓</span>Post-purchase LTV sequence — day 7, 14, 21 education + cross-sell</div>
+            <div class="check-item"><span class="chk">✓</span>Win-back automation — 3-touch flow to churned subscribers</div>
+            <div class="check-item"><span class="chk">✓</span>Zendesk ↔ Shopify + Retextion integration</div>
+            <div class="check-item"><span class="chk">✓</span>AI ticket deflection — top 3 ticket types auto-handled</div>
+            <div style="margin-top:12px; padding:10px 14px; border-radius:6px; background:#F9FAFB; border:1px solid #F0F0F0;">
+              <div style="font-size:10px; font-weight:700; color:#0D9B6C; margin-bottom:3px;">GUARANTEE</div>
+              <div style="font-size:11px; color:#666;">Every system delivered on the agreed timeline. If we miss, we work free until it's live.</div>
+            </div>
           </div>
         </div>
-        <div style="padding:14px 20px; border-radius:8px; background:#F9FAFB; font-size:13px; color:#666;">
-          <strong style="color:#0a0a0a;">ROI: 33,700%</strong> — every $1 invested returns $338 over 3 years
+
+        <!-- PLAN 2: FOUNDATION SPRINT -->
+        <div style="border-radius:12px; border:2px solid #0D9B6C; overflow:hidden; display:flex; flex-direction:column; position:relative;">
+          <div style="position:absolute; top:14px; right:14px; background:#0D9B6C; color:#fff; font-size:10px; font-weight:800; letter-spacing:0.1em; padding:4px 12px; border-radius:999px;">BEST VALUE</div>
+          <div style="padding:22px 28px; background:rgba(13,155,108,0.05); border-bottom:1px solid rgba(13,155,108,0.15); flex-shrink:0;">
+            <div style="font-size:10px; font-weight:700; letter-spacing:0.14em; color:#0D9B6C; margin-bottom:12px;">PLAN 2 — FOUNDATION SPRINT</div>
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:4px;">
+              <span style="font-size:clamp(28px,3vw,44px); font-weight:900;">$8,500</span>
+              <span style="font-size:13px; color:#999;">setup fee</span>
+            </div>
+            <div style="font-size:13px; color:#888; margin-bottom:2px;">then $2,000/month · cancel anytime</div>
+            <div style="font-size:12px; color:#aaa; margin-bottom:18px;">Delivered in 30 days · Fastest path to measurable results</div>
+            <div style="display:flex; gap:20px;">
+              <div>
+                <div style="font-size:10px; color:#aaa; margin-bottom:2px;">Projected impact</div>
+                <div style="font-size:16px; font-weight:800; color:#0D9B6C;">$2M–$4M/yr</div>
+              </div>
+              <div>
+                <div style="font-size:10px; color:#aaa; margin-bottom:2px;">Payback period</div>
+                <div style="font-size:16px; font-weight:800; color:#0a0a0a;">2–3 days</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding:18px 28px; flex:1; overflow:auto;">
+            <div style="font-size:10px; font-weight:700; letter-spacing:0.12em; color:#bbb; margin-bottom:12px;">4 SYSTEMS BUILT &amp; HANDED OFF</div>
+            <div class="check-item"><span class="chk">✓</span>Trustpilot repair flow — post-delivery email split</div>
+            <div class="check-item"><span class="chk">✓</span>Postscript SMS activated — cart recovery + pre-churn texts</div>
+            <div class="check-item"><span class="chk">✓</span>Pre-renewal email sequence rebuilt in Klaviyo</div>
+            <div class="check-item"><span class="chk">✓</span>Shipping &amp; tracking automation — WISMO tickets eliminated</div>
+            <div style="margin-top:12px; padding:10px 14px; border-radius:6px; background:rgba(13,155,108,0.05); border:1px solid rgba(13,155,108,0.15);">
+              <div style="font-size:10px; font-weight:700; color:#0D9B6C; margin-bottom:3px;">UPGRADE PATH</div>
+              <div style="font-size:11px; color:#666;">See results in 30 days, then roll straight into Plan 1 systems at a discounted setup rate.</div>
+            </div>
+            <div style="margin-top:10px; padding:10px 14px; border-radius:6px; background:#F9FAFB; border:1px solid #F0F0F0;">
+              <div style="font-size:10px; font-weight:700; color:#0D9B6C; margin-bottom:3px;">GUARANTEE</div>
+              <div style="font-size:11px; color:#666;">Every system delivered in 30 days. If we miss, we work free until it's live.</div>
+            </div>
+          </div>
         </div>
+
       </div>
 
-      <div style="width:260px; flex-shrink:0;">
-        <div class="label" style="color:#bbb; margin-bottom:20px;">Cumulative benefit</div>
-        <div style="display:flex; gap:16px; align-items:flex-end; height:220px;">
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
-            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$13.5M</span>
-            <div style="width:100%; border-radius:6px 6px 0 0; height:75px; background:#0D9B6C; opacity:0.5;"></div>
-            <span style="font-size:11px; color:#bbb;">Year 1</span>
-          </div>
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
-            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$25.7M</span>
-            <div style="width:100%; border-radius:6px 6px 0 0; height:145px; background:#0D9B6C; opacity:0.7;"></div>
-            <span style="font-size:11px; color:#bbb;">Year 2</span>
-          </div>
-          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;">
-            <span style="font-size:12px; font-weight:700; color:#0D9B6C;">$31.8M</span>
-            <div style="width:100%; border-radius:6px 6px 0 0; height:180px; background:#0D9B6C;"></div>
-            <span style="font-size:11px; color:#bbb;">Year 3</span>
-          </div>
+      <!-- What we need from you -->
+      <div style="margin-top:16px; padding:14px 22px; border-radius:8px; border:1px solid #F0F0F0; background:#F9FAFB; display:flex; align-items:center; gap:16px; flex-shrink:0;">
+        <div style="font-size:10px; font-weight:800; letter-spacing:0.12em; color:#bbb; white-space:nowrap; text-transform:uppercase;">What we need from you</div>
+        <div style="width:1px; height:24px; background:#E5E7EB; flex-shrink:0;"></div>
+        <div style="font-size:12px; color:#666; line-height:1.5;">
+          <strong style="color:#333;">Three easy things:</strong> &nbsp;(1) You or your EA completes a 15-min questionnaire about your current setup &nbsp;·&nbsp; (2) You review and approve the workflow blueprints before we build &nbsp;·&nbsp; (3) Sign the scope agreement — we build everything and hand it off with a complete usage guide
         </div>
       </div>
     </div>
@@ -422,14 +469,14 @@
       </div>
 
       <div style="width:260px; flex-shrink:0; border-radius:10px; border:1px solid rgba(13,155,108,0.2); padding:28px; background:rgba(13,155,108,0.04);">
-        <div class="label" style="color:#0D9B6C; margin-bottom:20px;">What you get</div>
+        <div class="label" style="color:#0D9B6C; margin-bottom:20px;">What you get (both plans)</div>
         <div style="display:flex; flex-direction:column; gap:0;">
           <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Full audit documentation</div>
           <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Custom automation builds</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Complete usage guide on handoff</div>
           <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Weekly performance reports</div>
           <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Quarterly roadmap reviews</div>
-          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(13,155,108,0.12); font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Ongoing optimization</div>
-          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Priority support</div>
+          <div style="display:flex; gap:10px; align-items:center; padding:10px 0; font-size:13px; color:#444;"><span style="color:#0D9B6C; font-weight:700;">✓</span> Cancel-anytime retainer</div>
         </div>
       </div>
     </div>
@@ -453,34 +500,34 @@
           <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
             <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">01</div>
             <div>
-              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Confirm Phase 1 scope</div>
-              <div style="font-size:13px; color:#888; line-height:1.6;">Trustpilot repair + Postscript activation + pre-renewal fix + shipping automation. All four can begin within 5 business days of contract.</div>
+              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Choose your plan</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">Sprint (4 systems, $8,500 + $2K/mo) or Complete (8 systems, $16,500 + $3.5K/mo). Both can begin within 5 business days of signing. Both cancel anytime.</div>
             </div>
           </div>
           <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
             <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">02</div>
             <div>
               <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Set a kickoff date</div>
-              <div style="font-size:13px; color:#888; line-height:1.6;">We're ready when you are. Implementation starts with a 90-minute systems onboarding call. Earliest available: within 2 weeks.</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">We kick off with a 60-min systems onboarding call. You or your EA fills out the questionnaire. We map the workflows and send them for your approval before building anything.</div>
             </div>
           </div>
           <div style="display:flex; gap:24px; align-items:flex-start; padding:24px; border-radius:10px; border:1px solid #F0F0F0;">
             <div style="font-size:clamp(32px,4vw,52px); font-weight:900; color:rgba(13,155,108,0.2); line-height:1; flex-shrink:0;">03</div>
             <div>
-              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Agree on retainer terms</div>
-              <div style="font-size:13px; color:#888; line-height:1.6;">Monthly partnership retainer covers implementation, reporting, and optimization. Scoped by phase — you're not committed beyond Q1 until Q1 delivers.</div>
+              <div style="font-size:17px; font-weight:700; margin-bottom:6px;">Sign the scope agreement</div>
+              <div style="font-size:13px; color:#888; line-height:1.6;">Confirms exactly what gets built, the timeline, and delivery guarantee. No long-term contract beyond the initial build period.</div>
             </div>
           </div>
         </div>
 
         <div style="display:flex; gap:0; align-items:center; padding:20px 28px; border-radius:10px; background:#0a0a0a; justify-content:space-between;">
           <div>
-            <div style="font-size:13px; color:#888; margin-bottom:4px;">Phase 1 begins generating revenue</div>
+            <div style="font-size:13px; color:#888; margin-bottom:4px;">Plan 2 starts generating revenue</div>
             <div style="font-size:18px; font-weight:800; color:#fff;">Within 30 days of kickoff</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:12px; color:#666; margin-bottom:2px;">Phase 1 payback</div>
-            <div style="font-size:22px; font-weight:900; color:#0D9B6C;">&lt; 3 days</div>
+            <div style="font-size:12px; color:#666; margin-bottom:2px;">Setup fee payback</div>
+            <div style="font-size:22px; font-weight:900; color:#0D9B6C;">2–3 days</div>
           </div>
         </div>
       </div>
