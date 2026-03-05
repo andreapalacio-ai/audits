@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rho Nutrition — Customer Experience Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #0D9B6C;
+    --green-light: #E8F7F2;
+    --green-mid: #B8E8D8;
+    --black: #0A0A0A;
+    --gray: #6B7280;
+    --light: #F9FAFB;
+    --border: #E5E7EB;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: var(--black);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand { font-size: 13px; font-weight: 700; color: var(--green); letter-spacing: .04em; text-transform: uppercase; }
+  .topbar-date { font-size: 12px; color: var(--gray); }
+
+  /* ── LAYOUT ── */
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 100px; }
+
+  /* ── HEADER ── */
+  .header { margin-bottom: 56px; }
+  .tag {
+    display: inline-block;
+    background: var(--green-light);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--black);
+    margin-bottom: 16px;
+  }
+  .header p {
+    font-size: 16px;
+    color: var(--gray);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 52px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--green-light);
+  }
+
+  /* ── SYSTEM CARDS ── */
+  .system-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .system-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--green);
+  }
+  .system-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .system-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 10px;
+  }
+  .system-desc {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .system-bullets { list-style: none; }
+  .system-bullets li {
+    font-size: 13px;
+    color: var(--gray);
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .system-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 12px;
+  }
+
+  /* ── PROCESS ── */
+  .process-steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .step-content p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  /* ── INVESTMENT ── */
+  .pricing-box {
+    background: var(--black);
+    border-radius: 16px;
+    padding: 40px;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .pricing-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    margin-bottom: 12px;
+  }
+  .pricing-amount {
+    font-size: clamp(40px, 6vw, 60px);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pricing-sub {
+    font-size: 14px;
+    color: #9CA3AF;
+    margin-bottom: 28px;
+  }
+  .pricing-includes {
+    border-top: 1px solid #1F2937;
+    padding-top: 24px;
+  }
+  .pricing-includes-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .pricing-list { list-style: none; }
+  .pricing-list li {
+    font-size: 13px;
+    color: #D1D5DB;
+    padding: 5px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .pricing-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .retainer-box {
+    background: var(--green-light);
+    border: 1px solid var(--green-mid);
+    border-radius: 16px;
+    padding: 28px 32px;
+  }
+  .retainer-box h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+  .retainer-box p {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .retainer-price {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--green);
+  }
+  .retainer-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--gray);
+  }
+
+  /* ── NEEDS ── */
+  .needs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .need-item {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+  .need-item strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--gray);
+    margin-bottom: 4px;
+  }
+
+  /* ── GUARANTEE ── */
+  .guarantee-box {
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 28px 32px;
+    background: var(--green-light);
+  }
+  .guarantee-box h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--black);
+    margin-bottom: 10px;
+  }
+  .guarantee-box p {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.75;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; gap: 0; }
+  .tl-item {
+    flex: 1;
+    padding: 20px 20px 20px 0;
+    border-bottom: 3px solid var(--border);
+    position: relative;
+  }
+  .tl-item.active { border-bottom-color: var(--green); }
+  .tl-week {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .tl-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .tl-item p { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+  /* ── CTA ── */
+  .cta-box {
+    background: var(--black);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+  }
+  .cta-box h2 {
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .cta-box p {
+    font-size: 14px;
+    color: #9CA3AF;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: .02em;
+  }
+  .cta-note {
+    font-size: 12px;
+    color: #6B7280;
+    margin-top: 16px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--gray);
+  }
+  .footer strong { color: var(--black); }
+
+  @media (max-width: 600px) {
+    .topbar { padding: 12px 20px; }
+    .wrap { padding: 40px 20px 80px; }
+    .pricing-box { padding: 28px 24px; }
+    .timeline { flex-direction: column; }
+    .tl-item { border-bottom: none; border-left: 3px solid var(--border); padding: 12px 16px; }
+    .tl-item.active { border-left-color: var(--green); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">Run Crewless × Rho Nutrition</div>
+  <div class="topbar-date">March 2025</div>
+</div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="tag">Customer Experience Proposal</div>
+    <h1>Two systems.<br>One focused project.<br>Done right.</h1>
+    <p>Based on our conversation, here's the specific scope: an AI-powered customer service system built on your existing Zendesk infrastructure, and a 24/7 voice agent trained on your team's actual knowledge. Nothing else.</p>
+  </div>
+
+  <!-- WHAT WE'RE BUILDING -->
+  <div class="section">
+    <div class="section-label">What We're Building</div>
+
+    <div class="system-card">
+      <div class="system-num">System 01</div>
+      <div class="system-title">Zendesk AI Support Agent</div>
+      <div class="system-desc">AI that has full context on every customer — order history, subscription status, products purchased, past interactions — and drafts a personalized response before your team sees the ticket. Your agents click send or escalate. That's it.</div>
+      <ul class="system-bullets">
+        <li>Connects to Zendesk + Shopify + Retextion for live customer data</li>
+        <li>Trained on your macro library + larger sample of real interactions</li>
+        <li>Drafts responses that feel personal, not templated</li>
+        <li>Auto-escalates to human agents when it should — not when it shouldn't</li>
+        <li>Every response reviewed before it goes out — your team stays in control</li>
+      </ul>
+    </div>
+
+    <div class="system-card">
+      <div class="system-num">System 02</div>
+      <div class="system-title">24/7 Voice Agent</div>
+      <div class="system-desc">A phone agent that speaks plain English, knows your full product catalog, understands your refund and subscription policies, and handles Tier 1 calls without a human. Escalates naturally when needed.</div>
+      <ul class="system-bullets">
+        <li>Trained on your macro library, product catalog, and business rules</li>
+        <li>Handles the calls your team gets on repeat — order status, cancellations, product questions</li>
+        <li>Sounds like a person, not a phone tree</li>
+        <li>Escalates to your team for anything outside its scope</li>
+        <li>Available every hour of every day</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section">
+    <div class="section-label">How This Works</div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>You give us access to your tools</h4>
+          <p>Zendesk, Shopify, Retextion. Read-only is fine to start. We map your current macro library and pull a sample of real ticket interactions (300+) for training.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>We build and train both systems</h4>
+          <p>No daily check-ins required. We work, we update you on progress, and we flag anything we need clarified. Your team stays focused on running the business.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Your team tests and approves</h4>
+          <p>We run both systems in review mode first — your agents see every AI draft before anything goes out. We refine based on their feedback until it's exactly right.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Handover with full documentation</h4>
+          <p>You receive a complete SOP — how to update the training data, how to adjust escalation rules, how to add new macros, and how to get the most out of both systems going forward.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVESTMENT -->
+  <div class="section">
+    <div class="section-label">Investment</div>
+
+    <div class="pricing-box">
+      <div class="pricing-label">One-Time Setup Fee</div>
+      <div class="pricing-amount">$6,500</div>
+      <div class="pricing-sub">Both systems · Delivered in 30 days · Full handover included</div>
+      <div class="pricing-includes">
+        <div class="pricing-includes-label">Everything included</div>
+        <ul class="pricing-list">
+          <li>Zendesk AI agent — built, trained, and integrated</li>
+          <li>Voice agent — built, trained, and live</li>
+          <li>Connection to Shopify + Retextion for real-time customer context</li>
+          <li>Macro library integration and training data curation</li>
+          <li>Testing period with your team before full go-live</li>
+          <li>Full SOP documentation for your team and leadership</li>
+          <li>Refinements until you're satisfied — in writing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="retainer-box">
+      <h3>Optional: Keep Me on Your Team</h3>
+      <p>After delivery, you can choose to bring me on as a monthly resource — monitoring both systems, updating training data as your business evolves, identifying new opportunities on your timeline, and being available to your team when they need it. This is not a maintenance contract. It's having someone who deeply knows your CX infrastructure available whenever you need them.</p>
+      <div class="retainer-price">$1,500 / month <span>· cancel anytime</span></div>
+    </div>
+  </div>
+
+  <!-- WHAT WE NEED FROM YOU -->
+  <div class="section">
+    <div class="section-label">What We Need From You</div>
+    <div class="needs-grid">
+      <div class="need-item"><strong>Access</strong>Zendesk, Shopify, Retextion (read-only to start)</div>
+      <div class="need-item"><strong>Macro Library</strong>Your current Zendesk macro library exported</div>
+      <div class="need-item"><strong>Ticket Sample</strong>300+ real customer interactions for training</div>
+      <div class="need-item"><strong>Business Rules</strong>Refund policy, cancellation policy, escalation triggers</div>
+      <div class="need-item"><strong>Product Catalog</strong>Full product list with descriptions and FAQs</div>
+      <div class="need-item"><strong>Team Contact</strong>One person on your CS team to validate responses during testing</div>
+    </div>
+  </div>
+
+  <!-- GUARANTEE -->
+  <div class="section">
+    <div class="section-label">The Guarantee</div>
+    <div class="guarantee-box">
+      <h3>I work until you're satisfied — full stop.</h3>
+      <p>If we deliver both systems and your team isn't satisfied with the quality of the AI responses and the voice agent's performance, I continue working at no additional charge until we get there. The goal isn't to hand over a tool and move on. The goal is for every one of your customers to feel genuinely taken care of. We put this in the agreement.</p>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section">
+    <div class="section-label">Timeline</div>
+    <div class="timeline">
+      <div class="tl-item active">
+        <div class="tl-week">Week 1</div>
+        <h4>Setup & Training Data</h4>
+        <p>Tool access, macro export, ticket sample collection, business rules review</p>
+      </div>
+      <div class="tl-item active">
+        <div class="tl-week">Weeks 2–3</div>
+        <h4>Build & Train</h4>
+        <p>Both systems built and trained on your data. Internal testing begins.</p>
+      </div>
+      <div class="tl-item active">
+        <div class="tl-week">Week 4</div>
+        <h4>Team Testing & Refinement</h4>
+        <p>Your CS team reviews AI drafts, we refine until the quality is right</p>
+      </div>
+      <div class="tl-item active">
+        <div class="tl-week">End of Week 4</div>
+        <h4>Handover</h4>
+        <p>Full SOP delivered. Both systems live. Team trained.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h2>Ready to move forward?</h2>
+    <p>Reply to this email and I'll send over the agreement.<br>I have two spots available for the next 60 days.</p>
+    <a href="mailto:teapalacio@gmail.com" class="cta-btn">Reply to Andrea</a>
+    <div class="cta-note">Questions? Reply to this email or text directly.</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Andrea Palacio</strong> · Run Crewless · <a href="mailto:teapalacio@gmail.com" style="color: var(--green); text-decoration: none;">teapalacio@gmail.com</a>
+</div>
+
+</body>
+</html>
