@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rising Zone — Process Map</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .dashed-border { border: 2px dashed #ef4444 !important; background: transparent !important; }
+    .node-btn { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+    .node-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .node-btn.selected { outline: 3px solid #fff; outline-offset: 2px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // =========================================================
+    // DATA — The Rising Zone
+    // =========================================================
+    const CLIENT = {
+      name: "The Rising Zone",
+      industry: "Wellness + Coworking | Rocklin, CA",
+    };
+
+    const LIFECYCLE_COLUMNS = [
+      {
+        id: "acquisition",
+        label: "Acquisition",
+        icon: "\uD83C\uDFAF",
+        nodes: [
+          {
+            id: "b2b-outreach",
+            name: "B2B/B2G Outbound",
+            status: "critical",
+            time: "6 hrs/wk (Owner)",
+            savings: "$35,100/yr",
+            description: "Target accounts exist only in Yvonne's head. No outbound system. First responders within 30mi not being contacted.",
+            action: "Build prospect list + automated email sequences for fire, police, EMT stations.",
+          },
+          {
+            id: "lead-followup",
+            name: "Lead Follow-Up",
+            status: "critical",
+            time: "5 hrs/wk (Owner)",
+            savings: "$31,200/yr",
+            description: "Manual follow-up with no sequences, no tracking, unknown response time.",
+            action: "Instant auto-response + CRM drip sequences + tour scheduling.",
+          },
+          {
+            id: "crm-pipeline",
+            name: "CRM & Pipeline",
+            status: "missing",
+            time: "N/A",
+            savings: "$20,000/yr (revenue)",
+            description: "No CRM. MindBody used as CRM but designed for yoga studios. Zero pipeline visibility.",
+            action: "CRITICAL: Build custom CRM with pipeline stages (Lead \u2192 Tour \u2192 Proposal \u2192 Closed).",
+          },
+          {
+            id: "tour-booking",
+            name: "Tour Scheduling",
+            status: "automate",
+            time: "3 hrs/wk (Admin)",
+            savings: "$3,089/yr",
+            description: "Phone/email scheduling with 2-3 day turnaround to confirm.",
+            action: "Self-serve calendar booking with automated confirmations.",
+          },
+        ],
+      },
+      {
+        id: "onboarding",
+        label: "Onboarding",
+        icon: "\uD83D\uDE80",
+        nodes: [
+          {
+            id: "registration",
+            name: "Member Registration",
+            status: "warning",
+            time: "4 hrs/wk (Admin)",
+            savings: "$3,203/yr",
+            description: "Manual data entry into MindBody. Wrong platform for multi-service business.",
+            action: "Digital intake forms auto-populating new CRM/custom tool.",
+          },
+          {
+            id: "waivers",
+            name: "Waiver Signing",
+            status: "warning",
+            time: "2 hrs/wk (Admin)",
+            savings: "$1,945/yr",
+            description: "Paper-based waiver management for high-risk wellness services (cold plunge, HBOT, infrared).",
+            action: "Digital waiver system with automated expiration tracking.",
+          },
+          {
+            id: "welcome-seq",
+            name: "Welcome Sequence",
+            status: "missing",
+            time: "N/A",
+            savings: "$6,000/yr (retention)",
+            description: "No automated onboarding sequence. New members receive ad-hoc communication.",
+            action: "Build 5-email welcome series with facility guide, booking links, class schedule.",
+          },
+          {
+            id: "facility-tour",
+            name: "Facility Orientation",
+            status: "normal",
+            time: "30 min/member",
+            savings: "$1,200/yr",
+            description: "In-person tours provided. Could be supplemented with video.",
+            action: "Low priority \u2014 add welcome video for self-service familiarization.",
+          },
+        ],
+      },
+      {
+        id: "servicing",
+        label: "Servicing",
+        icon: "\u2699\uFE0F",
+        nodes: [
+          {
+            id: "booking-system",
+            name: "Booking (Cowork + Wellness)",
+            status: "warning",
+            time: "4 hrs/wk (Admin)",
+            savings: "$3,661/yr",
+            description: "MindBody handles booking but poorly suited. Coworking and wellness likely in different flows.",
+            action: "Unified booking system in custom tool \u2014 one calendar for all services.",
+          },
+          {
+            id: "ops-tasks",
+            name: "Operational Tasks",
+            status: "manual",
+            time: "3 hrs/wk (Ops Mgr)",
+            savings: "$4,493/yr",
+            description: "Manual task assignment for cleaning, equipment, inventory, cafe supplies.",
+            action: "Digital task boards with automated recurring checklists.",
+          },
+          {
+            id: "staff-sched",
+            name: "Staff Scheduling",
+            status: "manual",
+            time: "2 hrs/wk (Ops Mgr)",
+            savings: "$2,995/yr",
+            description: "Manual staff scheduling and shift coordination.",
+            action: "Automated scheduling tool with shift management.",
+          },
+          {
+            id: "member-comms",
+            name: "Member Communication",
+            status: "automate",
+            time: "3 hrs/wk (Marketing)",
+            savings: "$3,494/yr",
+            description: "Manual email campaigns and event notifications.",
+            action: "Automated email sequences, event reminders, engagement campaigns.",
+          },
+        ],
+      },
+      {
+        id: "retention",
+        label: "Retention",
+        icon: "\uD83D\uDD04",
+        nodes: [
+          {
+            id: "lapse-detection",
+            name: "Lapse Detection",
+            status: "critical",
+            time: "3 hrs/wk (Owner)",
+            savings: "$17,550/yr",
+            description: "No automated tracking of member visit frequency. Lapsed members go unnoticed.",
+            action: "Automated alerts when member hasn't visited in X days. Trigger re-engagement sequence.",
+          },
+          {
+            id: "check-ins",
+            name: "Member Check-Ins",
+            status: "missing",
+            time: "N/A",
+            savings: "$12,000/yr (retention)",
+            description: "No 30/60/90 day check-in process. No satisfaction surveys. Churn reasons unknown.",
+            action: "Automated NPS surveys at milestones. Trigger save flows on low scores.",
+          },
+          {
+            id: "cancel-save",
+            name: "Cancellation Save Flow",
+            status: "missing",
+            time: "N/A",
+            savings: "$8,000/yr (retention)",
+            description: "No save offers when members attempt to cancel. Revenue walks out the door.",
+            action: "Build cancellation flow with reason capture + save offers.",
+          },
+          {
+            id: "upsell",
+            name: "Cross-Sell Triggers",
+            status: "missing",
+            time: "N/A",
+            savings: "$12,000/yr (revenue)",
+            description: "Coworking members not prompted for wellness. Wellness users not offered coworking. No data on cross-usage.",
+            action: "Usage-based triggers: gym members \u2192 cold plunge trial, coworking \u2192 yoga class.",
+          },
+        ],
+      },
+      {
+        id: "revenue",
+        label: "Revenue Opportunities",
+        icon: "\uD83D\uDCB0",
+        nodes: [
+          {
+            id: "b2g-contracts",
+            name: "B2G Corporate Contracts",
+            status: "automate",
+            time: "Implementation",
+            savings: "$72,000/yr (mid)",
+            description: "Dozens of first responder stations in 30mi radius. One fire dept contract (30 firefighters at $150/mo) = $54K/yr. No outreach happening.",
+            action: "Build prospect list. Launch automated outreach. Create corporate wellness packages.",
+          },
+          {
+            id: "b2b-packages",
+            name: "B2B Wellness Packages",
+            status: "automate",
+            time: "Implementation",
+            savings: "$36,000/yr (mid)",
+            description: "Local businesses would pay for team wellness memberships. No structured package exists.",
+            action: "Create tiered corporate packages. Automate proposal generation.",
+          },
+          {
+            id: "referral-program",
+            name: "Referral Program",
+            status: "missing",
+            time: "N/A",
+            savings: "$12,000/yr (mid)",
+            description: "High-performer members likely know other high performers. No formal referral ask.",
+            action: "Automated referral request at 90-day member mark with incentive.",
+          },
+          {
+            id: "freed-capacity",
+            name: "Yvonne's Freed Time",
+            status: "normal",
+            time: "14 hrs/wk freed",
+            savings: "$120,000/yr (opportunity)",
+            description: "Yvonne currently spends 17 hrs/wk on automatable tasks. At $150/hr opportunity cost, freeing this time for sales, investor relations, and franchise development is the highest-value outcome.",
+            action: "Redirect to sales calls, investor deck refinement, franchise playbook development.",
+          },
+        ],
+      },
+    ];
+
+    // Tool integrations
+    const TOOLS = [
+      { name: "MindBody", status: "standalone", note: "CRM/Booking/POS \u2014 wrong fit, to be replaced" },
+      { name: "WordPress + WooCommerce", status: "standalone", note: "Website \u2014 no CRM integration" },
+      { name: "Canva", status: "standalone", note: "Design tool \u2014 standalone" },
+      { name: "ChatGPT Teams", status: "standalone", note: "AI writing \u2014 maxed usage" },
+      { name: "Claude", status: "standalone", note: "AI \u2014 marketing lead, underutilized" },
+      { name: "Microsoft Teams", status: "standalone", note: "Internal comms \u2014 no integrations" },
+      { name: "Traneal", status: "standalone", note: "LMS \u2014 implementing" },
+      { name: "Custom CRM (planned)", status: "missing", note: "Phase 1+3 priority \u2014 replaces MindBody" },
+    ];
+
+    // =========================================================
+    // COMPONENT
+    // =========================================================
+    const { useState } = React;
+
+    const STATUS_CONFIG = {
+      critical:  { bg: "bg-red-500",   text: "text-white",       label: "Critical",  dot: "bg-red-500" },
+      automate:  { bg: "bg-green-500", text: "text-white",       label: "Automate",  dot: "bg-green-500" },
+      warning:   { bg: "bg-yellow-500", text: "text-gray-900",   label: "Warning",   dot: "bg-yellow-500" },
+      missing:   { bg: "bg-transparent border-2 border-red-500 border-dashed", text: "text-red-400", label: "Missing", dot: "bg-red-200" },
+      manual:    { bg: "bg-blue-500",  text: "text-white",       label: "Manual",    dot: "bg-blue-500" },
+      normal:    { bg: "bg-gray-500",  text: "text-white",       label: "Normal",    dot: "bg-gray-500" },
+    };
+
+    const TOOL_STATUS = {
+      integrated: { color: "text-green-400", icon: "\u2713", label: "Integrated" },
+      standalone: { color: "text-yellow-400", icon: "\u26A0", label: "Standalone" },
+      manual:     { color: "text-orange-400", icon: "\u26A0", label: "Manual" },
+      missing:    { color: "text-red-400",    icon: "\u2717", label: "Not Present" },
+    };
+
+    function NodeButton({ node, isSelected, onClick }) {
+      const cfg = STATUS_CONFIG[node.status] || STATUS_CONFIG.normal;
+      return (
+        <button
+          onClick={onClick}
+          className={`node-btn w-full rounded-lg p-3 text-left ${cfg.bg} ${cfg.text} ${isSelected ? "selected" : ""}`}
+        >
+          <div className="font-semibold text-xs leading-tight">{node.name}</div>
+          <div className="text-xs mt-1 opacity-75">{node.time}</div>
+          {node.savings && (
+            <div className={`text-xs mt-1 font-bold ${node.status === "missing" ? "text-red-300" : "opacity-90"}`}>
+              {node.savings}
+            </div>
+          )}
+        </button>
+      );
+    }
+
+    function DetailPanel({ node, onClose }) {
+      if (!node) return null;
+      const cfg = STATUS_CONFIG[node.status] || STATUS_CONFIG.normal;
+      return (
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 p-5 z-50 shadow-2xl">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <span className={`px-2 py-0.5 rounded text-xs font-bold ${cfg.bg} ${cfg.text}`}>{cfg.label}</span>
+                <h3 className="text-lg font-bold text-white">{node.name}</h3>
+              </div>
+              <button onClick={onClose} className="text-gray-400 hover:text-white text-xl font-bold ml-4">&times;</button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Current State</div>
+                <p className="text-sm text-gray-200">{node.description}</p>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Time Investment</div>
+                <p className="text-sm font-bold text-white">{node.time}</p>
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 mb-1">Recommended Action</div>
+                <p className="text-sm text-green-300">{node.action}</p>
+                {node.savings && (
+                  <p className="text-xs text-green-400 font-bold mt-1">Potential: {node.savings}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const [selectedNode, setSelectedNode] = useState(null);
+
+      const handleNodeClick = (node) => {
+        setSelectedNode(prev => prev?.id === node.id ? null : node);
+      };
+
+      return (
+        <div className="min-h-screen bg-gray-950 text-white pb-40">
+
+          {/* Header */}
+          <div className="bg-gray-900 border-b border-gray-700 px-6 py-4">
+            <div className="max-w-full mx-auto flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <div className="text-xs text-gray-400">Crewless — Automation Audit</div>
+                <h1 className="text-xl font-bold">{CLIENT.name} — Process Map</h1>
+                <div className="text-xs text-gray-400 mt-0.5">{CLIENT.industry} | Click any node for details</div>
+              </div>
+              {/* Legend */}
+              <div className="flex flex-wrap gap-3 text-xs">
+                {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+                  <div key={key} className="flex items-center gap-1">
+                    <div className={`w-2.5 h-2.5 rounded-full ${cfg.dot}`}></div>
+                    <span className="text-gray-300">{cfg.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Process Map Grid */}
+          <div className="px-4 py-6 overflow-x-auto">
+            <div className="flex gap-4 min-w-max pb-4" style={{ minWidth: "900px" }}>
+              {LIFECYCLE_COLUMNS.map((col) => (
+                <div key={col.id} className="flex-1 min-w-44">
+                  {/* Column Header */}
+                  <div className="text-center mb-4">
+                    <div className="text-2xl mb-1">{col.icon}</div>
+                    <div className="font-bold text-sm text-white">{col.label}</div>
+                    <div className="h-0.5 bg-gray-700 mt-2 mx-4 rounded"></div>
+                  </div>
+                  {/* Nodes */}
+                  <div className="flex flex-col gap-3">
+                    {col.nodes.map((node) => (
+                      <NodeButton
+                        key={node.id}
+                        node={node}
+                        isSelected={selectedNode?.id === node.id}
+                        onClick={() => handleNodeClick(node)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Data Systems */}
+          <div className="px-4 pb-4">
+            <div className="border border-gray-700 rounded-xl p-4 bg-gray-900">
+              <h3 className="font-bold text-sm mb-3 text-gray-200">Data Systems & Integration Status</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                {TOOLS.map((tool) => {
+                  const ts = TOOL_STATUS[tool.status] || TOOL_STATUS.standalone;
+                  return (
+                    <div key={tool.name} className="bg-gray-800 rounded-lg p-3">
+                      <div className="font-semibold text-xs text-white leading-tight">{tool.name}</div>
+                      <div className={`text-xs mt-1 font-bold ${ts.color}`}>{ts.icon} {ts.label}</div>
+                      <div className="text-xs text-gray-500 mt-1 leading-tight">{tool.note}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="px-4 pt-2 pb-2 flex justify-between text-xs text-gray-600">
+            <span>Prepared by Crewless | crewless.ai</span>
+            <span>CONFIDENTIAL</span>
+          </div>
+
+          {/* Detail Panel */}
+          {selectedNode && (
+            <DetailPanel node={selectedNode} onClose={() => setSelectedNode(null)} />
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
